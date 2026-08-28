@@ -1,0 +1,140 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SwasthaSetu design system — Indian government portal aesthetic.
+ * Palette restricted to WHITE, DARK BLUE and ORANGE with neutral greys.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 10px);
+  --radius-3xl: calc(var(--radius) + 14px);
+  --radius-4xl: calc(var(--radius) + 18px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-surface: var(--surface);
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Mukta", "Noto Sans", ui-sans-serif, sans-serif;
+  --shadow-panel: 0 1px 2px oklch(0 0 0 / 0.06), 0 8px 24px -16px oklch(0 0 0 / 0.35);
+}
+
+:root {
+  --radius: 0.25rem;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.03 258);
+
+  --surface: oklch(0.975 0.005 250);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.03 258);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.03 258);
+
+  /* Dark government blue */
+  --primary: oklch(0.34 0.099 264);
+  --primary-foreground: oklch(1 0 0);
+  --primary-dark: oklch(0.27 0.085 264);
+
+  --secondary: oklch(0.955 0.008 255);
+  --secondary-foreground: oklch(0.3 0.06 262);
+
+  --muted: oklch(0.965 0.005 250);
+  --muted-foreground: oklch(0.48 0.02 258);
+
+  /* Orange */
+  --accent: oklch(0.62 0.169 45);
+  --accent-foreground: oklch(1 0 0);
+
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.9 0.01 255);
+  --input: oklch(0.9 0.01 255);
+  --ring: oklch(0.62 0.169 45);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Section heading with the government-portal orange rule underneath */
+@utility rule-heading {
+  position: relative;
+  padding-bottom: 0.75rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 3.5rem;
+    height: 3px;
+    background-color: var(--color-accent);
+  }
+}
+
+@utility rule-heading-center {
+  position: relative;
+  padding-bottom: 0.75rem;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 3.5rem;
+    height: 3px;
+    background-color: var(--color-accent);
+  }
+}
+
+@utility gov-panel {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
+  box-shadow: var(--shadow-panel);
+}
