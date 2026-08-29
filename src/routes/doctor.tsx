@@ -52,18 +52,27 @@ const INITIAL_QUEUE: QueuePatient[] = [
   { token: "47", name: "Ramesh Kumar", age: "54 / M", status: "Active Intake Draft", time: "09:45 AM", complaint: "Chest pain on exertion", abha: "91-8273-9481-22" },
   { token: "48", name: "Priya Sharma", age: "31 / F", status: "Red Flag Alert", time: "10:00 AM", complaint: "Severe dyspnea & tachycardia", abha: "91-3456-7890-03" },
   { token: "49", name: "Abdul Rahim", age: "70 / M", status: "Waiting in Queue", time: "10:15 AM", complaint: "Diabetes follow-up", abha: "91-4567-8901-04" },
-];
-
-function DoctorPage() {
+];function DoctorPage() {
   const { strings } = useLocale();
-  const [queue, setQueue] = useState<QueuePatient[]>(INITIAL_QUEUE);
+  const docStrings = (strings.doctorPortal as any);
+  const initialQueueData = docStrings.queueList || INITIAL_QUEUE;
+  const [queue, setQueue] = useState<QueuePatient[]>(initialQueueData);
   const [selectedToken, setSelectedToken] = useState("47");
   const [activeTab, setActiveTab] = useState<"overview" | "queue" | "alerts" | "records">("overview");
   const [statusFilter, setStatusFilter] = useState<"all" | "Active Intake Draft" | "Waiting in Queue" | "Completed">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [actionDone, setActionDone] = useState<string | null>(null);
 
-  const selectedPatient = queue.find((p) => p.token === selectedToken) || queue[2];
+  const selectedPatient = queue.find((p) => p.token === selectedToken) || queue[0] || {
+    token: "024",
+    name: "Rahul Sharma",
+    age: 52,
+    gender: "Male",
+    abha: "91-8273-9481-22",
+    time: "09:15 AM",
+    status: "New",
+    complaint: "Chest pain & persistent cough",
+  };
 
   const handleAction = (action: "accepted" | "amended" | "rejected") => {
     setQueue((prev) =>
@@ -98,7 +107,7 @@ function DoctorPage() {
                 <h1 className="font-display text-2xl font-bold">{strings.doctorPortal.docName}</h1>
                 <span className="inline-flex items-center gap-1 rounded bg-emerald-500/20 px-2.5 py-0.5 text-xs font-semibold text-emerald-300 border border-emerald-400/30">
                   <ShieldCheck className="h-3.5 w-3.5" />
-                  NMC Verified Provider
+                  {docStrings.nmcVerified || "NMC Verified Provider"}
                 </span>
               </div>
               <p className="mt-1 text-xs opacity-85">
@@ -110,7 +119,7 @@ function DoctorPage() {
             to="/login"
             className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-4 py-2 text-xs font-semibold hover:bg-primary-dark transition-colors"
           >
-            Sign Out of Terminal
+            {docStrings.signOut || "Sign Out of Terminal"}
           </Link>
         </div>
 
@@ -163,7 +172,7 @@ function DoctorPage() {
                     {strings.doctorPortal.queueTitle}
                   </h3>
                   <span className="text-xs font-bold text-accent bg-accent/15 px-2 py-0.5 rounded">
-                    {queue.filter((q) => q.status !== "Completed").length} Active
+                    {queue.filter((q) => q.status !== "Completed").length} {docStrings.activeCount || "Active"}
                   </span>
                 </div>
 
@@ -173,25 +182,30 @@ function DoctorPage() {
                     <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
                     <input
                       type="text"
-                      placeholder="Search Token, Name, ABHA..."
+                      placeholder={docStrings.searchPlaceholder || "Search Token, Name, ABHA..."}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full rounded-md border border-border bg-surface pl-8 pr-3 py-1.5 text-xs text-foreground outline-none focus:border-accent"
                     />
                   </div>
                   <div className="flex gap-1 text-[11px] font-semibold">
-                    {(["all", "Active Intake Draft", "Waiting in Queue", "Completed"] as const).map((f) => (
+                    {[
+                      { id: "all", label: docStrings.filterAll || "All" },
+                      { id: "Active Intake Draft", label: docStrings.filterDraft || "Draft" },
+                      { id: "Waiting in Queue", label: docStrings.filterQueue || "Queue" },
+                      { id: "Completed", label: docStrings.filterCompleted || "Done" },
+                    ].map((f) => (
                       <button
-                        key={f}
+                        key={f.id}
                         type="button"
-                        onClick={() => setStatusFilter(f)}
+                        onClick={() => setStatusFilter(f.id as any)}
                         className={`px-2 py-1 rounded transition-colors ${
-                          statusFilter === f
+                          statusFilter === f.id
                             ? "bg-accent text-accent-foreground font-bold"
                             : "bg-surface text-muted-foreground hover:text-foreground"
                         }`}
                       >
-                        {f === "all" ? "All" : f.split(" ")[0]}
+                        {f.label}
                       </button>
                     ))}
                   </div>
@@ -268,7 +282,7 @@ function DoctorPage() {
                   {/* Chief Complaint */}
                   <div className="rounded-lg border-l-4 border-accent bg-accent/5 p-4">
                     <span className="text-xs font-bold tracking-wider text-accent uppercase flex items-center gap-1.5">
-                      <Activity className="h-4 w-4" /> Chief Complaint
+                      <Activity className="h-4 w-4" /> {docStrings.chiefComplaint || "Chief Complaint"}
                     </span>
                     <p className="mt-1 text-base font-bold text-foreground">
                       "{selectedPatient.complaint}"
@@ -280,32 +294,32 @@ function DoctorPage() {
                     {/* History of Present Illness */}
                     <div className="rounded-lg border border-border bg-surface p-4">
                       <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                        <FileText className="h-4 w-4 text-accent" /> History of Present Illness (HPI)
+                        <FileText className="h-4 w-4 text-accent" /> {docStrings.hpiTitle || "History of Present Illness (HPI)"}
                       </h4>
                       <dl className="mt-3 grid grid-cols-2 gap-3 text-xs sm:text-sm">
                         <div>
-                          <dt className="text-muted-foreground font-medium">Onset</dt>
-                          <dd className="font-semibold text-foreground">3 days ago, gradual</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.onset || "Onset"}</dt>
+                          <dd className="font-semibold text-foreground">{docStrings.onsetValue || "3 days ago, gradual"}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground font-medium">Character</dt>
-                          <dd className="font-semibold text-foreground">Squeezing, retrosternal</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.character || "Character"}</dt>
+                          <dd className="font-semibold text-foreground">{docStrings.characterValue || "Squeezing, retrosternal"}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground font-medium">Radiation</dt>
-                          <dd className="font-semibold text-foreground">Left arm</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.radiation || "Radiation"}</dt>
+                          <dd className="font-semibold text-foreground">{docStrings.radiationValue || "Left arm"}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground font-medium">Aggravating</dt>
-                          <dd className="font-semibold text-foreground">Exertion, climbing stairs</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.aggravating || "Aggravating"}</dt>
+                          <dd className="font-semibold text-foreground">{docStrings.aggravatingValue || "Exertion, climbing stairs"}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground font-medium">Relieving</dt>
-                          <dd className="font-semibold text-foreground">Rest</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.relieving || "Relieving"}</dt>
+                          <dd className="font-semibold text-foreground">{docStrings.relievingValue || "Rest"}</dd>
                         </div>
                         <div>
-                          <dt className="text-muted-foreground font-medium">Severity</dt>
-                          <dd className="font-semibold text-destructive">6 / 10</dd>
+                          <dt className="text-muted-foreground font-medium">{docStrings.severity || "Severity"}</dt>
+                          <dd className="font-semibold text-destructive">{docStrings.severityValue || "6 / 10"}</dd>
                         </div>
                       </dl>
                     </div>
@@ -314,17 +328,17 @@ function DoctorPage() {
                     <div className="space-y-4">
                       <div className="rounded-lg border border-border bg-surface p-4">
                         <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                          <Heart className="h-4 w-4 text-accent" /> Past Medical & Family History
+                          <Heart className="h-4 w-4 text-accent" /> {docStrings.pastHistoryTitle || "Past Medical & Family History"}
                         </h4>
                         <div className="mt-3 space-y-2 text-xs sm:text-sm">
                           <div className="flex flex-wrap gap-1.5 items-center">
-                            <span className="text-muted-foreground font-medium">Conditions:</span>
+                            <span className="text-muted-foreground font-medium">{docStrings.conditions || "Conditions"}:</span>
                             <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">Type 2 DM (2018)</span>
                             <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">Hypertension (2020)</span>
                           </div>
                           <div className="pt-1">
-                            <span className="text-muted-foreground font-medium">Family History:</span>
-                            <p className="font-medium text-foreground mt-0.5">Father: MI at age 55 · Mother: Type 2 DM</p>
+                            <span className="text-muted-foreground font-medium">{docStrings.familyHistory || "Family History"}:</span>
+                            <p className="font-medium text-foreground mt-0.5">{docStrings.familyHistoryValue || "Father: MI at age 55 · Mother: Type 2 DM"}</p>
                           </div>
                         </div>
                       </div>
@@ -332,7 +346,7 @@ function DoctorPage() {
                       {/* Regular Medication & Allergies */}
                       <div className="rounded-lg border border-border bg-surface p-4">
                         <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                          <Pill className="h-4 w-4 text-accent" /> Medications & Allergies
+                          <Pill className="h-4 w-4 text-accent" /> {docStrings.medicationsTitle || "Medications & Allergies"}
                         </h4>
                         <div className="mt-3 space-y-2 text-xs sm:text-sm">
                           <div className="flex flex-wrap gap-1.5 items-center">
@@ -340,7 +354,7 @@ function DoctorPage() {
                             <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">Tab Amlodipine 5mg OD</span>
                           </div>
                           <div className="pt-1 flex items-center gap-2">
-                            <span className="text-muted-foreground font-medium">Allergies:</span>
+                            <span className="text-muted-foreground font-medium">{docStrings.allergies || "Allergies"}:</span>
                             <span className="rounded bg-red-100 text-red-700 px-2 py-0.5 text-xs font-bold border border-red-200">
                               Sulfonamides (Rash)
                             </span>
@@ -353,16 +367,16 @@ function DoctorPage() {
                   {/* Prior Investigations */}
                   <div className="rounded-lg border border-border bg-surface p-4">
                     <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider border-b border-border pb-2">
-                      Prior Scanned Lab Reports
+                      {docStrings.labReportsTitle || "Prior Scanned Lab Reports"}
                     </h4>
                     <div className="mt-3 overflow-x-auto">
                       <table className="w-full text-left text-xs sm:text-sm">
                         <thead>
                           <tr className="text-muted-foreground border-b border-border">
-                            <th className="pb-2 font-semibold">Test Name</th>
-                            <th className="pb-2 font-semibold">Recorded Value</th>
-                            <th className="pb-2 font-semibold">Date</th>
-                            <th className="pb-2 font-semibold text-right">Status</th>
+                            <th className="pb-2 font-semibold">{docStrings.testHeader || "Test Name"}</th>
+                            <th className="pb-2 font-semibold">{docStrings.valHeader || "Recorded Value"}</th>
+                            <th className="pb-2 font-semibold">{docStrings.dateHeader || "Date"}</th>
+                            <th className="pb-2 font-semibold text-right">{docStrings.statusHeader || "Status"}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -371,7 +385,7 @@ function DoctorPage() {
                             <td className="py-2 font-bold text-destructive">7.8 %</td>
                             <td className="py-2 text-muted-foreground">3 months ago</td>
                             <td className="py-2 text-right">
-                              <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">ABOVE RANGE</span>
+                              <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{docStrings.aboveRange || "ABOVE RANGE"}</span>
                             </td>
                           </tr>
                           <tr>
@@ -379,7 +393,7 @@ function DoctorPage() {
                             <td className="py-2 font-bold text-destructive">165 mg/dL</td>
                             <td className="py-2 text-muted-foreground">3 months ago</td>
                             <td className="py-2 text-right">
-                              <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">ABOVE RANGE</span>
+                              <span className="rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{docStrings.aboveRange || "ABOVE RANGE"}</span>
                             </td>
                           </tr>
                         </tbody>
@@ -393,7 +407,7 @@ function DoctorPage() {
                       <div className="flex items-center gap-2">
                         <Sparkles className="h-5 w-5 text-accent" />
                         <h5 className="font-display text-sm font-bold text-primary uppercase tracking-wider">
-                          DOCTOR-ONLY AI CLINICAL INSIGHTS & DIFFERENTIAL DIAGNOSES
+                          {docStrings.aiInsightsTitle || "DOCTOR-ONLY AI CLINICAL INSIGHTS & DIFFERENTIAL DIAGNOSES"}
                         </h5>
                       </div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 bg-red-100 px-2 py-0.5 rounded border border-red-200">
@@ -403,7 +417,7 @@ function DoctorPage() {
 
                     <div className="space-y-2 text-xs sm:text-sm">
                       <div>
-                        <span className="text-muted-foreground font-semibold uppercase tracking-wider text-[11px]">Differential Diagnoses for Doctor Consideration:</span>
+                        <span className="text-muted-foreground font-semibold uppercase tracking-wider text-[11px]">{docStrings.differentialTitle || "Suggested Differential Diagnoses (Ranked by AI Confidence):"}</span>
                         <ul className="mt-1 space-y-1">
                           <li className="font-bold text-primary flex items-center gap-2">
                             <span className="h-1.5 w-1.5 rounded-full bg-accent" /> 1. Stable Angina Pectoris / Ischemic Heart Disease (ICD-10 I20.9)
@@ -418,9 +432,9 @@ function DoctorPage() {
                       </div>
 
                       <div className="border-t border-accent/20 pt-2">
-                        <span className="text-muted-foreground font-semibold uppercase tracking-wider text-[11px]">Recommended Clinical Workup:</span>
+                        <span className="text-muted-foreground font-semibold uppercase tracking-wider text-[11px]">{docStrings.workupTitle || "Suggested Diagnostic Workup:"}</span>
                         <p className="font-semibold text-foreground mt-0.5">
-                          • Stat 12-lead Electrocardiogram (ECG) · Serum Troponin I · Lipid Profile & Fasting HbA1c
+                          {docStrings.workupDetail || "• Stat 12-lead Electrocardiogram (ECG) · Serum Troponin I · Lipid Profile & Fasting HbA1c"}
                         </p>
                       </div>
                     </div>
@@ -432,7 +446,7 @@ function DoctorPage() {
                     <div>
                       <h5 className="font-bold text-sm text-red-800">TRIAGE ALERT / RED FLAG DETECTED</h5>
                       <p className="text-xs sm:text-sm mt-0.5">
-                        Exertional chest pain + family history of MI → Urgent cardiac evaluation recommended.
+                        {docStrings.triageAlert || "Exertional chest pain + family history of MI → Urgent cardiac evaluation recommended."}
                       </p>
                     </div>
                   </div>
@@ -445,21 +459,21 @@ function DoctorPage() {
                         onClick={() => handleAction("accepted")}
                         className="inline-flex items-center gap-2 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 shadow-sm"
                       >
-                        <CheckCircle2 className="h-4 w-4" /> Accept & Confirm Summary
+                        <CheckCircle2 className="h-4 w-4" /> {docStrings.acceptBtn || "Accept & Confirm Summary"}
                       </button>
                       <button
                         type="button"
                         onClick={() => handleAction("amended")}
                         className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
                       >
-                        <Edit3 className="h-4 w-4" /> Amend / Edit Notes
+                        <Edit3 className="h-4 w-4" /> {docStrings.editBtn || "Amend / Edit Clinical Notes"}
                       </button>
                       <button
                         type="button"
                         onClick={() => handleAction("rejected")}
                         className="inline-flex items-center gap-2 rounded border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
                       >
-                        <XCircle className="h-4 w-4" /> Reject Draft
+                        <XCircle className="h-4 w-4" /> {docStrings.rejectBtn || "Reject Draft"}
                       </button>
                     </div>
                     <span className="text-xs text-muted-foreground font-medium">
@@ -472,16 +486,16 @@ function DoctorPage() {
                     <div className="flex items-center justify-between border-b border-accent/20 pb-3">
                       <div className="flex items-center gap-2">
                         <Stethoscope className="h-5 w-5 text-accent" />
-                        <h4 className="font-display text-base font-bold text-primary">Actual Physician Consultation & Prescription</h4>
+                        <h4 className="font-display text-base font-bold text-primary">{docStrings.actualConsultTitle || "Actual Physician Consultation & Prescription"}</h4>
                       </div>
                       <span className="text-xs font-bold text-accent bg-accent/15 px-3 py-1 rounded">
-                        Clinician Decision Mode
+                        {docStrings.clinicianMode || "Clinician Decision Mode"}
                       </span>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Clinical Assessment / Diagnosis</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">{docStrings.assessmentLabel || "Clinical Assessment / Diagnosis"}</label>
                         <input
                           type="text"
                           defaultValue="Stable Angina Pectoris · Uncontrolled HbA1c"
@@ -489,17 +503,17 @@ function DoctorPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">Follow-up Schedule</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">{docStrings.followupLabel || "Follow-up Schedule"}</label>
                         <select className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground outline-none focus:border-accent">
-                          <option value="7">7 Days Follow-up</option>
-                          <option value="14" selected>14 Days Follow-up (Recommended)</option>
-                          <option value="30">30 Days Follow-up</option>
+                          <option value="7">{docStrings.followup7 || "7 Days Follow-up"}</option>
+                          <option value="14" selected>{docStrings.followup14 || "14 Days Follow-up (Recommended)"}</option>
+                          <option value="30">{docStrings.followup30 || "30 Days Follow-up"}</option>
                         </select>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Prescribed Medication List</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{docStrings.prescribedMedsLabel || "Prescribed Medication List"}</label>
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-xs">
                           <input type="text" defaultValue="Tab Sorbitrate 5mg Sublingual (PRN for Pain)" className="flex-1 rounded border border-border bg-background px-3 py-1.5 font-mono text-xs text-foreground" />
@@ -513,14 +527,14 @@ function DoctorPage() {
                     </div>
 
                     <div className="flex items-center justify-between border-t border-accent/20 pt-4">
-                      <span className="text-xs text-muted-foreground font-medium">Digital Signature Stamp: Dr. Ananya Sharma (NMC #2021-94812)</span>
+                      <span className="text-xs text-muted-foreground font-medium">{docStrings.sigStamp || "Digital Signature Stamp: Dr. Ananya Sharma (NMC #2021-94812)"}</span>
                       <button
                         type="button"
                         onClick={() => handleAction("accepted")}
                         className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-xs font-bold text-accent-foreground hover:bg-accent/90 shadow-md transition-colors"
                       >
                         <CheckCircle2 className="h-4 w-4" />
-                        Complete Consultation & Finalize Record
+                        {docStrings.completeConsultBtn || "Complete Consultation & Finalize Record"}
                       </button>
                     </div>
                   </div>
@@ -534,8 +548,8 @@ function DoctorPage() {
         {activeTab === "alerts" && (
           <div className="space-y-6">
             <div className="border-b border-border pb-4">
-              <h2 className="font-display text-xl font-bold text-primary">High-Priority Clinical Triage Alerts</h2>
-              <p className="text-xs text-muted-foreground">Automated AI detection of STEMI, acute abdomen, stroke, and critical lab values.</p>
+              <h2 className="font-display text-xl font-bold text-primary">{docStrings.alertsTitle || "High-Priority Clinical Triage Alerts"}</h2>
+              <p className="text-xs text-muted-foreground">{docStrings.alertsSub || "Automated AI detection of STEMI, acute abdomen, stroke, and critical lab values."}</p>
             </div>
 
             <div className="space-y-4">
@@ -544,13 +558,13 @@ function DoctorPage() {
                   <span className="text-xs font-bold text-red-700 bg-red-100 px-2.5 py-0.5 rounded">Token #48 · Priya Sharma (31 / F)</span>
                   <span className="text-xs font-mono text-muted-foreground">10:00 AM</span>
                 </div>
-                <h3 className="mt-2 font-display text-base font-bold text-primary">Severe Dyspnea & Acute Tachycardia Alert</h3>
+                <h3 className="mt-2 font-display text-base font-bold text-primary">{docStrings.alert1Title || "Severe Dyspnea & Acute Tachycardia Alert"}</h3>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Intake speech analysis detected acute respiratory distress. Fast-track cardiac & oxygen saturation check recommended.
+                  {docStrings.alert1Sub || "Intake speech analysis detected acute respiratory distress. Fast-track cardiac & oxygen saturation check recommended."}
                 </p>
                 <div className="mt-3 flex justify-end">
                   <button type="button" onClick={() => { setSelectedToken("48"); setActiveTab("overview"); }} className="text-xs font-bold text-accent hover:underline">
-                    Inspect Patient Record →
+                    {docStrings.inspectRecordBtn || "Inspect Patient Record →"}
                   </button>
                 </div>
               </div>
@@ -560,13 +574,13 @@ function DoctorPage() {
                   <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded">Token #47 · Ramesh Kumar (54 / M)</span>
                   <span className="text-xs font-mono text-muted-foreground">09:45 AM</span>
                 </div>
-                <h3 className="mt-2 font-display text-base font-bold text-primary">Exertional Chest Pain + Family History of MI</h3>
+                <h3 className="mt-2 font-display text-base font-bold text-primary">{docStrings.alert2Title || "Exertional Chest Pain + Family History of MI"}</h3>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Combine history of retrosternal pain with paternal MI at age 55. Stat ECG ordered.
+                  {docStrings.alert2Sub || "Combine history of retrosternal pain with paternal MI at age 55. Stat ECG ordered."}
                 </p>
                 <div className="mt-3 flex justify-end">
                   <button type="button" onClick={() => { setSelectedToken("47"); setActiveTab("overview"); }} className="text-xs font-bold text-accent hover:underline">
-                    Inspect Patient Record →
+                    {docStrings.inspectRecordBtn || "Inspect Patient Record →"}
                   </button>
                 </div>
               </div>
@@ -578,15 +592,15 @@ function DoctorPage() {
         {activeTab === "records" && (
           <div className="space-y-6">
             <div className="border-b border-border pb-4">
-              <h2 className="font-display text-xl font-bold text-primary">Verified Provider Records & Audit Log</h2>
-              <p className="text-xs text-muted-foreground">Only NMC / AYUSH verified clinicians can append signed consultation notes.</p>
+              <h2 className="font-display text-xl font-bold text-primary">{docStrings.recordsTitle || "Verified Provider Records & Audit Log"}</h2>
+              <p className="text-xs text-muted-foreground">{docStrings.recordsSub || "Only NMC / AYUSH verified clinicians can append signed consultation notes."}</p>
             </div>
 
             <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
               <div className="flex items-center justify-between border-b border-border pb-3 mb-4">
                 <h3 className="font-display text-base font-bold text-primary flex items-center gap-2">
                   <FileSpreadsheet className="h-4 w-4 text-accent" />
-                  Recent Signed Consultation Records
+                  {docStrings.recentSignedTitle || "Recent Signed Consultation Records"}
                 </h3>
                 <span className="text-xs font-mono text-muted-foreground">NMC #2021-94812</span>
               </div>
@@ -609,7 +623,7 @@ function DoctorPage() {
                       <td className="py-2.5 font-mono text-xs text-muted-foreground">12-3456-7890-1234</td>
                       <td className="py-2.5 text-foreground">General Medicine</td>
                       <td className="py-2.5 text-right">
-                        <span className="rounded bg-emerald-100 text-emerald-800 px-2 py-0.5 text-xs font-bold">NMC SIGNED</span>
+                        <span className="rounded bg-emerald-100 text-emerald-800 px-2 py-0.5 text-xs font-bold">{docStrings.nmcSigned || "NMC SIGNED"}</span>
                       </td>
                     </tr>
                     <tr>
@@ -618,7 +632,7 @@ function DoctorPage() {
                       <td className="py-2.5 font-mono text-xs text-muted-foreground">91-1234-5678-01</td>
                       <td className="py-2.5 text-foreground">General Medicine</td>
                       <td className="py-2.5 text-right">
-                        <span className="rounded bg-emerald-100 text-emerald-800 px-2 py-0.5 text-xs font-bold">NMC SIGNED</span>
+                        <span className="rounded bg-emerald-100 text-emerald-800 px-2 py-0.5 text-xs font-bold">{docStrings.nmcSigned || "NMC SIGNED"}</span>
                       </td>
                     </tr>
                   </tbody>

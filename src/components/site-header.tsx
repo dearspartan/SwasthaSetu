@@ -117,37 +117,37 @@ export function SiteHeader() {
       </div>
 
       {/* Primary navigation */}
-      <nav className="bg-primary text-primary-foreground" aria-label="Primary">
+      <nav className="relative bg-primary text-primary-foreground border-b-2 border-accent shadow-sm" aria-label="Primary">
         <div className="mx-auto w-full max-w-full px-4 sm:px-6 md:px-10 lg:px-16">
-          <ul className="hidden lg:flex">
+          <ul className="hidden lg:flex items-center justify-between flex-nowrap">
             {NAV.map((item) => (
-              <li key={item.to}>
+              <li key={item.to} className="shrink-0">
                 <Link
                   to={item.to}
                   activeOptions={{ exact: item.to === "/" }}
-                  className="inline-block border-b-4 border-transparent px-6 py-3.5 text-base font-semibold tracking-wide transition-colors hover:bg-primary-dark"
-                  activeProps={{ className: "border-accent bg-primary-dark" }}
+                  className="inline-block border-b-4 border-transparent px-3.5 xl:px-4.5 py-3 text-sm xl:text-base font-semibold tracking-wide whitespace-nowrap transition-all hover:bg-primary-dark hover:border-accent/40 -mb-[2px]"
+                  activeProps={{ className: "!border-accent bg-primary-dark font-bold text-white shadow-inner" }}
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
-            <li className="ml-auto flex items-center gap-2 py-3.5 text-xs font-medium opacity-90">
-              <ShieldCheck className="h-4 w-4" aria-hidden />
-              {strings.dpdpCompliance}
+            <li className="ml-auto flex items-center gap-1.5 py-3 text-xs font-medium opacity-90 whitespace-nowrap shrink-0">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-accent" aria-hidden />
+              <span>{strings.dpdpCompliance}</span>
             </li>
           </ul>
 
           {open && (
-            <ul className="flex flex-col py-2 lg:hidden">
+            <ul className="flex flex-col py-2 lg:hidden border-t border-primary-dark">
               {NAV.map((item) => (
                 <li key={item.to}>
                   <Link
                     to={item.to}
                     activeOptions={{ exact: item.to === "/" }}
                     onClick={() => setOpen(false)}
-                    className="block border-l-4 border-transparent px-4 py-3 text-base font-semibold"
-                    activeProps={{ className: "border-accent bg-primary-dark" }}
+                    className="block border-l-4 border-transparent px-4 py-3 text-base font-semibold transition-colors hover:bg-primary-dark"
+                    activeProps={{ className: "!border-accent bg-primary-dark font-bold" }}
                   >
                     {item.label}
                   </Link>

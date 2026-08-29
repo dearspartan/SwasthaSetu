@@ -147,6 +147,10 @@ function PatientPage() {
   const [uploadModal, setUploadModal] = useState(false);
   const [docFilter, setDocFilter] = useState<"all" | "Prescription" | "Lab Report">("all");
 
+  const consultations = (strings.patientPortal as any).consultations || CONSULTATIONS;
+  const medicines = (strings.patientPortal as any).medicines || MEDICINES;
+  const documents = (strings.patientPortal as any).documents || DOCUMENTS;
+
   return (
     <div className="mx-auto w-full max-w-full px-4 sm:px-6 md:px-10 lg:px-16 py-8">
       {/* Patient Header Card */}
@@ -324,7 +328,7 @@ function PatientPage() {
               </div>
 
               <div className="divide-y divide-border">
-                {CONSULTATIONS.map((c) => (
+                {consultations.map((c: any) => (
                   <div key={c.id} className="py-3.5 flex flex-wrap items-center justify-between gap-4 text-sm">
                     <div>
                       <div className="flex items-center gap-2">
@@ -364,7 +368,7 @@ function PatientPage() {
             </div>
 
             <div className="space-y-4">
-              {CONSULTATIONS.map((c) => (
+              {consultations.map((c: any) => (
                 <div key={c.id} className="rounded-xl border border-border bg-card p-6 shadow-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
                     <div className="flex items-center gap-2">
@@ -397,7 +401,7 @@ function PatientPage() {
                     <div className="md:col-span-2">
                       <span className="text-muted-foreground font-medium">Prescribed Therapy:</span>
                       <ul className="mt-1 space-y-1">
-                        {c.prescription.map((p) => (
+                        {c.prescription.map((p: string) => (
                           <li key={p} className="flex items-center gap-2 font-mono text-xs font-semibold text-foreground">
                             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                             {p}
@@ -422,7 +426,7 @@ function PatientPage() {
 
             {/* Daily Schedule Cards */}
             <div className="grid gap-4 md:grid-cols-3">
-              {MEDICINES.map((m) => (
+              {medicines.map((m: any) => (
                 <div key={m.name} className="rounded-xl border border-border bg-card p-5 shadow-sm relative border-l-4 border-accent">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-accent uppercase tracking-wider">{m.status}</span>
@@ -477,7 +481,7 @@ function PatientPage() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {DOCUMENTS.map((d) => (
+              {documents.map((d: any) => (
                 <div key={d.id} className="rounded-xl border border-border bg-card p-5 shadow-sm flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between gap-2">

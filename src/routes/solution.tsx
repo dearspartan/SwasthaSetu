@@ -120,6 +120,11 @@ const JOURNEY = [
 function SolutionPage() {
   const { strings } = useLocale();
 
+  const modules = (strings.solutionPage as any).modules || MODULES;
+  const journey = (strings.solutionPage as any).journey || JOURNEY;
+  const differentiators = (strings.solutionPage as any).differentiators || DIFFERENTIATORS;
+  const summary = (strings.solutionPage as any).summary || {};
+
   return (
     <>
       <PageHeader
@@ -133,10 +138,10 @@ function SolutionPage() {
         lead={strings.solutionPage.modulesLead}
       >
         <div className="grid gap-6 md:grid-cols-2">
-          {MODULES.map((m) => (
+          {modules.map((m: any) => (
             <InfoCard key={m.index} index={m.index} title={m.title}>
               <ul className="space-y-2">
-                {m.points.map((p) => (
+                {m.points.map((p: string) => (
                   <li key={p} className="flex gap-2">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-accent" aria-hidden />
                     <span>{p}</span>
@@ -150,7 +155,7 @@ function SolutionPage() {
 
       <Section title={strings.solutionPage.journeyTitle} tone="surface">
         <ol className="grid gap-4 md:grid-cols-5">
-          {JOURNEY.map((s) => (
+          {journey.map((s: any) => (
             <li key={s.step} className="border border-border bg-card p-5">
               <span className="text-xs font-bold tracking-[0.2em] text-accent uppercase">
                 {s.step}
@@ -166,7 +171,7 @@ function SolutionPage() {
         title={strings.solutionPage.diffTitle}
         lead={strings.solutionPage.diffLead}
       >
-        <DataTable headers={[strings.solutionPage.featureHeader, strings.solutionPage.purposeHeader]} rows={DIFFERENTIATORS} />
+        <DataTable headers={[strings.solutionPage.featureHeader, strings.solutionPage.purposeHeader]} rows={differentiators} />
       </Section>
 
       <Section title={strings.solutionPage.summaryTitle} tone="surface">
@@ -179,21 +184,21 @@ function SolutionPage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-display text-lg font-bold">Ramesh Kumar (M / 54 yrs)</h3>
+                  <h3 className="font-display text-lg font-bold">{summary.patientName}</h3>
                   <span className="inline-flex items-center gap-1 rounded bg-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-300 border border-emerald-400/30">
                     <ShieldCheck className="h-3.5 w-3.5" />
                     ABHA: 91-8273-9481-22
                   </span>
                 </div>
                 <p className="text-xs opacity-85 mt-0.5">
-                  Dept: General Medicine · Token #47 · Kiosk Intake #1024
+                  {summary.deptToken}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/20 px-3 py-1 text-xs font-semibold text-accent border border-accent/40">
                 <Clock className="h-3.5 w-3.5" />
-                AI Intake Draft — Awaiting Review
+                {summary.aiDraftBadge}
               </span>
             </div>
           </div>
@@ -202,10 +207,10 @@ function SolutionPage() {
             {/* Chief Complaint */}
             <div className="rounded-lg border-l-4 border-accent bg-accent/5 p-4">
               <span className="text-xs font-bold tracking-wider text-accent uppercase flex items-center gap-1.5">
-                <Activity className="h-4 w-4" /> Chief Complaint
+                <Activity className="h-4 w-4" /> {summary.chiefComplaintTitle}
               </span>
               <p className="mt-1 text-base font-bold text-foreground">
-                "Chest pain for 3 days, worsening on exertion"
+                {summary.chiefComplaintText}
               </p>
             </div>
 
@@ -214,32 +219,32 @@ function SolutionPage() {
               {/* History of Present Illness */}
               <div className="rounded-lg border border-border bg-surface p-4">
                 <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                  <FileText className="h-4 w-4 text-accent" /> History of Present Illness (HPI)
+                  <FileText className="h-4 w-4 text-accent" /> {summary.hpiTitle}
                 </h4>
                 <dl className="mt-3 grid grid-cols-2 gap-3 text-xs sm:text-sm">
                   <div>
-                    <dt className="text-muted-foreground font-medium">Onset</dt>
-                    <dd className="font-semibold text-foreground">3 days ago, gradual</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.onsetLabel}</dt>
+                    <dd className="font-semibold text-foreground">{summary.onsetValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">Character</dt>
-                    <dd className="font-semibold text-foreground">Squeezing, retrosternal</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.characterLabel}</dt>
+                    <dd className="font-semibold text-foreground">{summary.characterValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">Radiation</dt>
-                    <dd className="font-semibold text-foreground">Left arm</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.radiationLabel}</dt>
+                    <dd className="font-semibold text-foreground">{summary.radiationValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">Aggravating</dt>
-                    <dd className="font-semibold text-foreground">Exertion, climbing stairs</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.aggravatingLabel}</dt>
+                    <dd className="font-semibold text-foreground">{summary.aggravatingValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">Relieving</dt>
-                    <dd className="font-semibold text-foreground">Rest</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.relievingLabel}</dt>
+                    <dd className="font-semibold text-foreground">{summary.relievingValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">Severity</dt>
-                    <dd className="font-semibold text-destructive">6 / 10</dd>
+                    <dt className="text-muted-foreground font-medium">{summary.severityLabel}</dt>
+                    <dd className="font-semibold text-destructive">{summary.severityValue}</dd>
                   </div>
                 </dl>
               </div>
@@ -248,17 +253,17 @@ function SolutionPage() {
               <div className="space-y-4">
                 <div className="rounded-lg border border-border bg-surface p-4">
                   <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                    <Heart className="h-4 w-4 text-accent" /> Past Medical & Family History
+                    <Heart className="h-4 w-4 text-accent" /> {summary.pastHistoryTitle}
                   </h4>
                   <div className="mt-3 space-y-2 text-xs sm:text-sm">
                     <div className="flex flex-wrap gap-1.5 items-center">
-                      <span className="text-muted-foreground font-medium">Conditions:</span>
-                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">Type 2 Diabetes Mellitus (2018)</span>
-                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">Hypertension (2020)</span>
+                      <span className="text-muted-foreground font-medium">{summary.conditionsLabel}</span>
+                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">{summary.cond1}</span>
+                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">{summary.cond2}</span>
                     </div>
                     <div className="pt-1">
-                      <span className="text-muted-foreground font-medium">Family History:</span>
-                      <p className="font-medium text-foreground mt-0.5">Father: MI at age 55 · Mother: Type 2 DM</p>
+                      <span className="text-muted-foreground font-medium">{summary.familyHistoryLabel}</span>
+                      <p className="font-medium text-foreground mt-0.5">{summary.familyHistoryValue}</p>
                     </div>
                   </div>
                 </div>
@@ -266,17 +271,17 @@ function SolutionPage() {
                 {/* Regular Medication & Allergies */}
                 <div className="rounded-lg border border-border bg-surface p-4">
                   <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2 border-b border-border pb-2">
-                    <Pill className="h-4 w-4 text-accent" /> Medications & Allergies
+                    <Pill className="h-4 w-4 text-accent" /> {summary.medsTitle}
                   </h4>
                   <div className="mt-3 space-y-2 text-xs sm:text-sm">
                     <div className="flex flex-wrap gap-1.5 items-center">
-                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">Tab Metformin 500mg BD</span>
-                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">Tab Amlodipine 5mg OD</span>
+                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">{summary.med1}</span>
+                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">{summary.med2}</span>
                     </div>
                     <div className="pt-1 flex items-center gap-2">
-                      <span className="text-muted-foreground font-medium">Allergies:</span>
+                      <span className="text-muted-foreground font-medium">{summary.allergiesLabel}</span>
                       <span className="rounded bg-red-100 text-red-700 px-2 py-0.5 text-xs font-bold border border-red-200">
-                        Sulfonamides (Rash)
+                        {summary.allergyValue}
                       </span>
                     </div>
                   </div>
@@ -287,41 +292,41 @@ function SolutionPage() {
             {/* Prior Investigations */}
             <div className="rounded-lg border border-border bg-surface p-4">
               <h4 className="font-display text-sm font-bold text-primary uppercase tracking-wider border-b border-border pb-2">
-                Prior Investigations (Extracted from Scanned Documents)
+                {summary.priorInvestigationsTitle}
               </h4>
               <div className="mt-3 overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead>
                     <tr className="text-muted-foreground border-b border-border">
-                      <th className="pb-2 font-semibold">Test Name</th>
-                      <th className="pb-2 font-semibold">Recorded Value</th>
-                      <th className="pb-2 font-semibold">Date</th>
-                      <th className="pb-2 font-semibold text-right">Status Flag</th>
+                      <th className="pb-2 font-semibold">{summary.testNameHeader}</th>
+                      <th className="pb-2 font-semibold">{summary.recordedValueHeader}</th>
+                      <th className="pb-2 font-semibold">{summary.dateHeader}</th>
+                      <th className="pb-2 font-semibold text-right">{summary.statusFlagHeader}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     <tr>
-                      <td className="py-2.5 font-semibold text-foreground">HbA1c</td>
+                      <td className="py-2.5 font-semibold text-foreground">{summary.hbA1c}</td>
                       <td className="py-2.5 font-bold text-destructive">7.8 %</td>
-                      <td className="py-2.5 text-muted-foreground">3 months ago</td>
+                      <td className="py-2.5 text-muted-foreground">{summary.threeMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">ABOVE RANGE</span>
+                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{summary.aboveRange}</span>
                       </td>
                     </tr>
                     <tr>
                       <td className="py-2.5 font-semibold text-foreground">LDL Cholesterol</td>
                       <td className="py-2.5 font-bold text-destructive">165 mg/dL</td>
-                      <td className="py-2.5 text-muted-foreground">3 months ago</td>
+                      <td className="py-2.5 text-muted-foreground">{summary.threeMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">ABOVE RANGE</span>
+                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{summary.aboveRange}</span>
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2.5 font-semibold text-foreground">Resting ECG</td>
-                      <td className="py-2.5 text-foreground">Normal sinus rhythm</td>
-                      <td className="py-2.5 text-muted-foreground">6 months ago</td>
+                      <td className="py-2.5 font-semibold text-foreground">{summary.restingEcg}</td>
+                      <td className="py-2.5 text-foreground">{summary.ecgResult}</td>
+                      <td className="py-2.5 text-muted-foreground">{summary.sixMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">NORMAL</span>
+                        <span className="inline-block rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">{summary.normal}</span>
                       </td>
                     </tr>
                   </tbody>
@@ -333,9 +338,9 @@ function SolutionPage() {
             <div className="flex items-start gap-3 rounded-lg border-l-4 border-red-500 bg-red-50 p-4 text-red-900 shadow-sm">
               <AlertTriangle className="h-6 w-6 text-red-600 shrink-0 mt-0.5" />
               <div>
-                <h5 className="font-bold text-sm text-red-800">TRIAGE ALERT / RED FLAG DETECTED</h5>
+                <h5 className="font-bold text-sm text-red-800">{summary.triageAlertTitle}</h5>
                 <p className="text-xs sm:text-sm mt-0.5">
-                  Exertional chest pain + family history of MI → Recommend urgent cardiac evaluation & stat ECG.
+                  {summary.triageAlertText}
                 </p>
               </div>
             </div>
@@ -344,17 +349,17 @@ function SolutionPage() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
               <div className="flex flex-wrap items-center gap-3">
                 <button type="button" className="inline-flex items-center gap-2 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 shadow-sm">
-                  <CheckCircle2 className="h-4 w-4" /> Accept & Confirm Summary
+                  <CheckCircle2 className="h-4 w-4" /> {summary.acceptBtn}
                 </button>
                 <button type="button" className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
-                  <Edit3 className="h-4 w-4" /> Amend / Edit Notes
+                  <Edit3 className="h-4 w-4" /> {summary.amendBtn}
                 </button>
                 <button type="button" className="inline-flex items-center gap-2 rounded border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50">
-                  <XCircle className="h-4 w-4" /> Reject Draft
+                  <XCircle className="h-4 w-4" /> {summary.rejectBtn}
                 </button>
               </div>
               <span className="text-xs text-muted-foreground font-medium">
-                Decision Support Mode · Doctor responsibility unchanged
+                {summary.decisionSupportNote}
               </span>
             </div>
 

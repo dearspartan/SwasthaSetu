@@ -84,20 +84,9 @@ function LoginPage() {
           {role === "patient" ? (
             <form onSubmit={handlePatientSubmit} className="space-y-5">
               <div>
-                <div className="flex items-center justify-between">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                    {strings.loginPage.abhaLabel}
-                  </label>
-                  <a
-                    href="https://abha.abdm.gov.in/abha/v3/register"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-bold text-accent hover:underline flex items-center gap-1"
-                  >
-                    {(strings.loginPage as any).registerAbhaLink || "Register Official ABHA ID"}
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {strings.loginPage.abhaLabel}
+                </label>
                 <div className="mt-1.5 relative">
                   <input
                     type="text"
@@ -110,18 +99,6 @@ function LoginPage() {
                   <span className="absolute right-3 top-3 text-xs text-muted-foreground font-mono">
                     ABDM
                   </span>
-                </div>
-                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground bg-accent/10 p-2.5 rounded-md border border-accent/20">
-                  <span>{(strings.loginPage as any).noAbhaText || "Don't have an ABHA ID?"}</span>
-                  <a
-                    href="https://abha.abdm.gov.in/abha/v3/register"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-accent hover:underline flex items-center gap-1 shrink-0"
-                  >
-                    {(strings.loginPage as any).registerAbhaLink || "Register on official ABDM Portal"}
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
                 </div>
               </div>
 
@@ -149,6 +126,21 @@ function LoginPage() {
                 {strings.loginPage.submitPatient}
                 <ArrowRight className="h-4 w-4" />
               </button>
+
+              <div className="pt-2 text-center border-t border-border/60">
+                <p className="text-xs text-muted-foreground">
+                  {(strings.loginPage as any).noAbhaText || "Don't have an ABHA ID?"}{" "}
+                  <a
+                    href="https://abha.abdm.gov.in/abha/v3/register"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-accent hover:underline inline-flex items-center gap-1"
+                  >
+                    {(strings.loginPage as any).registerAbhaLink || "Create / Register Official ABHA ID"}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </p>
+              </div>
             </form>
           ) : (
             <form onSubmit={handleDoctorSubmit} className="space-y-5">

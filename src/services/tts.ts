@@ -12,16 +12,17 @@ export function speakTTS(
   window.speechSynthesis.cancel();
 
   // Determine language prefix
-  const langPrefix = lang.split("-")[0]; // 'hi', 'en', 'mr', 'ta', etc.
+  const safeLang = lang || "hi-IN";
+  const langPrefix = safeLang.split("-")[0] || "hi";
   const voices = window.speechSynthesis.getVoices();
 
   // Find best matching voice
   const matchingVoice = voices.find(
     (v) =>
-      v.lang === lang ||
-      v.lang.replace("_", "-") === lang ||
-      v.lang.startsWith(langPrefix) ||
-      v.name.toLowerCase().includes(langPrefix) ||
+      v.lang === safeLang ||
+      v.lang.replace("_", "-") === safeLang ||
+      (langPrefix && v.lang.startsWith(langPrefix)) ||
+      (langPrefix && v.name.toLowerCase().includes(langPrefix)) ||
       v.name.toLowerCase().includes("hindi")
   );
 

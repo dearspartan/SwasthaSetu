@@ -113,6 +113,11 @@ import { useLocale } from "@/context/LocaleContext";
 function FeasibilityPage() {
   const { strings } = useLocale();
 
+  const enablers = (strings.feasibilityPage as any).enablerRows || ENABLERS;
+  const risks = (strings.feasibilityPage as any).riskRows || RISKS;
+  const compliance = (strings.feasibilityPage as any).complianceRows || COMPLIANCE;
+  const adoption = (strings.feasibilityPage as any).adoptionPhases || ADOPTION;
+
   return (
     <>
       <PageHeader
@@ -122,28 +127,23 @@ function FeasibilityPage() {
       />
 
       <Section title={strings.feasibilityPage.feasibleTitle}>
-        <DataTable headers={[strings.feasibilityPage.enablerHeader, strings.feasibilityPage.detailHeader]} rows={ENABLERS} />
+        <DataTable headers={[strings.feasibilityPage.enablerHeader, strings.feasibilityPage.detailHeader]} rows={enablers} />
       </Section>
 
       <Section title={strings.feasibilityPage.risksTitle} tone="surface">
-        <DataTable headers={[strings.feasibilityPage.riskHeader, strings.feasibilityPage.mitigationHeader]} rows={RISKS} />
-        <div className="mt-8">
-          <CalloutBar>
-            {strings.feasibilityPage.riskCallout}
-          </CalloutBar>
-        </div>
+        <DataTable headers={[strings.feasibilityPage.riskHeader, strings.feasibilityPage.mitigationHeader]} rows={risks} />
       </Section>
 
       <Section
         title={strings.feasibilityPage.complianceTitle}
         lead={strings.feasibilityPage.complianceLead}
       >
-        <DataTable headers={[strings.feasibilityPage.regHeader, strings.feasibilityPage.complianceHeader]} rows={COMPLIANCE} />
+        <DataTable headers={[strings.feasibilityPage.regHeader, strings.feasibilityPage.complianceHeader]} rows={compliance} />
       </Section>
 
       <Section title={strings.feasibilityPage.adoptionTitle} tone="surface">
         <div className="grid gap-6 md:grid-cols-3">
-          {ADOPTION.map((p) => (
+          {adoption.map((p: any) => (
             <InfoCard key={p.index} index={p.index} title={p.title}>
               {p.body}
             </InfoCard>

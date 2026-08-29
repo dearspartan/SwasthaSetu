@@ -70,49 +70,8 @@ import { useLocale } from "@/context/LocaleContext";
 function ProblemsPage() {
   const { strings } = useLocale();
 
-  const REALITY = [
-    ["Consultation time", "2–5 minutes per OPD patient (BMJ Open, 2017) — among the shortest globally"],
-    ["Patient volume", "Tertiary government hospitals register 4,000–10,000 OPD patients per day"],
-    [
-      "History-taking yield",
-      "A thorough history yields the correct diagnosis in 70–80% of cases — but there is no time to take one",
-    ],
-    [
-      "Records",
-      "Patients carry loose paper prescriptions, lab reports and discharge summaries — handwritten, multilingual, unorganised",
-    ],
-    [
-      "AYUSH gap",
-      "Ayurvedic intake (Dashavidha Pariksha) is far more extensive than allopathic history — impossible to complete manually in OPD time",
-    ],
-    [
-      "Digital infrastructure",
-      "ABDM provides ABHA IDs, FHIR APIs and HIE — but the first-mile patient intake layer is missing",
-    ],
-  ] as const;
-
-  const FAILURES = [
-    [
-      "Hospital registration systems",
-      "Capture only demographics — name, age, token. Zero clinical history.",
-    ],
-    [
-      "Mobile health apps / tele-triage bots",
-      "Require smartphone literacy, stable connectivity and pre-enrolment — excluding elderly, rural and low-literacy patients",
-    ],
-    [
-      "Nurse-led triage desks",
-      "Human-resource-limited, do not scale to 5,000+ daily patients, reintroduce the same bottleneck",
-    ],
-    [
-      "Generic document scanners",
-      "Digitise images but do not extract, structure or link clinical content to patient records",
-    ],
-    [
-      "Existing EHR / EMR systems",
-      "Doctor-side data entry after the consultation — does not solve the pre-consultation history gap",
-    ],
-  ] as const;
+  const reality = (strings.problemsPage as any).realityRows || REALITY;
+  const failures = (strings.problemsPage as any).failureRows || FAILURES;
 
   return (
     <>
@@ -126,7 +85,7 @@ function ProblemsPage() {
         title={strings.problemsPage.realityTitle}
         lead={strings.problemsPage.realityLead}
       >
-        <DataTable headers={[strings.problemsPage.dimHeader, strings.problemsPage.realityHeader]} rows={REALITY} />
+        <DataTable headers={[strings.problemsPage.dimHeader, strings.problemsPage.realityHeader]} rows={reality} />
         <div className="mt-8">
           <CalloutBar>
             <strong className="text-primary">{strings.problemsPage.resultPrefix}</strong>{" "}
@@ -153,7 +112,7 @@ function ProblemsPage() {
         title={strings.problemsPage.failuresTitle}
         lead={strings.problemsPage.failuresLead}
       >
-        <DataTable headers={[strings.problemsPage.approachHeader, strings.problemsPage.shortfallHeader]} rows={FAILURES} />
+        <DataTable headers={[strings.problemsPage.approachHeader, strings.problemsPage.shortfallHeader]} rows={failures} />
       </Section>
     </>
   );

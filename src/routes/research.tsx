@@ -78,6 +78,11 @@ import { useLocale } from "@/context/LocaleContext";
 function ResearchPage() {
   const { strings } = useLocale();
 
+  const evidence = (strings.researchPage as any).evidenceRows || EVIDENCE;
+  const standards = (strings.researchPage as any).standardRows || STANDARDS;
+  const national = (strings.researchPage as any).nationalCards || NATIONAL;
+  const openQuestions = (strings.researchPage as any).openQuestions || OPEN;
+
   return (
     <>
       <PageHeader
@@ -87,16 +92,16 @@ function ResearchPage() {
       />
 
       <Section title={strings.researchPage.evidenceTitle}>
-        <DataTable headers={[strings.researchPage.areaHeader, strings.researchPage.findingHeader]} rows={EVIDENCE} />
+        <DataTable headers={[strings.researchPage.areaHeader, strings.researchPage.findingHeader]} rows={evidence} />
       </Section>
 
       <Section title={strings.researchPage.standardsTitle} tone="surface">
-        <DataTable headers={[strings.researchPage.standardHeader, strings.researchPage.roleHeader]} rows={STANDARDS} />
+        <DataTable headers={[strings.researchPage.standardHeader, strings.researchPage.roleHeader]} rows={standards} />
       </Section>
 
       <Section title={strings.researchPage.nationalTitle}>
         <div className="grid gap-6 md:grid-cols-3">
-          {NATIONAL.map((n) => (
+          {national.map((n: any) => (
             <InfoCard key={n.index} index={n.index} title={n.title}>
               {n.body}
             </InfoCard>
@@ -106,7 +111,7 @@ function ResearchPage() {
 
       <Section title={strings.researchPage.openTitle} tone="surface">
         <ul className="grid gap-4 md:grid-cols-2">
-          {OPEN.map((q) => (
+          {openQuestions.map((q: string) => (
             <li key={q} className="border-l-4 border-accent bg-card p-5 text-sm text-foreground">
               {q}
             </li>

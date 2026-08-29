@@ -71,6 +71,10 @@ const ACCESSIBILITY = [
 function TechnicalPage() {
   const { strings } = useLocale();
 
+  const stack = (strings.technicalPage as any).stackRows || STACK;
+  const ocrTiers = (strings.technicalPage as any).ocrRows || OCR_TIERS;
+  const accessibility = (strings.technicalPage as any).a11yRows || ACCESSIBILITY;
+
   return (
     <>
       <PageHeader
@@ -80,7 +84,7 @@ function TechnicalPage() {
       />
 
       <Section title={strings.technicalPage.stackTitle}>
-        <DataTable headers={[strings.technicalPage.layerHeader, strings.technicalPage.techHeader, strings.technicalPage.purposeHeader]} rows={STACK} />
+        <DataTable headers={[strings.technicalPage.layerHeader, strings.technicalPage.techHeader, strings.technicalPage.purposeHeader]} rows={stack} />
       </Section>
 
       <Section title={strings.technicalPage.archTitle} tone="surface">
@@ -237,7 +241,7 @@ function TechnicalPage() {
         title={strings.technicalPage.ocrTitle}
         lead={strings.technicalPage.ocrLead}
       >
-        <DataTable headers={[strings.technicalPage.tierHeader, strings.technicalPage.inputHeader, strings.technicalPage.handlingHeader]} rows={OCR_TIERS} />
+        <DataTable headers={[strings.technicalPage.tierHeader, strings.technicalPage.inputHeader, strings.technicalPage.handlingHeader]} rows={ocrTiers} />
         <div className="mt-8">
           <CalloutBar>
             {strings.technicalPage.ocrCallout}
@@ -249,7 +253,7 @@ function TechnicalPage() {
         <p className="mb-8 max-w-3xl text-muted-foreground">
           {strings.technicalPage.a11yIntro}
         </p>
-        <DataTable headers={[strings.technicalPage.principleHeader, strings.technicalPage.implHeader]} rows={ACCESSIBILITY} />
+        <DataTable headers={[strings.technicalPage.principleHeader, strings.technicalPage.implHeader]} rows={accessibility} />
       </Section>
     </>
   );

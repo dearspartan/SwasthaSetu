@@ -88,6 +88,11 @@ import { useLocale } from "@/context/LocaleContext";
 function ImpactsPage() {
   const { strings } = useLocale();
 
+  const time = (strings.impactsPage as any).timeRows || TIME;
+  const stakeholders = (strings.impactsPage as any).stakeholderCards || STAKEHOLDERS;
+  const scenarios = (strings.impactsPage as any).scenarioCards || SCENARIOS;
+  const metrics = (strings.impactsPage as any).metricRows || METRICS;
+
   return (
     <>
       <PageHeader
@@ -102,13 +107,13 @@ function ImpactsPage() {
       >
         <DataTable
           headers={[strings.impactsPage.phaseHeader, strings.impactsPage.withoutHeader, strings.impactsPage.withHeader]}
-          rows={TIME}
+          rows={time}
         />
       </Section>
 
       <Section title={strings.impactsPage.stakeholderTitle} tone="surface">
         <div className="grid gap-6 md:grid-cols-3">
-          {STAKEHOLDERS.map((s) => (
+          {stakeholders.map((s: any) => (
             <InfoCard key={s.index} index={s.index} title={s.title}>
               {s.body}
             </InfoCard>
@@ -118,7 +123,7 @@ function ImpactsPage() {
 
       <Section title={strings.impactsPage.scenariosTitle}>
         <div className="grid gap-6 md:grid-cols-2">
-          {SCENARIOS.map((s) => (
+          {scenarios.map((s: any) => (
             <InfoCard key={s.index} index={s.index} title={s.title}>
               {s.body}
             </InfoCard>
@@ -127,7 +132,7 @@ function ImpactsPage() {
       </Section>
 
       <Section title={strings.impactsPage.metricsTitle} tone="surface">
-        <DataTable headers={[strings.impactsPage.metricHeader, strings.impactsPage.targetHeader]} rows={METRICS} />
+        <DataTable headers={[strings.impactsPage.metricHeader, strings.impactsPage.targetHeader]} rows={metrics} />
       </Section>
     </>
   );

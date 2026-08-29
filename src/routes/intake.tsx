@@ -63,18 +63,21 @@ const INDIAN_LANGUAGES = [
   { code: "kn-IN", name: "ಕನ್ನಡ (Kannada)" },
 ];
 
-const CHATBOT_TRANSLATIONS: Record<
-  string,
-  {
-    q1Text: string;
-    q1Options: string[];
-    q2Text: string;
-    q2Options: string[];
-    q3Text: string;
-    q3Options: string[];
-    q4Text: string;
-  }
-> = {
+interface ChatbotTranslation {
+  q1Text: string;
+  q1Phonetic?: string;
+  q1Options: string[];
+  q2Text: string;
+  q2Phonetic?: string;
+  q2Options: string[];
+  q3Text: string;
+  q3Phonetic?: string;
+  q3Options: string[];
+  q4Text: string;
+  q4Phonetic?: string;
+}
+
+const CHATBOT_TRANSLATIONS: Record<string, ChatbotTranslation> = {
   "en-IN": {
     q1Text: "Namaste! I am SwasthaSetu's AI Clinical Intake Assistant. What chief health symptom or discomfort brings you to the hospital today?",
     q1Options: ["Chest pain / Discomfort", "Fever & Cough", "Abdominal Pain", "Severe Headaches", "AYUSH General Checkup"],
@@ -153,15 +156,45 @@ const CHATBOT_TRANSLATIONS: Record<
   },
 };
 
+const AYUSH_CHATBOT_TRANSLATIONS: Record<string, ChatbotTranslation> = {
+  "en-IN": {
+    q1Text: "Namaste! I am SwasthaSetu's AI Ayurvedic Clinical Assistant. I will guide you through an active Dashavidha Pariksha assessment (दशविध परीक्षा). What chief health imbalance or symptom brings you to the Vaidya today?",
+    q1Phonetic: "Namaste! I am SwasthaSetu's AI Ayurvedic Assistant. I will guide you through active Dashavidha Pariksha assessment.",
+    q1Options: ["Vata Imbalance (Joint pain, Gas, Dryness)", "Pitta Imbalance (Acidity, Skin rash, Burning)", "Kapha Imbalance (Mucus, Lethargy, Weight gain)", "General Ayurvedic Wellness Checkup"],
+    q2Text: "Thank you. Let us evaluate your Vikriti (Imbalance) and Agni (Digestive Fire). How is your appetite, and do you experience burning, gas, or heaviness after meals?",
+    q2Phonetic: "Thank you. Let us evaluate your Vikriti and Agni. How is your appetite and digestion?",
+    q2Options: ["Irregular appetite & gas (Vishama Agni)", "Intense hunger & burning (Tikshna Agni)", "Slow digestion & heaviness (Manda Agni)", "Normal digestion (Sama Agni)"],
+    q3Text: "Understood. Now evaluating Koshtha (Bowel Nature) and Ahara-Vihara (Diet & Sleep): How are your bowel movements, and how is your sleep quality?",
+    q3Phonetic: "Understood. Now evaluating Koshtha and Ahara-Vihara.",
+    q3Options: ["Hard stools & constipation (Krura Koshtha)", "Loose stools (Mrudu Koshtha)", "Regular normal stools (Madhyama Koshtha)"],
+    q4Text: "Thank you for completing the active Dashavidha Pariksha interview. I have compiled your complete Ayurvedic profile (Prakriti, Vikriti, Agni, Koshtha, Sara, Satmya, Sattva) for the Vaidya.",
+    q4Phonetic: "Thank you for completing Dashavidha Pariksha interview.",
+  },
+  "hi-IN": {
+    q1Text: "नमस्ते! मैं स्वास्थ्यसेतु का एआई आयुर्वेदिक क्लिनिकल सहायक हूं। मैं आपके सक्रिय दशविध परीक्षा (Dashavidha Pariksha) मूल्यांकन का संचालन करूंगा। आज आप वैद्य जी के पास कौन सा मुख्य दोष असंतुलन या लक्षण लेकर आए हैं?",
+    q1Phonetic: "Namaste! Main SwasthaSetu ka AI Ayurvedic assistant hoon. Main aapke sakriya Dashavidha Pariksha mulyankan ka sanchalan karunga.",
+    q1Options: ["वात असंतुलन (जोड़ों का दर्द, गैस, रूखापन)", "पित्त असंतुलन (एसिडिटी, त्वचा पर चकत्ते, जलन)", "कफ असंतुलन (बलगम, आलस्य, वजन बढ़ना)", "सामान्य आयुर्वेदिक स्वास्थ्य जांच"],
+    q2Text: "धन्यवाद। आइए आपकी विकृति और अग्नि (Agni - पाचन शक्ति) का मूल्यांकन करें। आपकी भूख कैसी रहती है और भोजन के बाद क्या पेट में जलन, गैस या भारीपन महसूस होता है?",
+    q2Phonetic: "Dhanyavaad. Aaiye aapki Vikriti aur Agni ka mulyankan karein.",
+    q2Options: ["अनियमित भूख और गैस (विषमाग्नि)", "तेज भूख और छाती में जलन (तीक्ष्णाग्नि)", "कम भूख और भारीपन (मंदाग्नि)", "सामान्य पाचन (समाग्नि)"],
+    q3Text: "समझ गया। अब आपके कोष्ठ (Koshtha - मल प्रकृति) और आहार-विहार का मूल्यांकन: आपका मल त्याग कैसा रहता है और आपकी नींद कैसी है?",
+    q3Phonetic: "Samajh gaya. Ab aapke Koshtha aur Ahara-Vihara ka mulyankan.",
+    q3Options: ["कड़ा मल और कब्ज (क्रूर कोष्ठ) · नींद कच्ची", "पतला मल और तीव्र वेग (मृदु कोष्ठ) · अच्छी नींद", "सामान्य मल त्याग (मध्यम कोष्ठ) · सामान्य नींद"],
+    q4Text: "दशविध परीक्षा साक्षात्कार पूरा करने के लिए धन्यवाद। मैंने वैद्य जी के लिए आपका संपूर्ण आयुर्वेदिक प्रोफाइल दर्ज कर लिया है।",
+    q4Phonetic: "Dashavidha Pariksha sakshatkar pura karne ke liye dhanyavaad.",
+  },
+};
+
 function IntakeWizardPage() {
-  const { strings } = useLocale();
+  const { locale, strings } = useLocale();
+  const wizardStrings = (strings.intakeWizard as any);
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
 
   // STEP 1: Informed Patient Consent (DPDP Act 2023 & ABDM)
-  const [consentHistory, setConsentHistory] = useState(true);
-  const [consentOcr, setConsentOcr] = useState(true);
-  const [consentAbdm, setConsentAbdm] = useState(true);
+  const [consentHistory, setConsentHistory] = useState(false);
+  const [consentOcr, setConsentOcr] = useState(false);
+  const [consentAbdm, setConsentAbdm] = useState(false);
   const [consentError, setConsentError] = useState(false);
 
   // STEP 2: Location & Care Destination
@@ -176,6 +209,7 @@ function IntakeWizardPage() {
   const [department, setDepartment] = useState("General Medicine");
   const [consultType, setConsultType] = useState<"new" | "followup">("new");
   const [doctorPref, setDoctorPref] = useState<"any" | "specific">("specific");
+  const [selectedDoctor, setSelectedDoctor] = useState("Dr. Ananya Sharma (NMC #2021-94812 · General Medicine)");
 
   // MODULE A: AI Clinical History Engine State
   const [intakeMode, setIntakeMode] = useState<"allopathy" | "ayush">("allopathy");
@@ -185,40 +219,52 @@ function IntakeWizardPage() {
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [aiThinking, setAiThinking] = useState(false);
 
+  // Synchronize intake selectedLang with site locale
+  useEffect(() => {
+    if (locale === "hi" && selectedLang !== "hi-IN") {
+      setSelectedLang("hi-IN");
+    } else if (locale === "en" && selectedLang !== "en-IN") {
+      setSelectedLang("en-IN");
+    }
+  }, [locale]);
+
   // Red Flag Emergency Overlay Modal State
   const [showRedFlagModal, setShowRedFlagModal] = useState(false);
   const [redFlagAcknowledged, setRedFlagAcknowledged] = useState(false);
 
-  // Conversational Messages Log (SOCRATES / OLDCARTS Framework)
+  // Conversational Messages Log (SOCRATES / Dashavidha Pariksha Framework)
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       sender: "ai",
-      text: CHATBOT_TRANSLATIONS["en-IN"].q1Text,
-      options: CHATBOT_TRANSLATIONS["en-IN"].q1Options,
+      text: CHATBOT_TRANSLATIONS["en-IN"]!.q1Text,
+      options: CHATBOT_TRANSLATIONS["en-IN"]!.q1Options,
       frameworkTag: "SOCRATES — Site & Chief Complaint",
     },
   ]);
 
-  // Update initial message and trigger TTS when language changes (ONLY on Step 4 AI Engine)
+  // Update initial message and trigger TTS when language or intakeMode changes (ONLY on Step 4 AI Engine)
   useEffect(() => {
-    const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"];
+    const isAyush = intakeMode === "ayush";
+    const translations = isAyush ? AYUSH_CHATBOT_TRANSLATIONS : CHATBOT_TRANSLATIONS;
+    const t = translations[selectedLang] || translations["en-IN"] || CHATBOT_TRANSLATIONS["en-IN"]!;
+    
     setMessages((prev) => {
-      if (prev.length === 1 && prev[0].sender === "ai") {
+      if (prev.length === 1 && prev[0]?.sender === "ai") {
         return [
           {
             sender: "ai",
             text: t.q1Text,
             options: t.q1Options,
-            frameworkTag: "SOCRATES — Site & Chief Complaint",
+            frameworkTag: isAyush ? "Dashavidha Pariksha — Vikriti & Chief Symptom" : "SOCRATES — Site & Chief Complaint",
           },
         ];
       }
       return prev;
     });
     if (step === 4 && ttsEnabled) {
-      speakText(t.q1Text, (t as any).q1Phonetic);
+      speakText(t.q1Text, t.q1Phonetic);
     }
-  }, [selectedLang, step]);
+  }, [selectedLang, intakeMode, step]);
 
   const [collectedHistory, setCollectedHistory] = useState({
     complaint: "Chest pain & persistent cough",
@@ -329,17 +375,19 @@ function IntakeWizardPage() {
     setMessages(newMessages);
     setAiThinking(true);
 
-    // Send multi-turn transcript directly to Gemini 2.0 Flash Model
+    // Send multi-turn transcript directly to Gemini 2.0 Flash Model with intakeMode (allopathy or ayush)
     try {
-      const geminiResult = await queryGemini2FlashChat(query, newMessages, selectedLang);
+      const geminiResult = await queryGemini2FlashChat(query, newMessages, selectedLang, intakeMode);
       setAiThinking(false);
 
       const aiReply: ChatMessage = {
         sender: "ai",
         text: geminiResult.replyText,
-        options: geminiResult.suggestedOptions,
         frameworkTag: geminiResult.frameworkTag || "Gemini 2.0 Flash Model",
       };
+      if (geminiResult.suggestedOptions && geminiResult.suggestedOptions.length > 0) {
+        aiReply.options = geminiResult.suggestedOptions;
+      }
 
       setMessages((prev) => [...prev, aiReply]);
       speakText(aiReply.text);
@@ -388,13 +436,13 @@ function IntakeWizardPage() {
               </span>
             </div>
             <h1 className="font-display text-2xl font-bold text-primary mt-1">
-              {step === 1 && "Step 1 · Informed Patient Consent (DPDP Act 2023 & ABDM)"}
-              {step === 2 && "Step 2 · Location & Care Destination"}
-              {step === 3 && "Step 3 · Facility & Department Selection"}
-              {step === 4 && "Step 4 · AI Clinical History Engine (SOCRATES / AYUSH)"}
-              {step === 5 && "Step 5 · Tiered OCR Document Digitisation"}
-              {step === 6 && "Step 6 · Structured Clinical Summary & Doctor-Only AI Insights"}
-              {step === 7 && "Step 7 · OPD Queue Token #024 Generated"}
+              {step === 1 && (wizardStrings.step1Title || "Step 1 · Informed Patient Consent (DPDP Act 2023 & ABDM)")}
+              {step === 2 && (wizardStrings.step2Title || "Step 2 · Location & Care Destination")}
+              {step === 3 && (wizardStrings.step3Title || "Step 3 · Facility & Department Selection")}
+              {step === 4 && (wizardStrings.step4Title || "Step 4 · AI Clinical History Engine (SOCRATES / AYUSH)")}
+              {step === 5 && (wizardStrings.step5Title || "Step 5 · Tiered OCR Document Digitisation")}
+              {step === 6 && (wizardStrings.step6Title || "Step 6 · Structured Clinical Summary & Doctor-Only AI Insights")}
+              {step === 7 && (wizardStrings.step7Title || "Step 7 · OPD Queue Token #024 Generated")}
             </h1>
           </div>
 
@@ -469,7 +517,7 @@ function IntakeWizardPage() {
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="font-display text-lg font-bold text-primary flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-accent" />
-                Informed Patient Consent for Information Collection
+                {wizardStrings.consentHeading || "Informed Patient Consent for Information Collection"}
               </h2>
               <span className="rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 border border-emerald-300 flex items-center gap-1">
                 <ShieldCheck className="h-3 w-3" /> DPDP Act 2023 & ABDM Framework
@@ -480,7 +528,7 @@ function IntakeWizardPage() {
             <div className="flex flex-wrap items-center justify-between bg-accent/10 border border-accent/30 p-3.5 rounded-xl text-xs gap-3">
               <div className="flex items-center gap-2 font-semibold text-foreground">
                 <Volume2 className="h-4 w-4 text-accent shrink-0" />
-                <span>Audio-Guided Consent Notice (ऑडियो सहमति सूचना):</span>
+                <span>{wizardStrings.audioConsentNotice || "Audio-Guided Consent Notice (ऑडियो सहमति सूचना):"}</span>
               </div>
               <button
                 type="button"
@@ -491,7 +539,7 @@ function IntakeWizardPage() {
                 className="px-3.5 py-1.5 bg-accent text-accent-foreground rounded-md font-bold text-xs hover:bg-accent/90 transition flex items-center gap-1.5 shadow-sm"
               >
                 <Volume2 className="h-3.5 w-3.5" />
-                Listen / सहमति सुनें
+                {wizardStrings.listenConsent || "Listen / सहमति सुनें"}
               </button>
             </div>
 
@@ -499,40 +547,40 @@ function IntakeWizardPage() {
             <div className="space-y-4 text-xs sm:text-sm text-foreground bg-surface p-5 rounded-xl border border-border">
               <h3 className="font-bold text-primary text-sm flex items-center gap-2">
                 <FileText className="h-4 w-4 text-accent" />
-                Purpose of Information Collection (Digital Clinical History & Records)
+                {wizardStrings.purposeHeading || "Purpose of Information Collection (Digital Clinical History & Records)"}
               </h3>
               
               <p className="text-muted-foreground leading-relaxed text-xs">
-                In compliance with the <strong>Digital Personal Data Protection (DPDP) Act 2023</strong> and the <strong>Ayushman Bharat Digital Mission (ABDM) Consent Architecture</strong>, SwasthaSetu requests your explicit authorization to capture and process your health details for today's OPD consultation:
+                {wizardStrings.purposeDesc || "In compliance with the Digital Personal Data Protection (DPDP) Act 2023 and the Ayushman Bharat Digital Mission (ABDM) Consent Architecture, SwasthaSetu requests your explicit authorization to capture and process your health details for today's OPD consultation:"}
               </p>
 
               <div className="grid gap-3 sm:grid-cols-3 pt-1">
                 <div className="p-3 bg-background rounded-lg border border-border space-y-1">
                   <div className="font-bold text-xs text-primary flex items-center gap-1.5">
-                    <Activity className="h-3.5 w-3.5 text-accent" /> 1. Symptom History
+                    <Activity className="h-3.5 w-3.5 text-accent" /> {wizardStrings.symptomHistoryTitle || "1. Symptom History"}
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-snug">Interactive voice & text intake of chief health complaints and SOCRATES history for your attending doctor.</p>
+                  <p className="text-[11px] text-muted-foreground leading-snug">{wizardStrings.symptomHistorySub || "Interactive voice & text intake of chief health complaints and SOCRATES history for your attending doctor."}</p>
                 </div>
                 <div className="p-3 bg-background rounded-lg border border-border space-y-1">
                   <div className="font-bold text-xs text-primary flex items-center gap-1.5">
-                    <Upload className="h-3.5 w-3.5 text-accent" /> 2. Document OCR
+                    <Upload className="h-3.5 w-3.5 text-accent" /> {wizardStrings.docOcrTitle || "2. Document OCR"}
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-snug">Digitisation and entity extraction of legacy paper prescriptions and diagnostic lab reports.</p>
+                  <p className="text-[11px] text-muted-foreground leading-snug">{wizardStrings.docOcrSub || "Digitisation and entity extraction of legacy paper prescriptions and diagnostic lab reports."}</p>
                 </div>
                 <div className="p-3 bg-background rounded-lg border border-border space-y-1">
                   <div className="font-bold text-xs text-primary flex items-center gap-1.5">
-                    <ShieldCheck className="h-3.5 w-3.5 text-accent" /> 3. ABDM FHIR Linking
+                    <ShieldCheck className="h-3.5 w-3.5 text-accent" /> {wizardStrings.abdmLinkingTitle || "3. ABDM FHIR Linking"}
                   </div>
-                  <p className="text-[11px] text-muted-foreground leading-snug">Formatting clinical summary into an ABDM FHIR bundle linked to your ABHA health account.</p>
+                  <p className="text-[11px] text-muted-foreground leading-snug">{wizardStrings.abdmLinkingSub || "Formatting clinical summary into an ABDM FHIR bundle linked to your ABHA health account."}</p>
                 </div>
               </div>
 
               <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-900 space-y-1">
-                <strong className="block text-emerald-950 font-bold">Patient Data Rights & Privacy Guarantee:</strong>
+                <strong className="block text-emerald-950 font-bold">{wizardStrings.dataRightsTitle || "Patient Data Rights & Privacy Guarantee:"}</strong>
                 <ul className="list-disc list-inside space-y-0.5 text-[11px] text-emerald-850">
-                  <li>Your health information is used <strong>strictly</strong> for your medical care during this consultation.</li>
-                  <li>Data is encrypted end-to-end and stored adhering to ABDM health data standards.</li>
-                  <li>Consent is revocable at any time without compromising your right to standard medical care.</li>
+                  <li>{wizardStrings.dataRights1 || "Your health information is used strictly for your medical care during this consultation."}</li>
+                  <li>{wizardStrings.dataRights2 || "Data is encrypted end-to-end and stored adhering to ABDM health data standards."}</li>
+                  <li>{wizardStrings.dataRights3 || "Consent is revocable at any time without compromising your right to standard medical care."}</li>
                 </ul>
               </div>
             </div>
@@ -547,8 +595,8 @@ function IntakeWizardPage() {
                   className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
-                  <strong className="text-foreground font-bold block">Consent for Clinical Intake & Symptom Interview</strong>
-                  <span className="text-muted-foreground">I consent to capturing and structuring my health symptoms via SwasthaSetu AI assistant for my doctor.</span>
+                  <strong className="text-foreground font-bold block">{wizardStrings.consentBox1Title || "Consent for Clinical Intake & Symptom Interview"}</strong>
+                  <span className="text-muted-foreground">{wizardStrings.consentBox1Sub || "I consent to capturing and structuring my health symptoms via SwasthaSetu AI assistant for my doctor."}</span>
                 </div>
               </label>
 
@@ -560,8 +608,8 @@ function IntakeWizardPage() {
                   className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
-                  <strong className="text-foreground font-bold block">Consent for Medical Document Digitization & OCR</strong>
-                  <span className="text-muted-foreground">I consent to scanning, extracting parameters, and summarizing my previous medical prescriptions & lab tests.</span>
+                  <strong className="text-foreground font-bold block">{wizardStrings.consentBox2Title || "Consent for Medical Document Digitization & OCR"}</strong>
+                  <span className="text-muted-foreground">{wizardStrings.consentBox2Sub || "I consent to scanning, extracting parameters, and summarizing my previous medical prescriptions & lab tests."}</span>
                 </div>
               </label>
 
@@ -573,8 +621,8 @@ function IntakeWizardPage() {
                   className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
-                  <strong className="text-foreground font-bold block">Consent for ABDM FHIR Profile Linking</strong>
-                  <span className="text-muted-foreground">I consent to linking this structured clinical intake summary to my ABHA account for my treating physician.</span>
+                  <strong className="text-foreground font-bold block">{wizardStrings.consentBox3Title || "Consent for ABDM FHIR Profile Linking"}</strong>
+                  <span className="text-muted-foreground">{wizardStrings.consentBox3Sub || "I consent to linking this structured clinical intake summary to my ABHA account for my treating physician."}</span>
                 </div>
               </label>
             </div>
@@ -600,7 +648,7 @@ function IntakeWizardPage() {
                 className="text-xs font-bold text-accent hover:underline flex items-center gap-1"
               >
                 <CheckCircle2 className="h-3.5 w-3.5" />
-                Select All & Agree
+                {wizardStrings.selectAllAgree || "Select All & Agree"}
               </button>
 
               <button
@@ -615,7 +663,7 @@ function IntakeWizardPage() {
                 }}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
-                I Agree & Give Consent
+                {wizardStrings.iAgreeBtn || "I Agree & Give Consent"}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -704,9 +752,73 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 3: FACILITY & DEPARTMENT SELECTION */}
+        {/* STEP 3: FACILITY & DEPARTMENT SELECTION (WITH ALLOPATHIC / AYUSH TOGGLE) */}
         {step === 3 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
+            {/* Medical System & Clinical Framework Selector */}
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                Medical System & Clinical Approach
+              </label>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIntakeMode("allopathy");
+                    if (department === "AYUSH OPD" || department.includes("Ayurvedic")) {
+                      setDepartment("General Medicine");
+                    }
+                    setSelectedDoctor("Dr. Ananya Sharma (NMC #2021-94812 · General Medicine)");
+                  }}
+                  className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 ${
+                    intakeMode === "allopathy"
+                      ? "border-accent bg-accent/15 shadow-sm"
+                      : "border-border bg-surface hover:border-primary/40"
+                  }`}
+                >
+                  <Stethoscope className="h-6 w-6 text-accent shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-foreground text-sm">Allopathic Medicine</h3>
+                      <span className="text-[10px] font-bold uppercase bg-accent/20 text-accent px-2 py-0.5 rounded">
+                        SOCRATES Framework
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Standard clinical history intake (SOCRATES & OLDCARTS) for Allopathic OPDs.
+                    </p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIntakeMode("ayush");
+                    setDepartment("AYUSH OPD");
+                    setSelectedDoctor("Vaidya Devrat Sharma (AYUSH Reg #AYU-2017-4819 · Kayachikitsa)");
+                  }}
+                  className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 ${
+                    intakeMode === "ayush"
+                      ? "border-emerald-500 bg-emerald-500/15 shadow-sm"
+                      : "border-border bg-surface hover:border-primary/40"
+                  }`}
+                >
+                  <Heart className="h-6 w-6 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-foreground text-sm">AYUSH / Ayurvedic</h3>
+                      <span className="text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded border border-emerald-300">
+                        Dashavidha Pariksha
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Traditional Ayurvedic 10-fold assessment (Prakriti, Agni, Koshtha, Dhatus) for Vaidyas.
+                    </p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{strings.intakeWizard.selectFacility}</label>
               <select
@@ -717,20 +829,28 @@ function IntakeWizardPage() {
                 <option value="Swastha District Hospital">Swastha District Hospital (2.4 km · Govt District OPD)</option>
                 <option value="Apex Super Speciality Hospital">Apex Super Speciality Hospital (5.1 km · Empaneled Private)</option>
                 <option value="City Community Health Centre">City Community Health Centre (1.2 km · CHC)</option>
+                {intakeMode === "ayush" && <option value="Government Ayurvedic Hospital">Government Ayurvedic Hospital (3.0 km · AYUSH Center)</option>}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{strings.intakeWizard.selectDept}</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                {strings.intakeWizard.selectDept} ({intakeMode === "allopathy" ? "Allopathic" : "AYUSH / Ayurvedic"})
+              </label>
               <div className="grid gap-3 sm:grid-cols-3">
-                {["General Medicine", "Cardiology", "Pediatrics", "ENT", "AYUSH OPD"].map((d) => (
+                {(intakeMode === "allopathy"
+                  ? ["General Medicine", "Cardiology", "Pediatrics", "ENT", "Emergency Medicine"]
+                  : ["AYUSH OPD", "Kayachikitsa (Ayurvedic Medicine)", "Panchakarma", "Dravyaguna", "Shalya Tantra"]
+                ).map((d) => (
                   <button
                     key={d}
                     type="button"
                     onClick={() => setDepartment(d)}
                     className={`p-3 rounded-lg border text-xs font-bold transition-all text-center ${
                       department === d
-                        ? "border-accent bg-accent text-accent-foreground shadow-sm"
+                        ? intakeMode === "ayush"
+                          ? "border-emerald-500 bg-emerald-600 text-white shadow-sm"
+                          : "border-accent bg-accent text-accent-foreground shadow-sm"
                         : "border-border bg-surface text-foreground hover:border-primary/40"
                     }`}
                   >
@@ -766,14 +886,51 @@ function IntakeWizardPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{strings.intakeWizard.doctorPref}</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                  {intakeMode === "allopathy" ? "Select Allopathic Physician" : "Select Ayurvedic Vaidya / Doctor"}
+                </label>
                 <select
-                  value={doctorPref}
-                  onChange={(e) => setDoctorPref(e.target.value as any)}
+                  value={selectedDoctor}
+                  onChange={(e) => setSelectedDoctor(e.target.value)}
                   className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground outline-none focus:border-accent"
                 >
-                  <option value="any">{strings.intakeWizard.anyDoc}</option>
-                  <option value="specific">{strings.intakeWizard.specificDoc}</option>
+                  {intakeMode === "allopathy" ? (
+                    <>
+                      <option value="Dr. Ananya Sharma (NMC #2021-94812 · General Medicine)">
+                        Dr. Ananya Sharma (NMC #2021-94812 · General Medicine)
+                      </option>
+                      <option value="Dr. Vikram Sethi (NMC #2015-38491 · Cardiology)">
+                        Dr. Vikram Sethi (NMC #2015-38491 · Cardiology)
+                      </option>
+                      <option value="Dr. Rajesh Verma (NMC #2018-57102 · Pediatrics)">
+                        Dr. Rajesh Verma (NMC #2018-57102 · Pediatrics)
+                      </option>
+                      <option value="Dr. Priya Nair (NMC #2019-41829 · ENT)">
+                        Dr. Priya Nair (NMC #2019-41829 · ENT)
+                      </option>
+                      <option value="Dr. Sandeep Gupta (NMC #2016-83910 · Emergency)">
+                        Dr. Sandeep Gupta (NMC #2016-83910 · Emergency)
+                      </option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="Vaidya Devrat Sharma (AYUSH Reg #AYU-2017-4819 · Kayachikitsa)">
+                        Vaidya Devrat Sharma (AYUSH Reg #AYU-2017-4819 · Kayachikitsa)
+                      </option>
+                      <option value="Vaidya Meenakshi Sundaram (AYUSH Reg #AYU-2015-9382 · Panchakarma)">
+                        Vaidya Meenakshi Sundaram (AYUSH Reg #AYU-2015-9382 · Panchakarma)
+                      </option>
+                      <option value="Vaidya Rajeshwari Patil (AYUSH Reg #AYU-2020-1104 · Dravyaguna)">
+                        Vaidya Rajeshwari Patil (AYUSH Reg #AYU-2020-1104 · Dravyaguna)
+                      </option>
+                      <option value="Vaidya Anand Acharya (AYUSH Reg #AYU-2018-7731 · Shalya Tantra)">
+                        Vaidya Anand Acharya (AYUSH Reg #AYU-2018-7731 · Shalya Tantra)
+                      </option>
+                      <option value="Vaidya Shashi Bhushan (AYUSH Reg #AYU-2019-3382 · AYUSH OPD)">
+                        Vaidya Shashi Bhushan (AYUSH Reg #AYU-2019-3382 · AYUSH OPD)
+                      </option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>
@@ -784,10 +941,36 @@ function IntakeWizardPage() {
               </button>
               <button
                 type="button"
-                onClick={() => setStep(4)}
+                onClick={() => {
+                  if (intakeMode === "ayush") {
+                    setMessages([
+                      {
+                        sender: "ai",
+                        text: selectedLang === "hi-IN" 
+                          ? "नमस्ते! मैं आपका आयुष क्लिनिकल इनटेक सहायक (दशविध परीक्षा) हूं। आयुर्वेदिक ओपीडी में आपका स्वागत है। आज आप कौन सी मुख्य समस्या या अग्नि/कोष्ठ असंतुलन का सामना कर रहे हैं?"
+                          : "Namaste! I am SwasthaSetu's AYUSH Clinical Intake Assistant (Dashavidha Pariksha). Welcome to the Ayurvedic OPD. What chief symptom or Agni/Koshtha imbalance brings you here today?",
+                        options: selectedLang === "hi-IN"
+                          ? ["अग्नि असंतुलन (पाचन समस्या)", "वात / जोड़ों में दर्द", "पित्त / त्वचा में जलन", "कफ / खांसी एवं जुकाम", "सामान्य आयुष जांच"]
+                          : ["Agni Imbalance (Digestive Fire)", "Vata / Joint Pain", "Pitta / Skin Burning Sensation", "Kapha / Cold & Respiratory", "AYUSH General Assessment"],
+                        frameworkTag: "AYUSH — Dashavidha Pariksha Assessment",
+                      },
+                    ]);
+                  } else {
+                    const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"]!;
+                    setMessages([
+                      {
+                        sender: "ai",
+                        text: t.q1Text,
+                        options: t.q1Options,
+                        frameworkTag: "SOCRATES — Site & Chief Complaint",
+                      },
+                    ]);
+                  }
+                  setStep(4);
+                }}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
-                Proceed to AI Clinical History Engine
+                Proceed to AI Clinical History Engine ({intakeMode === "allopathy" ? "SOCRATES" : "AYUSH"})
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -819,9 +1002,9 @@ function IntakeWizardPage() {
                     value={selectedVoiceURI}
                     onChange={(e) => {
                       setSelectedVoiceURI(e.target.value);
-                      const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"];
+                      const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"]!;
                       // Test voice immediately on change
-                      setTimeout(() => speakText(t.q1Text, (t as any).q1Phonetic), 100);
+                      setTimeout(() => speakText(t.q1Text, t.q1Phonetic), 100);
                     }}
                     className="rounded-md border border-border bg-surface px-2.5 py-1 text-[11px] font-bold text-primary outline-none max-w-[200px] truncate"
                     title="Select AI Voice Engine Model"
@@ -841,38 +1024,6 @@ function IntakeWizardPage() {
                 </span>
               </div>
 
-              {/* Gemini 2.0 Key Configurator & Mode Toggle */}
-              <div className="flex items-center gap-2">
-                <input
-                  type="password"
-                  placeholder="Paste Gemini API Key..."
-                  defaultValue={getGeminiApiKey()}
-                  onChange={(e) => setGeminiApiKey(e.target.value)}
-                  className="rounded-md border border-border bg-surface px-2.5 py-1 text-xs text-foreground outline-none focus:border-accent max-w-[170px]"
-                  title="Paste Google Gemini API Key from aistudio.google.com for live model execution"
-                />
-
-                <div className="flex items-center gap-1 bg-surface p-1 rounded-lg border border-border text-xs font-bold">
-                  <button
-                    type="button"
-                    onClick={() => setIntakeMode("allopathy")}
-                    className={`px-3 py-1.5 rounded transition-all ${
-                      intakeMode === "allopathy" ? "bg-accent text-accent-foreground shadow-sm" : "text-muted-foreground"
-                    }`}
-                  >
-                    SOCRATES Mode
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIntakeMode("ayush")}
-                    className={`px-3 py-1.5 rounded transition-all ${
-                      intakeMode === "ayush" ? "bg-accent text-accent-foreground shadow-sm" : "text-muted-foreground"
-                    }`}
-                  >
-                    AYUSH Mode
-                  </button>
-                </div>
-              </div>
             </div>
 
             {/* Patient Safety Callout */}
@@ -1146,31 +1297,121 @@ function IntakeWizardPage() {
               </button>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-sm">
-              <div className="flex items-center justify-between border-b border-border pb-3">
-                <span className="text-xs font-mono font-bold text-accent bg-accent/15 px-3 py-1 rounded">
-                  AI-GENERATED DRAFT — Patient Confirmed
-                </span>
-                <span className="text-xs font-bold text-muted-foreground">Facility: {facility}</span>
-              </div>
+            {intakeMode === "ayush" ? (
+              <div className="rounded-xl border-2 border-emerald-600 bg-emerald-50/40 p-6 space-y-4 shadow-md">
+                <div className="flex items-center justify-between border-b border-emerald-200 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-emerald-700" />
+                    <h3 className="font-display text-base font-bold text-emerald-950">
+                      AYURVEDIC DASHAVIDHA PARIKSHA (दशविध परीक्षा) CLINICAL PROFILE
+                    </h3>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded border border-emerald-300">
+                    AI-Guided Vaidya Assessment
+                  </span>
+                </div>
 
-              <div className="space-y-3 text-xs sm:text-sm">
-                <div>
-                  <span className="text-muted-foreground font-medium">Chief Complaint (SOCRATES):</span>
-                  <p className="font-bold text-foreground">"{collectedHistory.complaint}"</p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground font-medium">History of Present Illness (HPI):</span>
-                  <p className="font-semibold text-foreground">
-                    {collectedHistory.onset} · {collectedHistory.character} · {collectedHistory.radiation} · {collectedHistory.aggravating}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-muted-foreground font-medium">Past Medical History:</span>
-                  <p className="font-semibold text-primary">{collectedHistory.pastMedical}</p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-emerald-200 bg-emerald-100/60 text-emerald-900 font-bold">
+                        <th className="py-2.5 px-3">Pariksha Parameter</th>
+                        <th className="py-2.5 px-3">What the AI Assessed & Captured</th>
+                        <th className="py-2.5 px-3 text-right">Vaidya Classification</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-emerald-200/60 text-emerald-950 font-medium">
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Prakriti <span className="text-emerald-700 font-normal">(Constitution)</span></td>
+                        <td className="py-2 px-3">Vata / Pitta dominance through structured questions on body type & preferences</td>
+                        <td className="py-2 px-3 text-right font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">Vata-Pitta Dominant</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Vikriti <span className="text-emerald-700 font-normal">(Current Imbalance)</span></td>
+                        <td className="py-2 px-3">Present dosha aggravation based on current joint pain & gas symptoms</td>
+                        <td className="py-2 px-3 text-right font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">Vata Aggravated</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Sara <span className="text-emerald-700 font-normal">(Tissue Essence)</span></td>
+                        <td className="py-2 px-3">Quality of dhatus — skin, muscle, bone assessment questions</td>
+                        <td className="py-2 px-3 text-right font-semibold">Madhyama Sara</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Samhanana <span className="text-emerald-700 font-normal">(Body Build)</span></td>
+                        <td className="py-2 px-3">Compactness, frame, build assessment</td>
+                        <td className="py-2 px-3 text-right font-semibold">Madhyama Samhanana</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Pramana <span className="text-emerald-700 font-normal">(Proportions)</span></td>
+                        <td className="py-2 px-3">Height, weight, proportional assessment</td>
+                        <td className="py-2 px-3 text-right font-semibold">Sama Pramana (BMI 22.4)</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Satmya <span className="text-emerald-700 font-normal">(Adaptability)</span></td>
+                        <td className="py-2 px-3">Tolerance to foods, cold seasons, environments</td>
+                        <td className="py-2 px-3 text-right font-semibold">Madhyama Satmya</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Sattva <span className="text-emerald-700 font-normal">(Mental Resilience)</span></td>
+                        <td className="py-2 px-3">Psychological strength, stress response, emotional patterns</td>
+                        <td className="py-2 px-3 text-right font-semibold">Madhyama Sattva</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Ahara Shakti <span className="text-emerald-700 font-normal">(Digestive Capacity)</span></td>
+                        <td className="py-2 px-3">Appetite, digestion quality, Agni assessment</td>
+                        <td className="py-2 px-3 text-right font-semibold">Vishama Agni (विषमाग्नि)</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Vyayama Shakti <span className="text-emerald-700 font-normal">(Exercise Capacity)</span></td>
+                        <td className="py-2 px-3">Physical endurance, exercise habits</td>
+                        <td className="py-2 px-3 text-right font-semibold">Moderate Endurance</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Vaya <span className="text-emerald-700 font-normal">(Age Assessment)</span></td>
+                        <td className="py-2 px-3">Age-appropriate health parameters</td>
+                        <td className="py-2 px-3 text-right font-semibold">Madhyama Vaya (54 Y)</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Agni & Koshtha</td>
+                        <td className="py-2 px-3">Digestive fire classification & bowel nature</td>
+                        <td className="py-2 px-3 text-right font-bold text-emerald-800">Vishama Agni · Krura Koshtha</td>
+                      </tr>
+                      <tr>
+                        <td className="py-2 px-3 font-bold">Nidana & Samprapti</td>
+                        <td className="py-2 px-3">Identified causative factors & disease progression pathway</td>
+                        <td className="py-2 px-3 text-right font-bold text-purple-900">Vata-Anuvarta Samprapti</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="rounded-xl border border-border bg-card p-6 space-y-4 shadow-sm">
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <span className="text-xs font-mono font-bold text-accent bg-accent/15 px-3 py-1 rounded">
+                    AI-GENERATED DRAFT — Patient Confirmed
+                  </span>
+                  <span className="text-xs font-bold text-muted-foreground">Facility: {facility}</span>
+                </div>
+
+                <div className="space-y-3 text-xs sm:text-sm">
+                  <div>
+                    <span className="text-muted-foreground font-medium">Chief Complaint (SOCRATES):</span>
+                    <p className="font-bold text-foreground">"{collectedHistory.complaint}"</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground font-medium">History of Present Illness (HPI):</span>
+                    <p className="font-semibold text-foreground">
+                      {collectedHistory.onset} · {collectedHistory.character} · {collectedHistory.radiation} · {collectedHistory.aggravating}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground font-medium">Past Medical History:</span>
+                    <p className="font-semibold text-primary">{collectedHistory.pastMedical}</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="rounded-xl border-2 border-accent bg-accent/5 p-6 space-y-4 shadow-md">
               <div className="flex items-center justify-between border-b border-accent/20 pb-3">
@@ -1288,9 +1529,39 @@ function IntakeWizardPage() {
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h2 className="font-display text-2xl font-bold text-primary">{strings.intakeWizard.tokenGenerated}</h2>
-            <p className="text-xs sm:text-sm text-muted-foreground max-w-md mx-auto">
-              {strings.intakeWizard.tokenSub}
-            </p>
+            
+            {/* Queue Ticket Badge */}
+            <div className="max-w-md mx-auto rounded-xl border border-emerald-300 bg-emerald-50/50 p-5 text-left space-y-3 shadow-sm">
+              <div className="flex items-center justify-between border-b border-emerald-200 pb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Confirmed OPD Queue Ticket</span>
+                <span className="font-mono font-bold text-emerald-700 text-sm">#024</span>
+              </div>
+
+              <div className="grid gap-2 text-xs">
+                <div>
+                  <span className="text-muted-foreground font-bold">Facility:</span>{" "}
+                  <span className="font-semibold text-foreground">{facility}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground font-bold">Department:</span>{" "}
+                  <span className="font-semibold text-foreground">{department}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground font-bold">Clinical Approach:</span>{" "}
+                  <span className="inline-flex items-center gap-1 font-bold text-accent">
+                    {intakeMode === "allopathy" ? "🩺 Allopathic (SOCRATES Framework)" : "🌿 AYUSH (Dashavidha Pariksha)"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground font-bold">Assigned Provider:</span>{" "}
+                  <span className="font-bold text-primary">{selectedDoctor}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground font-bold">Estimated Waiting Time:</span>{" "}
+                  <span className="font-semibold text-foreground">15 minutes (Queue Position #4)</span>
+                </div>
+              </div>
+            </div>
 
             <div className="pt-4 flex flex-wrap justify-center gap-4">
               <button

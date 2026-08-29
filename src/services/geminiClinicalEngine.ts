@@ -17,49 +17,74 @@ export function setGeminiApiKey(key: string) {
 }
 
 export function getGeminiApiKey(): string {
+  const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
+  const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<string, string | undefined>;
+
   return (
     userApiKey ||
-    (typeof process !== "undefined" && process.env?.OPENROUTER_API_KEY) ||
-    (typeof process !== "undefined" && process.env?.GEMINI_API_KEY) ||
-    (typeof process !== "undefined" && process.env?.VITE_GEMINI_API_KEY) ||
-    (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_OPENROUTER_API_KEY) ||
-    (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_GEMINI_API_KEY) ||
+    env["OPENROUTER_API_KEY"] ||
+    env["GEMINI_API_KEY"] ||
+    env["VITE_GEMINI_API_KEY"] ||
+    metaEnv["VITE_OPENROUTER_API_KEY"] ||
+    metaEnv["VITE_GEMINI_API_KEY"] ||
     ""
   );
 }
 
-const BASE_GEMINI_SYSTEM_PROMPT = `
-You are an AI Clinical Assistant powered by Google Gemini for SwasthaSetu.
-Your role is to chat naturally with the patient in a warm, helpful, and intelligent manner.
+const ALLOPATHY_SYSTEM_PROMPT = `
+You are an AI Clinical Assistant powered by Google Gemini for SwasthaSetu (Allopathic OPD).
+Your role is to chat naturally with the patient for clinical intake.
 
 Core Behavior:
-1. Act as a natural conversational AI assistant for clinical intake.
-2. If the patient's input is off-topic, gibberish, or completely unrelated to health (e.g. "wallet", "helmet", "keyboard", "butterfly", "10 light years"), politely inform them that you are an AI clinical intake assistant and ask them to describe their health symptom or choose one of the options.
-3. Follow up with relevant clinical history questions (SOCRATES framework: Site, Onset, Character, Radiation, Severity) if they describe a symptom.
-4. DO NOT repeat static stock templates or rigid guardrail messages over and over.
-5. Provide 3-4 natural follow-up options relevant to the conversation turn.
+1. Act as a natural conversational AI assistant for clinical intake using the SOCRATES framework (Site, Onset, Character, Radiation, Severity).
+2. Nonsense / Off-topic Filter: If the patient's input is off-topic, gibberish, or completely unrelated to health (e.g. "wallet", "helmet", "keyboard", "butterfly", "10 light years"), politely inform them that you are an AI clinical intake assistant and ask them to describe their health symptom or choose one of the options.
+3. DO NOT repeat static stock templates or rigid guardrail messages over and over.
+4. Provide 3-4 natural follow-up options relevant to the conversation turn.
+`;
+
+const AYUSH_SYSTEM_PROMPT = `
+You are an AI Ayurvedic Clinical Assistant powered by Google Gemini for SwasthaSetu (Ayurvedic OPD / Vaidya Terminal).
+Your role is to conduct an ACTIVE, DYNAMIC AI-guided Dashavidha Pariksha (दशविध परीक्षा) assessment for the Vaidya.
+
+Dashavidha Pariksha Parameters Evaluated Dynamically:
+1. Prakriti (Vata/Pitta/Kapha constitution, body build, temperament)
+2. Vikriti (Present dosha imbalance and symptom aggravation)
+3. Agni (Digestive fire: Sama, Vishama, Tikshna, or Manda)
+4. Koshtha (Bowel nature: Krura, Mrudu, or Madhyama)
+5. Ahara Shakti & Vyayama Shakti (Appetite, digestion quality, exercise endurance)
+6. Satmya & Sattva (Food/season adaptability, mental resilience & stress response)
+7. Sara, Samhanana, Pramana (Tissue essence, body build, proportions)
+8. Ahara-Vihara, Nidana, Samprapti (Diet/lifestyle habits, causative triggers, pathogenesis)
+
+Core Behavior:
+1. Conduct an ACTIVE, dynamic interview asking adaptive follow-up questions tailored to their reported dosha symptoms, Agni, Koshtha, and lifestyle.
+2. Nonsense / Off-topic Filter: If the patient inputs off-topic, gibberish, or non-medical words (e.g., "helmet", "wallet", "butterfly", "asdf"), REJECT the insensible input politely, explain that you are conducting an Ayurvedic Dashavidha Pariksha intake, and ask them to clarify their symptom or pick a structured option.
+3. Provide 3-4 natural, relevant option buttons for the patient in each turn.
+4. Include the active Pariksha parameter tag in your response (e.g., "Dashavidha Pariksha — Agni & Koshtha Assessment").
 `;
 
 export async function queryGemini2FlashChat(
   userInput: string,
   chatHistory: { sender: "ai" | "patient"; text: string }[],
-  language: string = "en-IN"
+  language: string = "en-IN",
+  mode: "allopathy" | "ayush" = "allopathy"
 ): Promise<GeminiClinicalResponse> {
   const apiKey = getGeminiApiKey();
+  const systemPrompt = mode === "ayush" ? AYUSH_SYSTEM_PROMPT : ALLOPATHY_SYSTEM_PROMPT;
 
   if (apiKey) {
     // 1. OpenRouter Live AI Execution (sk-or-v1-...)
     if (apiKey.startsWith("sk-or-v1-")) {
       try {
         const messages = [
-          { role: "system", content: BASE_GEMINI_SYSTEM_PROMPT + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
+          { role: "system", content: systemPrompt + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
           ...chatHistory.map((m) => ({
             role: m.sender === "patient" ? "user" : "assistant",
             content: m.text,
           })),
           {
             role: "user",
-            content: `[Language: ${language}]\nPatient Input: "${userInput}"`,
+            content: `[Language: ${language}, Mode: ${mode.toUpperCase()}]\nPatient Input: "${userInput}"`,
           },
         ];
 
@@ -95,14 +120,14 @@ export async function queryGemini2FlashChat(
       for (const modelCandidate of modelCandidates) {
         try {
           const messages = [
-            { role: "system", content: BASE_GEMINI_SYSTEM_PROMPT + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
+            { role: "system", content: systemPrompt + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
             ...chatHistory.map((m) => ({
               role: m.sender === "patient" ? "user" : "assistant",
               content: m.text,
             })),
             {
               role: "user",
-              content: `[Language: ${language}]\nPatient Input: "${userInput}"`,
+              content: `[Language: ${language}, Mode: ${mode.toUpperCase()}]\nPatient Input: "${userInput}"`,
             },
           ];
 
@@ -147,7 +172,7 @@ export async function queryGemini2FlashChat(
             role: "user",
             parts: [
               {
-                text: `[Language: ${language}]\nPatient Input: "${userInput}"`,
+                text: `[Language: ${language}, Mode: ${mode.toUpperCase()}]\nPatient Input: "${userInput}"`,
               },
             ],
           },
@@ -157,7 +182,7 @@ export async function queryGemini2FlashChat(
           model: "gemini-2.0-flash",
           contents,
           config: {
-            systemInstruction: BASE_GEMINI_SYSTEM_PROMPT,
+            systemInstruction: systemPrompt,
             responseMimeType: "application/json",
             responseSchema: {
               type: Type.OBJECT,
@@ -186,17 +211,18 @@ export async function queryGemini2FlashChat(
   }
 
   // Pure Dynamic Gemini Base Engine with Nonsense / Off-Topic Validation
-  return pureGeminiBaseEngine(userInput, chatHistory, language);
+  return pureGeminiBaseEngine(userInput, chatHistory, language, mode);
 }
 
 /**
- * Dynamic Base Model Simulator that follows SOCRATES clinical intake step-by-step
+ * Dynamic Base Model Simulator that follows SOCRATES (Allopathy) or Dashavidha Pariksha (AYUSH)
  * without repeating canned strings or static option lists.
  */
 function pureGeminiBaseEngine(
   userInput: string,
   chatHistory: { sender: "ai" | "patient"; text: string }[],
-  language: string
+  language: string,
+  mode: "allopathy" | "ayush" = "allopathy"
 ): GeminiClinicalResponse {
   const isHi = language.startsWith("hi");
   const clean = userInput.trim();
@@ -204,6 +230,90 @@ function pureGeminiBaseEngine(
   // Turn count (excluding current input)
   const patientTurns = chatHistory.filter((m) => m.sender === "patient").length;
 
+  // AYUSH (Ayurvedic Dashavidha Pariksha Engine)
+  if (mode === "ayush") {
+    const GIBBERISH_REGEX = /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
+    const HAS_AYUSH_KEYWORDS = /vata|pitta|kapha|dosha|agni|koshtha|digest|pain|gas|acid|stool|bowel|skin|fever|cough|sleep|stress|cold|hot|warm|sweat|appetite|joint|heavy|body|head|day|week|month|year|started|none|no|yes|hi|hello|namaste|ayurved/i;
+
+    if (GIBBERISH_REGEX.test(clean) || (!HAS_AYUSH_KEYWORDS.test(clean) && clean.split(" ").length <= 3 && patientTurns > 0)) {
+      return {
+        replyText: isHi
+          ? `मुझे क्षमा करें, आपका उत्तर ("${clean}") आपके आयुर्वेदिक दशविध परीक्षा मूल्यांकन से संबंधित नहीं लग रहा है। कृपया अपनी स्वास्थ्य समस्या या दोष लक्षण स्पष्ट करें, अथवा नीचे दिए गए विकल्पों में से चुनें।`
+          : `I noticed your input ("${clean}") does not seem related to your Ayurvedic Dashavidha Pariksha assessment. Please describe your health concern or select one of the options below.`,
+        isOffTopic: true,
+        frameworkTag: "Validation Alert — Off-Topic / Unclear AYUSH Input",
+        suggestedOptions: isHi
+          ? ["वात असंतुलन (जोड़ों का दर्द, गैस, रूखापन)", "पित्त असंतुलन (एसिडिटी, जलन)", "कफ असंतुलन (बलगम, आलस्य)", "सामान्य स्वास्थ्य जांच"]
+          : ["Vata Imbalance (Joint pain, Gas)", "Pitta Imbalance (Acidity, Burning)", "Kapha Imbalance (Mucus, Lethargy)", "General Wellness Checkup"],
+      };
+    }
+
+    switch (patientTurns) {
+      case 0:
+      case 1:
+        return {
+          replyText: isHi
+            ? `मुख्य दोष/लक्षण दर्ज कर लिया गया है ("${clean}")। आइए आपकी विकृति (Vikriti) और अग्नि (Agni - पाचन शक्ति) का मूल्यांकन करें। आपकी भूख कैसी रहती है और भोजन के बाद क्या पेट में जलन, गैस या भारीपन महसूस होता है?`
+            : `Recorded chief symptom: "${clean}". Let us evaluate your Vikriti (Current Imbalance) and Agni (Digestive Fire). How is your appetite, and do you experience burning, gas, or heaviness after meals?`,
+          isOffTopic: false,
+          frameworkTag: "Dashavidha Pariksha — Vikriti & Agni Assessment",
+          suggestedOptions: isHi
+            ? ["अनियमित भूख और गैस (विषमाग्नि)", "तेज भूख और छाती में जलन (तीक्ष्णाग्नि)", "कम भूख और भारीपन (मंदाग्नि)", "सामान्य पाचन (समाग्नि)"]
+            : ["Irregular appetite & gas (Vishama Agni)", "Intense hunger & burning (Tikshna Agni)", "Slow digestion & heaviness (Manda Agni)", "Normal digestion (Sama Agni)"],
+        };
+
+      case 2:
+        return {
+          replyText: isHi
+            ? `धन्यवाद। अब आपके कोष्ठ (Koshtha - मल प्रकृति) और आहार-विहार का मूल्यांकन: आपका मल त्याग कैसा रहता है (कड़ा, सामान्य या पतला), और आपकी नींद कैसी है?`
+            : `Thank you. Now evaluating your Koshtha (Bowel Nature) and Ahara-Vihara (Diet & Sleep): How are your bowel movements (hard, normal, or loose), and how is your sleep quality?`,
+          isOffTopic: false,
+          frameworkTag: "Dashavidha Pariksha — Koshtha & Ahara-Vihara Assessment",
+          suggestedOptions: isHi
+            ? ["कड़ा मल और कब्ज (क्रूर कोष्ठ) · नींद कच्ची", "पतला मल और तीव्र वेग (मृदु कोष्ठ) · अच्छी नींद", "सामान्य मल त्याग (मध्यम कोष्ठ) · सामान्य नींद"]
+            : ["Hard stools & constipation (Krura Koshtha) · Disturbed sleep", "Loose stools (Mrudu Koshtha) · Sound sleep", "Regular normal stools (Madhyama Koshtha) · Normal sleep"],
+        };
+
+      case 3:
+        return {
+          replyText: isHi
+            ? `समझ गया। अब आपकी प्रकृति (Prakriti) और सात्म्य (Satmya - अनुकूलता): आप ठंडे या गर्म मौसम के प्रति कैसे प्रतिक्रिया देते हैं, और आपकी त्वचा तथा शारीरिक बनावट कैसी है?`
+            : `Understood. Now assessing your Prakriti (Constitution) and Satmya (Environmental Adaptability): How do you react to cold or hot weather, and what is your skin texture and body build?`,
+          isOffTopic: false,
+          frameworkTag: "Dashavidha Pariksha — Prakriti & Satmya Assessment",
+          suggestedOptions: isHi
+            ? ["ठंड संवेदनशील, सूखी त्वचा, पतला शरीर (वात)", "गर्मी संवेदनशील, तैलीय त्वचा, मध्यम शरीर (पित्त)", "गर्मी सहनशील, चिकनी त्वचा, मजबूत शरीर (कफ)"]
+            : ["Sensitive to cold, dry skin, lean frame (Vata)", "Sensitive to heat, oily skin, medium build (Pitta)", "Tolerates heat, smooth skin, sturdy build (Kapha)"],
+        };
+
+      case 4:
+        return {
+          replyText: isHi
+            ? `धन्यवाद। अब सत्त्व (Sattva - मानसिक सहनशक्ति) और व्यायाम शक्ति (Physical Endurance): तनाव के समय आपका मानसिक दृष्टिकोण कैसा रहता है, और आपकी शारीरिक सहनशक्ति (थकान का स्तर) कैसी है?`
+            : `Thank you. Now evaluating Sattva (Mental Resilience) and Vyayama Shakti (Exercise Capacity): How do you respond to psychological stress, and what is your physical endurance / fatigue level?`,
+          isOffTopic: false,
+          frameworkTag: "Dashavidha Pariksha — Sattva & Vyayama Shakti Assessment",
+          suggestedOptions: isHi
+            ? ["जल्दी चिंता / तनाव होना (अवर सत्त्व) · जल्दी थकान", "मध्यम तनाव सहनशीलता (मध्यम सत्त्व) · सामान्य ऊर्जा", "मजबूत मानसिक शक्ति (प्रवर सत्त्व) · उच्च सहनशक्ति"]
+            : ["Prone to anxiety/stress (Avara Sattva) · Early fatigue", "Moderate stress tolerance (Madhyama Sattva) · Normal energy", "High mental resilience (Pravara Sattva) · High endurance"],
+        };
+
+      case 5:
+      default:
+        return {
+          replyText: isHi
+            ? `उत्कृष्ट! आपकी दशविध परीक्षा (प्रकृति, विकृति, सार, संहनन, प्रमाण, सात्म्य, सत्त्व, आहार शक्ति, व्यायाम शक्ति, वय) का पूर्ण मूल्यांकन हो चुका है। वैद्य जी के लिए सारांश तैयार है।`
+            : `Excellent! Your complete Dashavidha Pariksha assessment (Prakriti, Vikriti, Agni, Koshtha, Sara, Satmya, Sattva, Vyayama Shakti) is fully recorded. The Vaidya can now review your comprehensive Ayurvedic profile.`,
+          isOffTopic: false,
+          frameworkTag: "Dashavidha Pariksha Completed — Profile Generated",
+          suggestedOptions: isHi
+            ? ["चरण 5 पर आगे बढ़ें (दस्तावेज़ ओसीआर)", "आयुर्वेदिक समरी देखें", "पुनः जांच शुरू करें"]
+            : ["Proceed to Step 5 (Document OCR)", "View Ayurvedic Profile Summary", "Restart Intake"],
+        };
+    }
+  }
+
+  // ALLOPATHY (SOCRATES Engine)
   // 0. Off-topic & Nonsense Input Validation
   const GIBBERISH_REGEX = /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
   const HAS_MEDICAL_OR_TIME_KEYWORDS = /pain|fever|cough|headache|chest|stomach|abdomen|ankle|foot|leg|arm|day|week|month|today|year|since|started|worse|better|mild|moderate|severe|squeezing|sharp|dull|hypertension|diabetes|asthma|none|no|yes|hi|hello|namaste|cough|injury|swell|burn|cramp|nausea|vomit|dizzy|fatigue/i;
@@ -356,3 +466,4 @@ function pureGeminiBaseEngine(
       };
   }
 }
+
