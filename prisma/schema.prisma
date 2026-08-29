@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id         String     @id @default(cuid())
+  abhaId     String?    @unique
+  name       String
+  age        Int
+  gender     String
+  address    String?
+  phone      String?
+  bloodGroup String?
+  language   String     @default("en")
+  createdAt  DateTime   @default(now())
+  sessions   Session[]
+  documents  Document[]
+  consents   Consent[]
+  insurance  Insurance[]
+}
+
+model Provider {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  passwordHash       String
+  registrationNumber String?
+  specialty          String?
+  institution        String?
+  isVerified         Boolean  @default(false)
+  createdAt          DateTime @default(now())
+}
+
+model Session {
+  id              String   @id @default(cuid())
+  patientId       String
+  patient         Patient  @relation(fields: [patientId], references: [id])
+  mode            String   @default("allopathic")
+  language        String
+  status          String   @default("in_progress")
+  currentSection  String   @default("chief_complaint")
+  conversationLog String   @default("[]")
+  extractedData   String   @default("{}")
+  redFlags        String   @default("[]")
+  summary         String?
+  summaryStatus   String?
+  confirmedBy     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  documents       Document[]
+}
+
+model Document {
+  id            String   @id @default(cuid())
+  sessionId     String
+  session       Session  @relation(fields: [sessionId], references: [id])
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  imageUrl      String
+  documentType  String?
+  extractedText String?
+  entities      String?
+  confidence    Float?
+  documentDate  DateTime?
+  createdAt     DateTime @default(now())
+}
+
+model Consent {
+  id          String    @id @default(cuid())
+  patientId   String
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  consentType String
+  shareWith   String
+  grantedAt   DateTime  @default(now())
+  revokedAt   DateTime?
+  isActive    Boolean   @default(true)
+}
+
+model Insurance {
+  id               String   @id @default(cuid())
+  patientId        String
+  patient          Patient  @relation(fields: [patientId], references: [id])
+  provider         String
+  policyNumber     String
+  coverageType     String
+  sumInsured       Float?
+  waitingPeriodEnd DateTime?
+  isActive         Boolean  @default(true)
+}
