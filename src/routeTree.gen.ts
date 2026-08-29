@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as FeasibilityRouteImport } from './routes/feasibility'
 import { Route as ImpactsRouteImport } from './routes/impacts'
+import { Route as IntakeRouteImport } from './routes/intake'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PatientRouteImport } from './routes/patient'
 import { Route as ProblemsRouteImport } from './routes/problems'
@@ -38,6 +39,11 @@ const FeasibilityRoute = FeasibilityRouteImport.update({
 const ImpactsRoute = ImpactsRouteImport.update({
   id: '/impacts',
   path: '/impacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntakeRoute = IntakeRouteImport.update({
+  id: '/intake',
+  path: '/intake',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/doctor': typeof DoctorRoute
   '/feasibility': typeof FeasibilityRoute
   '/impacts': typeof ImpactsRoute
+  '/intake': typeof IntakeRoute
   '/login': typeof LoginRoute
   '/patient': typeof PatientRoute
   '/problems': typeof ProblemsRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/doctor': typeof DoctorRoute
   '/feasibility': typeof FeasibilityRoute
   '/impacts': typeof ImpactsRoute
+  '/intake': typeof IntakeRoute
   '/login': typeof LoginRoute
   '/patient': typeof PatientRoute
   '/problems': typeof ProblemsRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/doctor': typeof DoctorRoute
   '/feasibility': typeof FeasibilityRoute
   '/impacts': typeof ImpactsRoute
+  '/intake': typeof IntakeRoute
   '/login': typeof LoginRoute
   '/patient': typeof PatientRoute
   '/problems': typeof ProblemsRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/feasibility'
     | '/impacts'
+    | '/intake'
     | '/login'
     | '/patient'
     | '/problems'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/feasibility'
     | '/impacts'
+    | '/intake'
     | '/login'
     | '/patient'
     | '/problems'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/doctor'
     | '/feasibility'
     | '/impacts'
+    | '/intake'
     | '/login'
     | '/patient'
     | '/problems'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   DoctorRoute: typeof DoctorRoute
   FeasibilityRoute: typeof FeasibilityRoute
   ImpactsRoute: typeof ImpactsRoute
+  IntakeRoute: typeof IntakeRoute
   LoginRoute: typeof LoginRoute
   PatientRoute: typeof PatientRoute
   ProblemsRoute: typeof ProblemsRoute
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/impacts'
       fullPath: '/impacts'
       preLoaderRoute: typeof ImpactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intake': {
+      id: '/intake'
+      path: '/intake'
+      fullPath: '/intake'
+      preLoaderRoute: typeof IntakeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   DoctorRoute: DoctorRoute,
   FeasibilityRoute: FeasibilityRoute,
   ImpactsRoute: ImpactsRoute,
+  IntakeRoute: IntakeRoute,
   LoginRoute: LoginRoute,
   PatientRoute: PatientRoute,
   ProblemsRoute: ProblemsRoute,
