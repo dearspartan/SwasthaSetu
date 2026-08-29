@@ -248,6 +248,8 @@ export const en = {
     quickDemoTitle: "Quick Demo Access (One-Click)",
     demoPatientBtn: "Login as Patient (Rahul Sharma)",
     demoDoctorBtn: "Login as Doctor (Dr. Ananya Sharma)",
+    noAbhaText: "Don't have an ABHA ID?",
+    registerAbhaLink: "Create / Register Official ABHA ID",
   },
 
   patientPortal: {

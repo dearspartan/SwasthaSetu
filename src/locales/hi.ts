@@ -250,6 +250,8 @@ export const hi: typeof en = {
     quickDemoTitle: "त्वरित डेमो एक्सेस (एक-क्लिक)",
     demoPatientBtn: "मरीज के रूप में लॉगिन करें (राहुल शर्मा)",
     demoDoctorBtn: "डॉक्टर के रूप में लॉगिन करें (डॉ. अनन्या शर्मा)",
+    noAbhaText: "एबीएचए (ABHA) आईडी नहीं है?",
+    registerAbhaLink: "आधिकारिक ABHA पोर्टल पर नया आईडी बनाएं",
   },
 
   patientPortal: {

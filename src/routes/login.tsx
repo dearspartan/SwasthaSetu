@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLocale } from "@/context/LocaleContext";
-import { User, Stethoscope, ShieldCheck, KeyRound, ArrowRight, Sparkles, Lock } from "lucide-react";
+import { User, Stethoscope, ShieldCheck, KeyRound, ArrowRight, Sparkles, Lock, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -84,9 +84,20 @@ function LoginPage() {
           {role === "patient" ? (
             <form onSubmit={handlePatientSubmit} className="space-y-5">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {strings.loginPage.abhaLabel}
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {strings.loginPage.abhaLabel}
+                  </label>
+                  <a
+                    href="https://abha.abdm.gov.in/abha/v3/register"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-bold text-accent hover:underline flex items-center gap-1"
+                  >
+                    {(strings.loginPage as any).registerAbhaLink || "Register Official ABHA ID"}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </div>
                 <div className="mt-1.5 relative">
                   <input
                     type="text"
@@ -99,6 +110,18 @@ function LoginPage() {
                   <span className="absolute right-3 top-3 text-xs text-muted-foreground font-mono">
                     ABDM
                   </span>
+                </div>
+                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground bg-accent/10 p-2.5 rounded-md border border-accent/20">
+                  <span>{(strings.loginPage as any).noAbhaText || "Don't have an ABHA ID?"}</span>
+                  <a
+                    href="https://abha.abdm.gov.in/abha/v3/register"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-accent hover:underline flex items-center gap-1 shrink-0"
+                  >
+                    {(strings.loginPage as any).registerAbhaLink || "Register on official ABDM Portal"}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
                 </div>
               </div>
 
