@@ -156,16 +156,22 @@ const CHATBOT_TRANSLATIONS: Record<
 function IntakeWizardPage() {
   const { strings } = useLocale();
   const navigate = useNavigate();
-  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
 
-  // STEP 1: Location & Care Destination
+  // STEP 1: Informed Patient Consent (DPDP Act 2023 & ABDM)
+  const [consentHistory, setConsentHistory] = useState(true);
+  const [consentOcr, setConsentOcr] = useState(true);
+  const [consentAbdm, setConsentAbdm] = useState(true);
+  const [consentError, setConsentError] = useState(false);
+
+  // STEP 2: Location & Care Destination
   const [locationMode, setLocationMode] = useState<"gps" | "manual">("manual");
   const [stateName, setStateName] = useState("Delhi NCR");
   const [district, setDistrict] = useState("Central Delhi");
   const [cityName, setCityName] = useState("Connaught Place");
   const [pincode, setPincode] = useState("110001");
 
-  // STEP 2: Facility & Department
+  // STEP 3: Facility & Department
   const [facility, setFacility] = useState("Swastha District Hospital");
   const [department, setDepartment] = useState("General Medicine");
   const [consultType, setConsultType] = useState<"new" | "followup">("new");
@@ -193,7 +199,7 @@ function IntakeWizardPage() {
     },
   ]);
 
-  // Update initial message and trigger TTS when language changes (ONLY on Step 3)
+  // Update initial message and trigger TTS when language changes (ONLY on Step 4 AI Engine)
   useEffect(() => {
     const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"];
     setMessages((prev) => {
@@ -209,7 +215,7 @@ function IntakeWizardPage() {
       }
       return prev;
     });
-    if (step === 3 && ttsEnabled) {
+    if (step === 4 && ttsEnabled) {
       speakText(t.q1Text, (t as any).q1Phonetic);
     }
   }, [selectedLang, step]);
@@ -382,12 +388,13 @@ function IntakeWizardPage() {
               </span>
             </div>
             <h1 className="font-display text-2xl font-bold text-primary mt-1">
-              {step === 1 && "Module D · Location & Care Destination"}
-              {step === 2 && "Module D · Facility & Department Selection"}
-              {step === 3 && "Module A · AI Clinical History Engine (SOCRATES / AYUSH)"}
-              {step === 4 && "Module B · Tiered OCR Document Digitisation"}
-              {step === 5 && "Module C · Structured Clinical Summary & Doctor-Only AI Insights"}
-              {step === 6 && "OPD Queue Token #024 Generated"}
+              {step === 1 && "Step 1 · Informed Patient Consent (DPDP Act 2023 & ABDM)"}
+              {step === 2 && "Step 2 · Location & Care Destination"}
+              {step === 3 && "Step 3 · Facility & Department Selection"}
+              {step === 4 && "Step 4 · AI Clinical History Engine (SOCRATES / AYUSH)"}
+              {step === 5 && "Step 5 · Tiered OCR Document Digitisation"}
+              {step === 6 && "Step 6 · Structured Clinical Summary & Doctor-Only AI Insights"}
+              {step === 7 && "Step 7 · OPD Queue Token #024 Generated"}
             </h1>
           </div>
 
@@ -399,7 +406,7 @@ function IntakeWizardPage() {
             </span>
 
             {/* TTS Speaker Mute/Unmute Toggle */}
-            {step === 3 && (
+            {step === 4 && (
               <button
                 type="button"
                 onClick={() => {
@@ -416,7 +423,7 @@ function IntakeWizardPage() {
             )}
 
             <span className="rounded-full bg-accent/15 px-3 py-1 font-mono text-xs font-bold text-accent">
-              Step {step} of 6
+              Step {step} of 7
             </span>
           </div>
         </div>
@@ -456,8 +463,167 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 1: LOCATION SELECTION (MODULE D) */}
+        {/* STEP 1: INFORMED PATIENT CONSENT (DPDP ACT 2023 & ABDM) */}
         {step === 1 && (
+          <div className="gov-panel p-6 sm:p-8 space-y-6">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h2 className="font-display text-lg font-bold text-primary flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5 text-accent" />
+                Informed Patient Consent for Information Collection
+              </h2>
+              <span className="rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 border border-emerald-300 flex items-center gap-1">
+                <ShieldCheck className="h-3 w-3" /> DPDP Act 2023 & ABDM Framework
+              </span>
+            </div>
+
+            {/* Consent Audio Guidance Banner */}
+            <div className="flex flex-wrap items-center justify-between bg-accent/10 border border-accent/30 p-3.5 rounded-xl text-xs gap-3">
+              <div className="flex items-center gap-2 font-semibold text-foreground">
+                <Volume2 className="h-4 w-4 text-accent shrink-0" />
+                <span>Audio-Guided Consent Notice (ऑडियो सहमति सूचना):</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => speakText(
+                  "स्वास्थ्यसेतु में आपका स्वागत है। आपके क्लिनिकल इतिहास, लक्षणों और चिकित्सा दस्तावेजों का संग्रह केवल आपकी चिकित्सा सहायता और डॉक्टर के लिए किया जा रहा है। क्या आप इसकी अनुमति देते हैं?",
+                  "Welcome to SwasthaSetu. Your clinical history and documents are collected strictly for your medical consultation under DPDP Act 2023 and ABDM consent rules."
+                )}
+                className="px-3.5 py-1.5 bg-accent text-accent-foreground rounded-md font-bold text-xs hover:bg-accent/90 transition flex items-center gap-1.5 shadow-sm"
+              >
+                <Volume2 className="h-3.5 w-3.5" />
+                Listen / सहमति सुनें
+              </button>
+            </div>
+
+            {/* Consent Purpose Breakdown */}
+            <div className="space-y-4 text-xs sm:text-sm text-foreground bg-surface p-5 rounded-xl border border-border">
+              <h3 className="font-bold text-primary text-sm flex items-center gap-2">
+                <FileText className="h-4 w-4 text-accent" />
+                Purpose of Information Collection (Digital Clinical History & Records)
+              </h3>
+              
+              <p className="text-muted-foreground leading-relaxed text-xs">
+                In compliance with the <strong>Digital Personal Data Protection (DPDP) Act 2023</strong> and the <strong>Ayushman Bharat Digital Mission (ABDM) Consent Architecture</strong>, SwasthaSetu requests your explicit authorization to capture and process your health details for today's OPD consultation:
+              </p>
+
+              <div className="grid gap-3 sm:grid-cols-3 pt-1">
+                <div className="p-3 bg-background rounded-lg border border-border space-y-1">
+                  <div className="font-bold text-xs text-primary flex items-center gap-1.5">
+                    <Activity className="h-3.5 w-3.5 text-accent" /> 1. Symptom History
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-snug">Interactive voice & text intake of chief health complaints and SOCRATES history for your attending doctor.</p>
+                </div>
+                <div className="p-3 bg-background rounded-lg border border-border space-y-1">
+                  <div className="font-bold text-xs text-primary flex items-center gap-1.5">
+                    <Upload className="h-3.5 w-3.5 text-accent" /> 2. Document OCR
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-snug">Digitisation and entity extraction of legacy paper prescriptions and diagnostic lab reports.</p>
+                </div>
+                <div className="p-3 bg-background rounded-lg border border-border space-y-1">
+                  <div className="font-bold text-xs text-primary flex items-center gap-1.5">
+                    <ShieldCheck className="h-3.5 w-3.5 text-accent" /> 3. ABDM FHIR Linking
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-snug">Formatting clinical summary into an ABDM FHIR bundle linked to your ABHA health account.</p>
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-900 space-y-1">
+                <strong className="block text-emerald-950 font-bold">Patient Data Rights & Privacy Guarantee:</strong>
+                <ul className="list-disc list-inside space-y-0.5 text-[11px] text-emerald-850">
+                  <li>Your health information is used <strong>strictly</strong> for your medical care during this consultation.</li>
+                  <li>Data is encrypted end-to-end and stored adhering to ABDM health data standards.</li>
+                  <li>Consent is revocable at any time without compromising your right to standard medical care.</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Mandatory Checkboxes */}
+            <div className="space-y-3 pt-1">
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
+                <input
+                  type="checkbox"
+                  checked={consentHistory}
+                  onChange={(e) => setConsentHistory(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
+                />
+                <div className="text-xs">
+                  <strong className="text-foreground font-bold block">Consent for Clinical Intake & Symptom Interview</strong>
+                  <span className="text-muted-foreground">I consent to capturing and structuring my health symptoms via SwasthaSetu AI assistant for my doctor.</span>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
+                <input
+                  type="checkbox"
+                  checked={consentOcr}
+                  onChange={(e) => setConsentOcr(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
+                />
+                <div className="text-xs">
+                  <strong className="text-foreground font-bold block">Consent for Medical Document Digitization & OCR</strong>
+                  <span className="text-muted-foreground">I consent to scanning, extracting parameters, and summarizing my previous medical prescriptions & lab tests.</span>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
+                <input
+                  type="checkbox"
+                  checked={consentAbdm}
+                  onChange={(e) => setConsentAbdm(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
+                />
+                <div className="text-xs">
+                  <strong className="text-foreground font-bold block">Consent for ABDM FHIR Profile Linking</strong>
+                  <span className="text-muted-foreground">I consent to linking this structured clinical intake summary to my ABHA account for my treating physician.</span>
+                </div>
+              </label>
+            </div>
+
+            {consentError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs font-bold text-red-700 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-red-600 shrink-0" />
+                Please select all consent items above to proceed with digital intake, or request manual queue registration at reception.
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  setConsentHistory(true);
+                  setConsentOcr(true);
+                  setConsentAbdm(true);
+                  setConsentError(false);
+                  setStep(2);
+                }}
+                className="text-xs font-bold text-accent hover:underline flex items-center gap-1"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Select All & Agree
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (!consentHistory || !consentOcr || !consentAbdm) {
+                    setConsentError(true);
+                    return;
+                  }
+                  setConsentError(false);
+                  setStep(2);
+                }}
+                className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
+              >
+                I Agree & Give Consent
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 2: LOCATION SELECTION (MODULE D) */}
+        {step === 2 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <h2 className="font-display text-lg font-bold text-primary flex items-center gap-2">
@@ -522,10 +688,13 @@ function IntakeWizardPage() {
               </div>
             )}
 
-            <div className="flex justify-end pt-4 border-t border-border">
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <button type="button" onClick={() => setStep(1)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="h-4 w-4" /> Back to Consent
+              </button>
               <button
                 type="button"
-                onClick={() => setStep(2)}
+                onClick={() => setStep(3)}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
                 Proceed to Facility & Department
@@ -535,8 +704,8 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 2: FACILITY & DEPARTMENT SELECTION */}
-        {step === 2 && (
+        {/* STEP 3: FACILITY & DEPARTMENT SELECTION */}
+        {step === 3 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">{strings.intakeWizard.selectFacility}</label>
@@ -610,12 +779,12 @@ function IntakeWizardPage() {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-border">
-              <button type="button" onClick={() => setStep(1)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="h-4 w-4" /> Back
+              <button type="button" onClick={() => setStep(2)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="h-4 w-4" /> Back to Location
               </button>
               <button
                 type="button"
-                onClick={() => setStep(3)}
+                onClick={() => setStep(4)}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
                 Proceed to AI Clinical History Engine
@@ -625,8 +794,8 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 3: MODULE A — AI CLINICAL HISTORY ENGINE */}
-        {step === 3 && (
+        {/* STEP 4: MODULE A — AI CLINICAL HISTORY ENGINE */}
+        {step === 4 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
             {/* Top Toolbar: Language & AYUSH Mode Toggle */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
@@ -811,12 +980,12 @@ function IntakeWizardPage() {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-border">
-              <button type="button" onClick={() => setStep(2)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="h-4 w-4" /> Back
+              <button type="button" onClick={() => setStep(3)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="h-4 w-4" /> Back to Facility
               </button>
               <button
                 type="button"
-                onClick={() => setStep(4)}
+                onClick={() => setStep(5)}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
                 Proceed to Document Digitisation (Module B)
@@ -826,8 +995,8 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 4: MODULE B — WORKING OCR DIGITISATION */}
-        {step === 4 && (
+        {/* STEP 5: MODULE B — WORKING OCR DIGITISATION */}
+        {step === 5 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
             <div className="border-b border-border pb-3">
               <h2 className="font-display text-lg font-bold text-primary flex items-center gap-2">
@@ -943,12 +1112,12 @@ function IntakeWizardPage() {
             )}
 
             <div className="flex items-center justify-between pt-4 border-t border-border">
-              <button type="button" onClick={() => setStep(3)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
-                <ArrowLeft className="h-4 w-4" /> Back
+              <button type="button" onClick={() => setStep(4)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
+                <ArrowLeft className="h-4 w-4" /> Back to History
               </button>
               <button
                 type="button"
-                onClick={() => setStep(5)}
+                onClick={() => setStep(6)}
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-colors shadow-sm"
               >
                 Generate Summary & Doctor Insights (Module C)
@@ -958,8 +1127,8 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 5: MODULE C — SUMMARY & DOCTOR INSIGHTS */}
-        {step === 5 && (
+        {/* STEP 6: MODULE C — SUMMARY & DOCTOR INSIGHTS */}
+        {step === 6 && (
           <div className="gov-panel p-6 sm:p-8 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-3">
               <div>
@@ -1040,12 +1209,12 @@ function IntakeWizardPage() {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t border-border">
-              <button type="button" onClick={() => setStep(4)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
+              <button type="button" onClick={() => setStep(5)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-foreground">
                 <ArrowLeft className="h-4 w-4" /> Back to Documents
               </button>
               <button
                 type="button"
-                onClick={() => setStep(6)}
+                onClick={() => setStep(7)}
                 className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm"
               >
                 Confirm Summary & Generate OPD Queue Token
@@ -1112,8 +1281,8 @@ function IntakeWizardPage() {
           </div>
         )}
 
-        {/* STEP 6: QUEUE TOKEN GENERATED */}
-        {step === 6 && (
+        {/* STEP 7: QUEUE TOKEN GENERATED */}
+        {step === 7 && (
           <div className="gov-panel p-8 text-center space-y-6">
             <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-2">
               <CheckCircle2 className="h-10 w-10" />
