@@ -1385,10 +1385,42 @@ function IntakeWizardPage() {
                 )}
 
                 {ocrStatus === "done" && (
-                  <div className="space-y-3 pt-2">
-                    <h5 className="font-bold text-xs uppercase tracking-wider text-primary flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Extracted Clinical Parameters (Gemini 2.0 Vision OCR - {ocrResultData?.confidenceScore || 98.4}% Confidence):
-                    </h5>
+                  <div className="space-y-4 pt-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
+                      <h5 className="font-bold text-xs uppercase tracking-wider text-primary flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Extracted Parameters (Gemini 2.0 Vision OCR - {ocrResultData?.confidenceScore || 98.4}% Confidence):
+                      </h5>
+                      <span className={`text-xs font-mono font-bold px-3 py-1 rounded border ${
+                        ocrResultData?.ocrTier?.includes("Tier 1")
+                          ? "bg-emerald-100 text-emerald-900 border-emerald-300"
+                          : ocrResultData?.ocrTier?.includes("Tier 3")
+                          ? "bg-amber-100 text-amber-900 border-amber-300 animate-pulse"
+                          : "bg-blue-100 text-blue-900 border-blue-300"
+                      }`}>
+                        {ocrResultData?.ocrTier || "Tier 2 · Scanned Copy (Camera Photo / Printed Scan)"}
+                      </span>
+                    </div>
+
+                    {/* Tier 3 Unreadable Data Guardrail Warning Banner */}
+                    {ocrResultData?.unreadableFields && ocrResultData.unreadableFields.length > 0 && (
+                      <div className="rounded-lg border-2 border-amber-400 bg-amber-50 p-4 text-xs font-medium text-amber-950 space-y-2">
+                        <div className="flex items-center gap-2 font-bold text-amber-900">
+                          <AlertTriangle className="h-4 w-4 text-amber-700 shrink-0" />
+                          <span>Tier 3 Safety Guardrail: Unreadable / Smudged Data Flagged</span>
+                        </div>
+                        <p className="text-[11px] leading-relaxed text-amber-900">
+                          {ocrResultData.unreadableWarning || "⚠️ Low Image Clarity / Unreadable Details Flagged for Human Physician Verification — Never Guessed by AI Engine."}
+                        </p>
+                        <div className="pt-1">
+                          <span className="font-bold text-[11px] uppercase tracking-wider text-amber-950">Flagged Fields Sent to Doctor:</span>
+                          <ul className="mt-1 list-disc list-inside space-y-0.5 font-mono text-[11px] text-amber-900">
+                            {ocrResultData.unreadableFields.map((field, idx) => (
+                              <li key={idx}>{field}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-xs sm:text-sm">
@@ -1404,12 +1436,22 @@ function IntakeWizardPage() {
                             ocrResultData.labParams.map((p, i) => (
                               <tr key={i}>
                                 <td className="py-2 font-semibold text-foreground">{p.paramName}</td>
-                                <td className={`py-2 font-bold ${p.status === "HIGH" || p.status === "CRITICAL" ? "text-destructive" : "text-foreground"}`}>
+                                <td className={`py-2 font-bold ${
+                                  p.status === "HIGH" || p.status === "CRITICAL"
+                                    ? "text-destructive"
+                                    : p.status === "UNREADABLE" || p.isUnreadable
+                                    ? "text-amber-800 italic"
+                                    : "text-foreground"
+                                }`}>
                                   {p.value} {p.unit || ""} {p.referenceRange ? `(${p.referenceRange})` : ""}
                                 </td>
                                 <td className="py-2 text-right">
                                   <span className={`rounded px-2 py-0.5 text-xs font-bold ${
-                                    p.status === "HIGH" || p.status === "CRITICAL" ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-800"
+                                    p.status === "HIGH" || p.status === "CRITICAL"
+                                      ? "bg-red-100 text-red-700"
+                                      : p.status === "UNREADABLE" || p.isUnreadable
+                                      ? "bg-amber-100 text-amber-800 border border-amber-300"
+                                      : "bg-emerald-100 text-emerald-800"
                                   }`}>
                                     {p.status}
                                   </span>
