@@ -381,37 +381,11 @@ function IntakeWizardPage() {
     }
   };
 
-  // Web Speech API Voice Recognition (STT) & Speech Synthesis (TTS) Engine
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoiceURI, setSelectedVoiceURI] = useState<string>("");
-  const [activeVoiceName, setActiveVoiceName] = useState<string>("Default Indic Voice");
-
-  useEffect(() => {
-    if ("speechSynthesis" in window) {
-      const loadVoices = () => {
-        const vs = window.speechSynthesis.getVoices();
-        setAvailableVoices(vs);
-
-        // Auto-select natural or Google voice if available
-        if (!selectedVoiceURI && vs.length > 0) {
-          const natural = vs.find((v) =>
-            v.name.toLowerCase().includes("google") ||
-            v.name.toLowerCase().includes("natural") ||
-            v.name.toLowerCase().includes("neural")
-          );
-          if (natural) setSelectedVoiceURI(natural.voiceURI || natural.name);
-        }
-      };
-      loadVoices();
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-  }, []);
-
-  const speakText = (text: string, phoneticText?: string) => {
+  // Gemini 2.0 Flash Audio Speech Synthesis (TTS) Engine
+  const speakText = (text: string) => {
     if (!ttsEnabled) return;
     stopTTS();
-    setActiveVoiceName(`Speech Synthesizer (${selectedLang})`);
-    speakTTS(text, selectedLang, phoneticText);
+    speakTTS(text, selectedLang);
   };
 
   // Gemini 2.0 Multimodal Audio Transcription State & Recorder
