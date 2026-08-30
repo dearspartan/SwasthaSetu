@@ -1384,7 +1384,28 @@ function IntakeWizardPage() {
                   </div>
                 )}
 
-                {ocrStatus === "done" && (
+                {ocrStatus === "done" && ocrResultData?.isMedicalDocument === false && (
+                  <div className="rounded-xl border-2 border-red-500 bg-red-50 p-5 text-red-950 space-y-3 shadow-md my-3">
+                    <div className="flex items-center gap-2 font-bold text-red-700 text-sm">
+                      <AlertTriangle className="h-5 w-5 text-red-600 shrink-0" />
+                      <span>Non-Medical Document Rejected by Clinical Guardrails</span>
+                    </div>
+                    <p className="text-xs leading-relaxed text-red-900">
+                      {ocrResultData.nonMedicalReason || "The uploaded file does not appear to be a clinical prescription, laboratory test report, discharge summary, or diagnostic scan. Please upload a valid medical document."}
+                    </p>
+                    <div className="pt-2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="px-4 py-2 bg-red-600 text-white rounded-md text-xs font-bold hover:bg-red-700 transition shadow-sm"
+                      >
+                        Upload Valid Medical File
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {ocrStatus === "done" && ocrResultData?.isMedicalDocument !== false && (
                   <div className="space-y-4 pt-2">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
                       <h5 className="font-bold text-xs uppercase tracking-wider text-primary flex items-center gap-2">

@@ -27,7 +27,9 @@ export interface ExtractedMedication {
 }
 
 export interface ExtractedDocumentResult {
-  docType: "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan";
+  isMedicalDocument: boolean;
+  nonMedicalReason?: string;
+  docType: "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan" | "Non-Medical Document";
   ocrTier: OcrTierType;
   patientName?: string;
   date?: string;
@@ -61,7 +63,7 @@ export function fileToBase64DataUrl(file: File): Promise<{ base64Data: string; m
 }
 
 /**
- * Sends image data to Gemini 2.0 Vision for 3-Tier clinical parameter extraction
+ * Sends image data to Gemini 2.0 Vision for 3-Tier clinical parameter extraction & Medical Document Guardrail Validation
  */
 export async function processMedicalDocumentWithGeminiVision(
   fileData: File | { base64Data: string; mimeType: string }
@@ -88,19 +90,25 @@ export async function processMedicalDocumentWithGeminiVision(
     if (apiKey.startsWith("AIza")) {
       try {
         const ai = new GoogleGenAI({ apiKey });
-        const prompt = `You are a medical OCR specialist for SwasthaSetu. Analyze this medical document image and perform 3-Tier classification & extraction:
+        const prompt = `You are a medical OCR specialist for SwasthaSetu. Analyze this document image and perform 3-Tier classification & medical relevance validation:
 
-1. Classify OCR Tier:
+1. MEDICAL RELEVANCE VALIDATION (CRITICAL):
+   - Determine if the uploaded image is a valid medical record (prescription, lab test report, discharge summary, clinical note, or diagnostic scan).
+   - If the image is NOT a medical record (e.g., driver's license, utility bill, receipt, passport, animal, landscape, vehicle, random text, invoice), set "isMedicalDocument": false, set "docType": "Non-Medical Document", and provide a detailed explanation in "nonMedicalReason". DO NOT extract lab params or medications for non-medical files.
+
+2. Classify OCR Tier (for valid medical records):
    - Tier 1: Digital PDF or high-resolution typed report.
    - Tier 2: Physical paper scan or camera photo.
    - Tier 3: Low quality, blurry, smudged, or partially cropped document.
 
-2. CRITICAL RULE FOR TIER 3 / UNREADABLE DATA:
+3. UNREADABLE / BLURRY DATA GUARDRAIL:
    If any lab parameter, drug dosage, or doctor handwriting is blurry, cropped, smudged, or ambiguous, DO NOT guess. Flag it under "unreadableFields" and set status to "UNREADABLE".
 
 Respond in JSON matching this schema:
 {
-  "docType": "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan",
+  "isMedicalDocument": true | false,
+  "nonMedicalReason": "Reason if not a medical document, else undefined",
+  "docType": "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan" | "Non-Medical Document",
   "ocrTier": "Tier 1 · Digital File (High Precision PDF / E-Report)" | "Tier 2 · Scanned Copy (Camera Photo / Printed Scan)" | "Tier 3 · Low Clarity / Unreadable Details Flagged",
   "patientName": "string or undefined",
   "date": "string or undefined",
@@ -155,7 +163,7 @@ Respond in JSON matching this schema:
                 content: [
                   {
                     type: "text",
-                    text: `Perform 3-Tier Medical OCR (Tier 1: Digital PDF, Tier 2: Camera Scan, Tier 3: Blurry/Unreadable). Flag unreadable fields under unreadableFields. Return JSON.`,
+                    text: `Analyze document. If not a medical report/prescription, set isMedicalDocument: false, docType: 'Non-Medical Document'. Return JSON.`,
                   },
                   {
                     type: "image_url",
@@ -186,14 +194,45 @@ Respond in JSON matching this schema:
 }
 
 /**
- * Fallback 3-Tier clinical digitizer demonstrating Tier 1, Tier 2, and Tier 3 unreadable flagging
+ * Fallback 3-Tier clinical digitizer demonstrating Tier 1, Tier 2, Tier 3 unreadable flagging, and non-medical document rejection
  */
 function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): ExtractedDocumentResult {
-  const isPdf = mimeType.includes("pdf") || fileName.toLowerCase().endsWith(".pdf");
-  const isBlurry = fileName.toLowerCase().includes("blur") || fileName.toLowerCase().includes("poor");
+  const lowerName = fileName.toLowerCase();
+  const isNonMedical =
+    lowerName.includes("bill") ||
+    lowerName.includes("invoice") ||
+    lowerName.includes("license") ||
+    lowerName.includes("receipt") ||
+    lowerName.includes("passport") ||
+    lowerName.includes("random") ||
+    lowerName.includes("cat") ||
+    lowerName.includes("dog");
+
+  if (isNonMedical) {
+    return {
+      isMedicalDocument: false,
+      docType: "Non-Medical Document",
+      ocrTier: "Tier 3 · Low Clarity / Unreadable Details Flagged",
+      nonMedicalReason: `The uploaded file "${fileName}" appears to be a utility bill, commercial receipt, or identity document. It does not contain valid clinical prescriptions, laboratory test metrics, or hospital discharge summaries.`,
+      labParams: [],
+      medications: [],
+      clinicalObservations: [
+        "Non-medical document detected and rejected by SwasthaSetu Safety Guardrail.",
+        "No health parameters or medical regimens extracted to protect EHR data integrity.",
+      ],
+      unreadableFields: ["Entire Document (Non-Medical Content)"],
+      unreadableWarning: "⚠️ Non-Medical Document Upload Blocked from Electronic Health Records (EHR)",
+      confidenceScore: 12.0,
+      rawExtractedText: `REJECTED DOCUMENT: ${fileName} does not contain clinical data.`,
+    };
+  }
+
+  const isPdf = mimeType.includes("pdf") || lowerName.endsWith(".pdf");
+  const isBlurry = lowerName.includes("blur") || lowerName.includes("poor");
 
   if (isPdf) {
     return {
+      isMedicalDocument: true,
       docType: "Lab Report",
       ocrTier: "Tier 1 · Digital File (High Precision PDF / E-Report)",
       patientName: "Rahul Sharma",
@@ -218,6 +257,7 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
 
   if (isBlurry) {
     return {
+      isMedicalDocument: true,
       docType: "Prescription",
       ocrTier: "Tier 3 · Low Clarity / Unreadable Details Flagged",
       patientName: "Rahul Sharma",
@@ -247,6 +287,7 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
 
   // Default Tier 2 Camera / Physical Scan
   return {
+    isMedicalDocument: true,
     docType: "Prescription",
     ocrTier: "Tier 2 · Scanned Copy (Camera Photo / Printed Scan)",
     patientName: "Rahul Sharma",
