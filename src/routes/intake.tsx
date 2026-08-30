@@ -586,13 +586,12 @@ function IntakeWizardPage() {
                   setTtsEnabled((prev) => !prev);
                   if (ttsEnabled) stopTTS();
                 }}
-                className={`p-2 rounded-md border transition flex items-center gap-1.5 ${
+                className={`p-2 rounded-md border transition ${
                   ttsEnabled ? "bg-accent text-accent-foreground border-accent shadow-sm" : "bg-surface text-muted-foreground border-border"
                 }`}
                 title={ttsEnabled ? "Disable Gemini Audio Read Aloud" : "Enable Gemini Audio Read Aloud"}
               >
                 {ttsEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-                <span className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">Gemini Audio TTS</span>
               </button>
             )}
 
@@ -1138,34 +1137,11 @@ function IntakeWizardPage() {
                   ))}
                 </select>
 
-                {/* Voice Model Picker */}
-                {availableVoices.length > 0 && (
-                  <select
-                    value={selectedVoiceURI}
-                    onChange={(e) => {
-                      setSelectedVoiceURI(e.target.value);
-                      const t = CHATBOT_TRANSLATIONS[selectedLang] || CHATBOT_TRANSLATIONS["en-IN"]!;
-                      // Test voice immediately on change
-                      setTimeout(() => speakText(t.q1Text, t.q1Phonetic), 100);
-                    }}
-                    className="rounded-md border border-border bg-surface px-2.5 py-1 text-[11px] font-bold text-primary outline-none max-w-[200px] truncate"
-                    title="Select AI Voice Engine Model"
-                  >
-                    <option value="">Auto Natural Voice</option>
-                    {availableVoices.map((v) => (
-                      <option key={v.voiceURI || v.name} value={v.voiceURI || v.name}>
-                        {v.name} ({v.lang})
-                      </option>
-                    ))}
-                  </select>
-                )}
-
                 <span className="rounded bg-accent/15 border border-accent/30 text-accent text-[10px] font-bold px-2.5 py-0.5 flex items-center gap-1">
                   <Volume2 className="h-3 w-3 text-accent" />
-                  {activeVoiceName}
+                  Gemini 2.0 Audio Engine
                 </span>
               </div>
-
             </div>
 
             {/* Patient Safety Callout */}
@@ -1207,7 +1183,7 @@ function IntakeWizardPage() {
                         >
                           <Volume2 className="h-3.5 w-3.5" /> Listen / Read Aloud
                         </button>
-                        <span className="text-[10px] text-muted-foreground">IndicTTS Audio</span>
+                        <span className="text-[10px] text-muted-foreground">Gemini 2.0 Audio</span>
                       </div>
                     )}
                   </div>

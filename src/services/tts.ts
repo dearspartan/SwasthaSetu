@@ -1,5 +1,5 @@
 // src/services/tts.ts
-// Multilingual Gemini 2.0 Flash Audio Multimodal Speech Synthesizer for SwasthaSetu
+// Pure Multilingual Gemini 2.0 Flash Audio Speech Synthesizer for SwasthaSetu (ASR & TTS via Google Gemini)
 
 import { GoogleGenAI } from "@google/genai";
 import { getGeminiApiKey } from "./geminiClinicalEngine";
@@ -7,22 +7,21 @@ import { getGeminiApiKey } from "./geminiClinicalEngine";
 let activeAudioElement: HTMLAudioElement | null = null;
 
 /**
- * Native Gemini 2.0 Flash Audio Speech Synthesis (TTS) via @google/genai
+ * Pure Gemini 2.0 Flash Audio Speech Synthesis (TTS) via @google/genai SDK
+ * Uses Gemini 2.0 Flash Audio Modality Output
  */
 export async function speakGeminiTTS(
   text: string,
-  lang: string = "hi-IN",
-  phoneticText?: string
+  lang: string = "hi-IN"
 ): Promise<boolean> {
   stopTTS();
 
   const apiKey = getGeminiApiKey();
 
-  // Try native Gemini 2.0 Flash Audio Modality Synthesis if Google API key is available
-  if (apiKey && apiKey.startsWith("AIza")) {
+  if (apiKey) {
     try {
       const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Read the following clinical text aloud clearly and naturally in ${lang} (supporting Hindi, English, Hinglish, Tamil, Telugu, Marathi): "${text}"`;
+      const prompt = `Read the following clinical response aloud clearly and naturally in ${lang}: "${text}"`;
 
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
@@ -37,7 +36,7 @@ export async function speakGeminiTTS(
           speechConfig: {
             voiceConfig: {
               prebuiltVoiceConfig: {
-                voiceName: "Puck", // Warm natural voice
+                voiceName: "Puck", // Warm natural clinical voice
               },
             },
           },
@@ -56,77 +55,27 @@ export async function speakGeminiTTS(
         return true;
       }
     } catch (err) {
-      console.warn("Gemini native audio TTS synthesis notice:", err);
+      console.warn("Gemini 2.0 Flash Audio TTS synthesis notice:", err);
     }
   }
 
-  // Browser Web Speech API fallback if Gemini audio modality API is unavailable
-  speakBrowserFallbackTTS(text, lang, phoneticText);
   return false;
 }
 
 /**
- * Universal Wrapper for Intake Speech Output
+ * Universal Wrapper for Gemini Intake Speech Output
  */
-export function speakTTS(
-  text: string,
-  lang: string = "hi-IN",
-  phoneticText?: string
-) {
-  speakGeminiTTS(text, lang, phoneticText);
+export function speakTTS(text: string, lang: string = "hi-IN") {
+  speakGeminiTTS(text, lang);
 }
 
 /**
- * Browser SpeechSynthesis Fallback Engine
- */
-function speakBrowserFallbackTTS(
-  text: string,
-  lang: string = "hi-IN",
-  phoneticText?: string
-) {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
-  window.speechSynthesis.cancel();
-
-  const safeLang = lang || "hi-IN";
-  const langPrefix = safeLang.split("-")[0] || "hi";
-  const voices = window.speechSynthesis.getVoices();
-
-  const matchingVoice = voices.find(
-    (v) =>
-      v.lang === safeLang ||
-      v.lang.replace("_", "-") === safeLang ||
-      (langPrefix && v.lang.startsWith(langPrefix)) ||
-      (langPrefix && v.name.toLowerCase().includes(langPrefix)) ||
-      v.name.toLowerCase().includes("hindi")
-  );
-
-  const textToSpeak = matchingVoice ? text : phoneticText || text;
-
-  const utterance = new SpeechSynthesisUtterance(textToSpeak);
-  utterance.rate = 0.9;
-  utterance.pitch = 1.0;
-
-  if (matchingVoice) {
-    utterance.voice = matchingVoice;
-    utterance.lang = matchingVoice.lang;
-  } else {
-    utterance.lang = "en-IN";
-  }
-
-  window.speechSynthesis.speak(utterance);
-}
-
-/**
- * Stops all active Gemini audio playback and browser WebSpeech utterances
+ * Stops all active Gemini audio playback
  */
 export function stopTTS() {
   if (activeAudioElement) {
     activeAudioElement.pause();
     activeAudioElement.currentTime = 0;
     activeAudioElement = null;
-  }
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
   }
 }
