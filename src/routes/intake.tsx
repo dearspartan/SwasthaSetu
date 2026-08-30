@@ -578,20 +578,21 @@ function IntakeWizardPage() {
               Rahul Sharma (54 / M)
             </span>
 
-            {/* TTS Speaker Mute/Unmute Toggle */}
+            {/* Gemini Audio TTS Speaker Mute/Unmute Toggle */}
             {step === 4 && (
               <button
                 type="button"
                 onClick={() => {
                   setTtsEnabled((prev) => !prev);
-                  if (ttsEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
+                  if (ttsEnabled) stopTTS();
                 }}
-                className={`p-2 rounded-md border transition ${
+                className={`p-2 rounded-md border transition flex items-center gap-1.5 ${
                   ttsEnabled ? "bg-accent text-accent-foreground border-accent shadow-sm" : "bg-surface text-muted-foreground border-border"
                 }`}
-                title={ttsEnabled ? "Disable Auto Read Aloud" : "Enable Auto Read Aloud"}
+                title={ttsEnabled ? "Disable Gemini Audio Read Aloud" : "Enable Gemini Audio Read Aloud"}
               >
                 {ttsEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                <span className="text-[10px] font-bold uppercase tracking-wider hidden sm:inline">Gemini Audio TTS</span>
               </button>
             )}
 
