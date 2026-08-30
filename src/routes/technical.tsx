@@ -33,22 +33,22 @@ export const Route = createFileRoute("/technical")({
 });
 
 const STACK = [
-  ["Speech-to-Text (ASR)", "Bhashini / AI4Bharat IndicASR", "Indian-language, multi-accent recognition"],
-  ["Text-to-Speech (TTS)", "Bhashini TTS / AI4Bharat IndicTTS", "Audio prompts and consent explanation"],
+  ["Speech-to-Text (ASR)", "Gemini 2.0 Flash Multimodal Audio API (@google/genai)", "85+ languages, Hinglish code-switching, filler word removal"],
+  ["Text-to-Speech (TTS)", "Web Speech API + Bhashini IndicTTS Fallback", "Audio prompts and consent explanation in patient language"],
   [
     "Conversational AI",
-    "Medically fine-tuned LLM constrained by clinical ontology",
-    "Adaptive clinical interview and history structuring",
+    "Gemini 2.0 Flash (SOCRATES & Dashavidha Pariksha Engine)",
+    "Adaptive clinical interview, off-topic rejection, HPI structuring",
   ],
   ["Clinical Ontology", "ICD-10, SNOMED-CT, RxNorm / ATC", "Standardised coding for interoperability"],
-  ["OCR Engine", "Cloud Vision AI + custom handwriting models / Tesseract", "Printed and handwritten extraction"],
-  ["Document AI", "NER models trained on Indian medical documents", "Clinical entity extraction"],
+  ["OCR Engine", "Gemini 2.0 Flash Vision Multimodal", "Printed prescriptions, lab report entity extraction"],
+  ["Document AI", "Gemini Vision Multimodal Clinical Extractor", "Lab parameter extraction, reference range flagging"],
+  ["Summary Generation", "Gemini 2.0 Flash Clinical Summarizer", "Dynamic HPI narrative & doctor-only differential synthesis"],
   ["Interoperability", "HL7 FHIR R4 APIs", "ABDM integration, HIS/EMR push, ABHA linking"],
   ["ABDM APIs", "M1 authentication, HIP push, HIU pull", "National digital health ecosystem"],
-  ["Frontend", "Progressive Web App", "Cross-platform, installable, offline-capable"],
+  ["Frontend", "Progressive Web App (TanStack Start + Tailwind)", "Cross-platform, installable, offline-capable"],
   ["Backend", "Cloud-native microservices", "Scalable, secure, module-independent deployment"],
   ["Database", "FHIR-native store, AES-256 at rest", "Secure health data persistence"],
-  ["Offline Sync", "Service workers + local storage with conflict resolution", "Low-connectivity environments"],
 ] as const;
 
 const OCR_TIERS = [

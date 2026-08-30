@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocale } from "@/context/LocaleContext";
+import { fetchQueueSessionsFromSupabase } from "@/services/supabaseDatabase";
 import {
   Stethoscope,
   User,
@@ -52,7 +53,9 @@ const INITIAL_QUEUE: QueuePatient[] = [
   { token: "47", name: "Ramesh Kumar", age: "54 / M", status: "Active Intake Draft", time: "09:45 AM", complaint: "Chest pain on exertion", abha: "91-8273-9481-22" },
   { token: "48", name: "Priya Sharma", age: "31 / F", status: "Red Flag Alert", time: "10:00 AM", complaint: "Severe dyspnea & tachycardia", abha: "91-3456-7890-03" },
   { token: "49", name: "Abdul Rahim", age: "70 / M", status: "Waiting in Queue", time: "10:15 AM", complaint: "Diabetes follow-up", abha: "91-4567-8901-04" },
-];function DoctorPage() {
+];
+
+function DoctorPage() {
   const { strings } = useLocale();
   const docStrings = (strings.doctorPortal as any);
   const initialQueueData = docStrings.queueList || INITIAL_QUEUE;
@@ -62,6 +65,24 @@ const INITIAL_QUEUE: QueuePatient[] = [
   const [statusFilter, setStatusFilter] = useState<"all" | "Active Intake Draft" | "Waiting in Queue" | "Completed">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [actionDone, setActionDone] = useState<string | null>(null);
+
+  // Fetch live sessions from Supabase on mount
+  useEffect(() => {
+    fetchQueueSessionsFromSupabase().then((sessions) => {
+      if (sessions && sessions.length > 0) {
+        const fetchedItems: QueuePatient[] = sessions.map((s) => ({
+          token: s.token_number || "024",
+          name: s.patient_name || "Rahul Sharma",
+          age: `${s.patient_age} / ${s.patient_gender}`,
+          status: s.status === "COMPLETED" ? "Completed" : "Active Intake Draft",
+          time: new Date(s.created_at || Date.now()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          complaint: s.chief_complaint,
+          abha: s.abha_id,
+        }));
+        setQueue(fetchedItems);
+      }
+    });
+  }, []);
 
   const selectedPatient = queue.find((p) => p.token === selectedToken) || queue[0] || {
     token: "024",

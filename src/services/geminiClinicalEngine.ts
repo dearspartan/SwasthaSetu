@@ -19,9 +19,11 @@ export function setGeminiApiKey(key: string) {
 export function getGeminiApiKey(): string {
   const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
   const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<string, string | undefined>;
+  const storedKey = typeof window !== "undefined" ? window.localStorage.getItem("swasthasetu_gemini_key") : "";
 
   return (
     userApiKey ||
+    storedKey ||
     env["OPENROUTER_API_KEY"] ||
     env["GEMINI_API_KEY"] ||
     env["VITE_GEMINI_API_KEY"] ||
