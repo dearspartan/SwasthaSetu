@@ -20,10 +20,17 @@ function LoginPage() {
   const { strings } = useLocale();
   const navigate = useNavigate();
   const [role, setRole] = useState<"patient" | "doctor">("patient");
-  const [abhaId, setAbhaId] = useState("");
-  const [otp, setOtp] = useState("");
-  const [doctorReg, setDoctorReg] = useState("");
-  const [password, setPassword] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+
+  const handleSendOtp = () => {
+    setOtpLoading(true);
+    setTimeout(() => {
+      setOtpLoading(false);
+      setOtpSent(true);
+      setOtp("123456");
+    }, 800);
+  };
 
   const handlePatientSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,17 +113,39 @@ function LoginPage() {
                 <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   {strings.loginPage.otpLabel}
                 </label>
-                <div className="mt-1.5 relative">
-                  <input
-                    type="password"
-                    required
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    placeholder={strings.loginPage.otpPlaceholder}
-                    className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                  />
-                  <KeyRound className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="mt-1.5 flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="password"
+                      required
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder={strings.loginPage.otpPlaceholder}
+                      className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-accent focus:ring-1 focus:ring-accent pr-9 font-mono"
+                    />
+                    <KeyRound className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={otpLoading}
+                    className="shrink-0 px-4 py-2.5 bg-accent text-accent-foreground text-xs font-bold rounded-md hover:bg-accent/90 transition shadow-sm disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
+                  >
+                    {otpLoading ? (
+                      <span>Sending OTP...</span>
+                    ) : otpSent ? (
+                      <span className="text-emerald-950 flex items-center gap-1">✓ Resend OTP</span>
+                    ) : (
+                      <span>Send OTP</span>
+                    )}
+                  </button>
                 </div>
+                {otpSent && (
+                  <p className="mt-1.5 text-xs text-emerald-700 font-medium flex items-center gap-1">
+                    <span>✓ Aadhaar OTP dispatched to linked mobile (+91-XXXXXX9481). Demo OTP:</span>
+                    <strong className="font-mono bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">123456</strong>
+                  </p>
+                )}
               </div>
 
               <button
