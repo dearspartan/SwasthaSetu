@@ -20,6 +20,10 @@ function LoginPage() {
   const { strings } = useLocale();
   const navigate = useNavigate();
   const [role, setRole] = useState<"patient" | "doctor">("patient");
+  const [abhaId, setAbhaId] = useState("");
+  const [otp, setOtp] = useState("");
+  const [doctorReg, setDoctorReg] = useState("");
+  const [password, setPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
 
@@ -29,16 +33,21 @@ function LoginPage() {
       setOtpLoading(false);
       setOtpSent(true);
       setOtp("123456");
-    }, 800);
+      if (!abhaId) setAbhaId("91-8273-9481-22");
+    }, 400);
   };
 
   const handlePatientSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!abhaId) setAbhaId("91-8273-9481-22");
+    if (!otp) setOtp("123456");
     navigate({ to: "/patient" });
   };
 
   const handleDoctorSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!doctorReg) setDoctorReg("NMC-2021-94812");
+    if (!password) setPassword("demo123");
     navigate({ to: "/doctor" });
   };
 
@@ -97,7 +106,6 @@ function LoginPage() {
                 <div className="mt-1.5 relative">
                   <input
                     type="text"
-                    required
                     value={abhaId}
                     onChange={(e) => setAbhaId(e.target.value)}
                     placeholder={strings.loginPage.abhaPlaceholder}
@@ -116,8 +124,7 @@ function LoginPage() {
                 <div className="mt-1.5 flex items-center gap-2">
                   <div className="relative flex-1">
                     <input
-                      type="password"
-                      required
+                      type="text"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       placeholder={strings.loginPage.otpPlaceholder}
@@ -150,7 +157,7 @@ function LoginPage() {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-bold text-accent-foreground transition-colors hover:bg-accent/90 shadow-sm"
+                className="w-full flex items-center justify-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-bold text-accent-foreground transition-colors hover:bg-accent/90 shadow-sm cursor-pointer"
               >
                 {strings.loginPage.submitPatient}
                 <ArrowRight className="h-4 w-4" />
@@ -180,7 +187,6 @@ function LoginPage() {
                 <div className="mt-1.5 relative">
                   <input
                     type="text"
-                    required
                     value={doctorReg}
                     onChange={(e) => setDoctorReg(e.target.value)}
                     placeholder={strings.loginPage.doctorRegPlaceholder}
@@ -197,7 +203,6 @@ function LoginPage() {
                 <div className="mt-1.5 relative">
                   <input
                     type="password"
-                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
@@ -209,7 +214,7 @@ function LoginPage() {
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-dark shadow-sm"
+                className="w-full flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary-dark shadow-sm cursor-pointer"
               >
                 {strings.loginPage.submitDoctor}
                 <ArrowRight className="h-4 w-4" />
@@ -227,7 +232,7 @@ function LoginPage() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/patient" })}
-                className="flex items-center gap-2 rounded-md border border-accent/30 bg-accent/10 px-3.5 py-2.5 text-xs font-semibold text-foreground hover:bg-accent/20 text-left transition-colors"
+                className="flex items-center gap-2 rounded-md border border-accent/30 bg-accent/10 px-3.5 py-2.5 text-xs font-semibold text-foreground hover:bg-accent/20 text-left transition-colors cursor-pointer"
               >
                 <User className="h-4 w-4 text-accent shrink-0" />
                 <span>{strings.loginPage.demoPatientBtn}</span>
@@ -235,7 +240,7 @@ function LoginPage() {
               <button
                 type="button"
                 onClick={() => navigate({ to: "/doctor" })}
-                className="flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3.5 py-2.5 text-xs font-semibold text-foreground hover:bg-primary/20 text-left transition-colors"
+                className="flex items-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3.5 py-2.5 text-xs font-semibold text-foreground hover:bg-primary/20 text-left transition-colors cursor-pointer"
               >
                 <Stethoscope className="h-4 w-4 text-primary shrink-0" />
                 <span>{strings.loginPage.demoDoctorBtn}</span>

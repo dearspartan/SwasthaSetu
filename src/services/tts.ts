@@ -77,8 +77,9 @@ export async function speakGeminiTTS(
   // Try native Gemini 2.0 Flash Audio Modality Synthesis if AIza Google API key is available
   if (apiKey && apiKey.startsWith("AIza")) {
     try {
-      const ai = new GoogleGenAI({ apiKey });
-      const prompt = `Read the following clinical response aloud clearly and naturally in ${lang}: "${text}"`;
+      const isHindi = lang.startsWith("hi");
+      const targetLangName = isHindi ? "Hindi (Devanagari / Hindustani)" : lang;
+      const prompt = `Perform clear, empathetic, spoken text-to-speech audio synthesis in ${targetLangName} for the following clinical response: "${text}"`;
 
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
@@ -93,7 +94,7 @@ export async function speakGeminiTTS(
           speechConfig: {
             voiceConfig: {
               prebuiltVoiceConfig: {
-                voiceName: "Puck", // Warm natural clinical voice
+                voiceName: isHindi ? "Kore" : "Puck",
               },
             },
           },
