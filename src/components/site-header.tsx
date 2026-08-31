@@ -91,7 +91,7 @@ export function SiteHeader() {
 
           <div className="flex items-center gap-3">
             <Link
-              to="/login"
+              to="/intake"
               className="hidden items-center gap-2 bg-accent px-5 py-2 text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/90 sm:inline-flex shadow-sm"
             >
               <LogIn className="h-4 w-4" aria-hidden />

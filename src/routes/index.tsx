@@ -147,15 +147,15 @@ function Index() {
               {strings.hero.subtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-4" id="start">
-              <a
-                href="#services"
+              <Link
+                to="/intake"
                 className="inline-flex items-center gap-2 bg-accent px-7 py-3.5 text-base font-semibold text-accent-foreground transition-colors hover:bg-accent/90 shadow-sm"
               >
                 {strings.startConsultation}
                 <ArrowRight className="h-5 w-5" aria-hidden />
-              </a>
+              </Link>
               <Link
-                to="/solution"
+                to="/login"
                 className="inline-flex items-center gap-2 border border-primary-foreground/40 px-7 py-3.5 text-base font-semibold transition-colors hover:bg-primary-dark"
               >
                 {strings.loginToMyHealth}
