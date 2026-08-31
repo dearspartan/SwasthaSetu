@@ -8,17 +8,9 @@ export function SiteFooter() {
     {
       title: strings.footer.colPlatform,
       links: [
-        { label: strings.footer.linkProblem, to: "/problems" },
-        { label: strings.footer.linkSolution, to: "/solution" },
-        { label: strings.footer.linkTechnical, to: "/technical" },
-      ],
-    },
-    {
-      title: strings.footer.colEvidence,
-      links: [
-        { label: strings.footer.linkFeasibility, to: "/feasibility" },
-        { label: strings.footer.linkImpacts, to: "/impacts" },
-        { label: strings.footer.linkResearch, to: "/research" },
+        { label: strings.navigation.patient, to: "/patient" },
+        { label: strings.navigation.doctor, to: "/doctor" },
+        { label: strings.startConsultation, to: "/login" },
       ],
     },
   ] as const;

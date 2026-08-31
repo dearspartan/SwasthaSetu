@@ -9,12 +9,6 @@ export function SiteHeader() {
 
   const NAV = [
     { to: "/", label: strings.navigation.home },
-    { to: "/problems", label: strings.navigation.problem },
-    { to: "/solution", label: strings.navigation.solution },
-    { to: "/technical", label: strings.navigation.technical },
-    { to: "/feasibility", label: strings.navigation.feasibility },
-    { to: "/impacts", label: strings.navigation.impact },
-    { to: "/research", label: strings.navigation.research },
     { to: "/patient", label: strings.navigation.patient },
     { to: "/doctor", label: strings.navigation.doctor },
   ] as const;
