@@ -702,17 +702,12 @@ function IntakeWizardPage() {
 
             {/* Mandatory Checkboxes */}
             <div className="space-y-3 pt-1">
-              <label className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
-                consentHistory ? "border-accent bg-accent/10 shadow-sm" : "border-border bg-background hover:border-accent/60 hover:bg-accent/5 hover:shadow-sm"
-              }`}>
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
                 <input
                   type="checkbox"
                   checked={consentHistory}
-                  onChange={(e) => {
-                    setConsentHistory(e.target.checked);
-                    if (consentError) setConsentError(false);
-                  }}
-                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent accent-accent"
+                  onChange={(e) => setConsentHistory(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
                   <strong className="text-foreground font-bold block">{wizardStrings.consentBox1Title || "Consent for Clinical Intake & Symptom Interview"}</strong>
@@ -720,17 +715,12 @@ function IntakeWizardPage() {
                 </div>
               </label>
 
-              <label className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
-                consentOcr ? "border-accent bg-accent/10 shadow-sm" : "border-border bg-background hover:border-accent/60 hover:bg-accent/5 hover:shadow-sm"
-              }`}>
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
                 <input
                   type="checkbox"
                   checked={consentOcr}
-                  onChange={(e) => {
-                    setConsentOcr(e.target.checked);
-                    if (consentError) setConsentError(false);
-                  }}
-                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent accent-accent"
+                  onChange={(e) => setConsentOcr(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
                   <strong className="text-foreground font-bold block">{wizardStrings.consentBox2Title || "Consent for Medical Document Digitization & OCR"}</strong>
@@ -738,17 +728,12 @@ function IntakeWizardPage() {
                 </div>
               </label>
 
-              <label className={`flex items-start gap-3 p-4 rounded-xl border transition-all cursor-pointer ${
-                consentAbdm ? "border-accent bg-accent/10 shadow-sm" : "border-border bg-background hover:border-accent/60 hover:bg-accent/5 hover:shadow-sm"
-              }`}>
+              <label className="flex items-start gap-3 p-3.5 rounded-lg border border-border bg-background cursor-pointer hover:border-accent transition">
                 <input
                   type="checkbox"
                   checked={consentAbdm}
-                  onChange={(e) => {
-                    setConsentAbdm(e.target.checked);
-                    if (consentError) setConsentError(false);
-                  }}
-                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent accent-accent"
+                  onChange={(e) => setConsentAbdm(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 text-accent rounded border-border focus:ring-accent"
                 />
                 <div className="text-xs">
                   <strong className="text-foreground font-bold block">{wizardStrings.consentBox3Title || "Consent for ABDM FHIR Profile Linking"}</strong>
@@ -758,18 +743,14 @@ function IntakeWizardPage() {
             </div>
 
             {consentError && (
-              <div className="p-3.5 bg-red-50 border-2 border-red-300 rounded-xl text-xs font-bold text-red-700 flex items-center gap-2 shadow-sm">
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-xs font-bold text-red-700 flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-red-600 shrink-0" />
-                Please select all 3 checkpoints above to proceed with digital intake, or click "Select All & Agree".
+                Please select all consent items above to proceed with digital intake, or request manual queue registration at reception.
               </div>
             )}
 
-            {/* Navigation Action Card with Hover and Active Highlight */}
-            <div className={`flex flex-wrap items-center justify-between p-4 sm:p-5 rounded-xl border transition-all duration-300 gap-4 ${
-              consentHistory && consentOcr && consentAbdm
-                ? "bg-accent/10 border-accent shadow-md ring-2 ring-accent/30"
-                : "bg-surface border-border hover:border-accent/40"
-            }`}>
+            {/* Navigation */}
+            <div className="flex items-center justify-between pt-4 border-t border-border">
               <button
                 type="button"
                 onClick={() => {
@@ -778,9 +759,9 @@ function IntakeWizardPage() {
                   setConsentAbdm(true);
                   setConsentError(false);
                 }}
-                className="text-xs font-bold text-accent hover:underline flex items-center gap-1.5 py-1.5 px-3 rounded-md hover:bg-accent/15 transition cursor-pointer"
+                className="text-xs font-bold text-accent hover:underline flex items-center gap-1 cursor-pointer"
               >
-                <CheckCircle2 className="h-4 w-4 text-accent" />
+                <CheckCircle2 className="h-3.5 w-3.5" />
                 {wizardStrings.selectAllAgree || "Select All Checkpoints"}
               </button>
 
@@ -794,11 +775,7 @@ function IntakeWizardPage() {
                   setConsentError(false);
                   setStep(2);
                 }}
-                className={`inline-flex items-center gap-2 rounded-lg px-7 py-3 text-sm font-bold transition-all duration-300 shadow-md cursor-pointer ${
-                  consentHistory && consentOcr && consentAbdm
-                    ? "bg-accent text-accent-foreground hover:bg-accent/90 hover:scale-105 hover:shadow-xl ring-2 ring-accent"
-                    : "bg-accent/80 text-accent-foreground hover:bg-accent hover:scale-[1.02]"
-                }`}
+                className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-2.5 text-sm font-bold text-accent-foreground hover:bg-accent/90 transition-all shadow-sm cursor-pointer hover:shadow-md"
               >
                 {wizardStrings.iAgreeBtn || "I Agree & Give Consent"}
                 <ArrowRight className="h-4 w-4" />
@@ -822,15 +799,20 @@ function IntakeWizardPage() {
               <button
                 type="button"
                 onClick={() => setLocationMode("gps")}
-                className={`p-5 rounded-xl border text-left transition-all flex items-start gap-3 ${
+                className={`p-5 rounded-xl border text-left transition-all duration-300 transform flex items-start gap-3.5 cursor-pointer ${
                   locationMode === "gps"
-                    ? "border-accent bg-accent/10 shadow-sm"
-                    : "border-border bg-surface hover:border-primary/40"
+                    ? "border-accent bg-accent/10 shadow-md ring-2 ring-accent/30 -translate-y-1"
+                    : "border-border bg-card shadow-sm hover:border-accent hover:-translate-y-1 hover:shadow-xl hover:bg-accent/5"
                 }`}
               >
-                <MapPin className="h-6 w-6 text-accent shrink-0 mt-0.5" />
+                <div className="p-2 rounded-lg bg-accent/15 text-accent shrink-0 mt-0.5">
+                  <MapPin className="h-5 w-5" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-foreground text-sm">{strings.intakeWizard.useGps}</h3>
+                  <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
+                    {strings.intakeWizard.useGps}
+                    {locationMode === "gps" && <CheckCircle2 className="h-4 w-4 text-emerald-600" />}
+                  </h3>
                   <p className="text-xs text-muted-foreground mt-1">Auto-detect nearest empaneled government hospitals & clinics.</p>
                 </div>
               </button>
@@ -838,22 +820,27 @@ function IntakeWizardPage() {
               <button
                 type="button"
                 onClick={() => setLocationMode("manual")}
-                className={`p-5 rounded-xl border text-left transition-all flex items-start gap-3 ${
+                className={`p-5 rounded-xl border text-left transition-all duration-300 transform flex items-start gap-3.5 cursor-pointer ${
                   locationMode === "manual"
-                    ? "border-accent bg-accent/10 shadow-sm"
-                    : "border-border bg-surface hover:border-primary/40"
+                    ? "border-accent bg-accent/10 shadow-md ring-2 ring-accent/30 -translate-y-1"
+                    : "border-border bg-card shadow-sm hover:border-accent hover:-translate-y-1 hover:shadow-xl hover:bg-accent/5"
                 }`}
               >
-                <Building2 className="h-6 w-6 text-accent shrink-0 mt-0.5" />
+                <div className="p-2 rounded-lg bg-accent/15 text-accent shrink-0 mt-0.5">
+                  <Building2 className="h-5 w-5" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-foreground text-sm">{strings.intakeWizard.enterManual}</h3>
+                  <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
+                    {strings.intakeWizard.enterManual}
+                    {locationMode === "manual" && <CheckCircle2 className="h-4 w-4 text-emerald-600" />}
+                  </h3>
                   <p className="text-xs text-muted-foreground mt-1">Specify State, District, City or PIN Code manually.</p>
                 </div>
               </button>
             </div>
 
             {locationMode === "manual" && (
-              <div className="grid gap-4 sm:grid-cols-2 pt-2 bg-surface p-4 rounded-xl border border-border">
+              <div className="grid gap-4 sm:grid-cols-2 pt-2 bg-surface p-4 sm:p-5 rounded-xl border border-border transition-all duration-300 hover:shadow-md hover:border-accent/40">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">{strings.intakeWizard.selectState}</label>
                   <input type="text" value={stateName} onChange={(e) => setStateName(e.target.value)} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground outline-none focus:border-accent" />
