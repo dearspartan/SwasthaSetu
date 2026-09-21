@@ -477,7 +477,7 @@ function IntakeWizardPage() {
       const aiReply: ChatMessage = {
         sender: "ai",
         text: geminiResult.replyText,
-        frameworkTag: geminiResult.frameworkTag || "Gemini 2.0 Flash Model",
+        frameworkTag: geminiResult.frameworkTag || "AI Clinical Assistant",
       };
       if (geminiResult.suggestedOptions && geminiResult.suggestedOptions.length > 0) {
         aiReply.options = geminiResult.suggestedOptions;
@@ -563,7 +563,7 @@ function IntakeWizardPage() {
                 className={`p-2 rounded-md border transition ${
                   ttsEnabled ? "bg-accent text-accent-foreground border-accent shadow-sm" : "bg-surface text-muted-foreground border-border"
                 }`}
-                title={ttsEnabled ? "Disable Gemini Audio Read Aloud" : "Enable Gemini Audio Read Aloud"}
+                title={ttsEnabled ? "Disable Audio Read Aloud" : "Enable Audio Read Aloud"}
               >
                 {ttsEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
               </button>
@@ -1122,7 +1122,7 @@ function IntakeWizardPage() {
 
                 <span className="rounded bg-accent/15 border border-accent/30 text-accent text-[10px] font-bold px-2.5 py-0.5 flex items-center gap-1">
                   <Volume2 className="h-3 w-3 text-accent" />
-                  Gemini 2.0 Audio Engine
+                  Multilingual Voice AI
                 </span>
               </div>
             </div>
@@ -1166,7 +1166,7 @@ function IntakeWizardPage() {
                         >
                           <Volume2 className="h-3.5 w-3.5" /> Listen / Read Aloud
                         </button>
-                        <span className="text-[10px] text-muted-foreground">Gemini 2.0 Audio</span>
+                        <span className="text-[10px] text-muted-foreground">Voice AI</span>
                       </div>
                     )}
                   </div>
@@ -1198,7 +1198,7 @@ function IntakeWizardPage() {
               )}
             </div>
 
-            {/* Live Gemini Audio Multimodal STT Status Indicator */}
+            {/* Live Audio Multimodal STT Status Indicator */}
             {isListening && (
               <div className="flex items-center justify-between p-3 rounded-lg bg-red-50 border border-red-200 text-xs font-bold text-red-700 animate-pulse mb-2">
                 <span className="flex items-center gap-2">
@@ -1206,7 +1206,7 @@ function IntakeWizardPage() {
                   Recording Voice... Speak clearly in Hindi, English, Hinglish, Tamil, Telugu, or Marathi.
                 </span>
                 <span className="text-[10px] uppercase font-mono tracking-wider bg-red-100 px-2 py-0.5 rounded border border-red-300">
-                  Gemini Audio STT
+                  Voice AI STT
                 </span>
               </div>
             )}
@@ -1214,7 +1214,7 @@ function IntakeWizardPage() {
             {isTranscribingAudio && (
               <div className="flex items-center gap-2 p-3 rounded-lg bg-accent/10 border border-accent/30 text-xs font-bold text-accent animate-pulse mb-2">
                 <RefreshCw className="h-4 w-4 animate-spin text-accent" />
-                <span>Transcribing voice recording via Gemini 2.0 Multimodal Audio AI...</span>
+                <span>Transcribing voice recording via Multilingual Audio AI...</span>
               </div>
             )}
 
@@ -1228,7 +1228,7 @@ function IntakeWizardPage() {
                     ? "bg-red-500 text-white animate-pulse"
                     : "bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm"
                 }`}
-                title="Toggle Gemini Multilingual Audio Input"
+                title="Toggle Multilingual Audio Input"
               >
                 {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
               </button>
@@ -1239,7 +1239,7 @@ function IntakeWizardPage() {
                   isListening
                     ? "Recording voice... Click mic to stop & transcribe"
                     : isTranscribingAudio
-                    ? "Transcribing with Gemini Multilingual Audio AI..."
+                    ? "Transcribing with Multilingual Audio AI..."
                     : "Type or speak your health symptoms here..."
                 }
                 value={userInputText}
@@ -1369,7 +1369,7 @@ function IntakeWizardPage() {
                   <div className="space-y-4 pt-2">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
                       <h5 className="font-bold text-xs uppercase tracking-wider text-primary flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Extracted Parameters (Gemini 2.0 Vision OCR - {ocrResultData?.confidenceScore || 98.4}% Confidence):
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Extracted Parameters (Vision OCR - {ocrResultData?.confidenceScore || 98.4}% Confidence):
                       </h5>
                       <span className={`text-xs font-mono font-bold px-3 py-1 rounded border ${
                         ocrResultData?.ocrTier?.includes("Tier 1")
@@ -1522,7 +1522,7 @@ function IntakeWizardPage() {
             {isGeneratingSummary && (
               <div className="flex items-center gap-3 p-4 rounded-xl bg-accent/10 border border-accent/30 text-xs font-bold text-accent animate-pulse">
                 <RefreshCw className="h-4 w-4 animate-spin" />
-                Gemini 2.0 Flash is analyzing chat conversation transcript and synthesizing structured clinical summary...
+                Clinical AI Engine is analyzing chat conversation transcript and synthesizing structured clinical summary...
               </div>
             )}
 

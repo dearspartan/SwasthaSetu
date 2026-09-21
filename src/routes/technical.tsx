@@ -33,17 +33,17 @@ export const Route = createFileRoute("/technical")({
 });
 
 const STACK = [
-  ["Speech-to-Text (ASR)", "Gemini 2.0 Flash Multimodal Audio API (@google/genai)", "85+ languages, Hinglish code-switching, filler word removal"],
+  ["Speech-to-Text (ASR)", "Multilingual Audio ASR API Engine", "85+ languages, Hinglish code-switching, filler word removal"],
   ["Text-to-Speech (TTS)", "Web Speech API + Bhashini IndicTTS Fallback", "Audio prompts and consent explanation in patient language"],
   [
     "Conversational AI",
-    "Gemini 2.0 Flash (SOCRATES & Dashavidha Pariksha Engine)",
+    "Clinical AI Engine (SOCRATES & Dashavidha Pariksha Engine)",
     "Adaptive clinical interview, off-topic rejection, HPI structuring",
   ],
   ["Clinical Ontology", "ICD-10, SNOMED-CT, RxNorm / ATC", "Standardised coding for interoperability"],
-  ["OCR Engine", "Gemini 2.0 Flash Vision Multimodal", "Printed prescriptions, lab report entity extraction"],
-  ["Document AI", "Gemini Vision Multimodal Clinical Extractor", "Lab parameter extraction, reference range flagging"],
-  ["Summary Generation", "Gemini 2.0 Flash Clinical Summarizer", "Dynamic HPI narrative & doctor-only differential synthesis"],
+  ["OCR Engine", "Vision Multimodal OCR Engine", "Printed prescriptions, lab report entity extraction"],
+  ["Document AI", "Vision Multimodal Clinical Extractor", "Lab parameter extraction, reference range flagging"],
+  ["Summary Generation", "Clinical AI Summarizer Engine", "Dynamic HPI narrative & doctor-only differential synthesis"],
   ["Interoperability", "HL7 FHIR R4 APIs", "ABDM integration, HIS/EMR push, ABHA linking"],
   ["ABDM APIs", "M1 authentication, HIP push, HIU pull", "National digital health ecosystem"],
   ["Frontend", "Progressive Web App (TanStack Start + Tailwind)", "Cross-platform, installable, offline-capable"],
