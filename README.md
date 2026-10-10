@@ -3,6 +3,8 @@
 > **AI-Powered Pre-Consultation Clinical History, Multilingual Voice Intake & Medical OCR Bridge for Indian Healthcare**  
 > _Aligned with the Ayushman Bharat Digital Mission (ABDM) & Digital Personal Data Protection (DPDP) Act 2023._
 
+🌐 **Live Prototype (Hosted on Vercel)**: [https://swastha-setu-v4if.vercel.app/](https://swastha-setu-v4if.vercel.app/)
+
 ---
 
 ## 📌 Executive Summary
