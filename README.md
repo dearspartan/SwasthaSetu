@@ -110,8 +110,8 @@ Create a `.env` file in the root directory:
 VITE_GEMINI_API_KEY=AIzaSy...
 
 # Database & Queue Credentials (Required for Live Doctor Queue Sync)
-VITE_SUPABASE_URL=https://drrrrmrasdmzpksxmxvu.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_sxEmFuoz7i1lZVWEe8krRg_bbcNTcHX
+VITE_SUPABASE_URL=https://.......supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_........
 ```
 
 ### 3. Run Development Server
