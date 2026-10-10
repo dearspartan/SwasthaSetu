@@ -16,21 +16,87 @@ export interface SOCRATESState {
 
 // Medical keywords for intent recognition
 const MEDICAL_SYMPTOM_KEYWORDS = [
-  "pain", "chest", "fever", "cough", "headache", "stomach", "vomiting", "nausea",
-  "dizziness", "breath", "shortness", "arm", "back", "leg", "joint", "swelling",
-  "blood", "pressure", "sugar", "heart", "rash", "itching", "cold", "flu",
-  "throat", "infection", "weakness", "fatigue", "burning", "acidity", "gas",
-  "दर्द", "सीना", "बुखार", "खांसी", "सिरदर्द", "पेट", "सांस", "तकलीफ", "उल्टी", "थकान"
+  "pain",
+  "chest",
+  "fever",
+  "cough",
+  "headache",
+  "stomach",
+  "vomiting",
+  "nausea",
+  "dizziness",
+  "breath",
+  "shortness",
+  "arm",
+  "back",
+  "leg",
+  "joint",
+  "swelling",
+  "blood",
+  "pressure",
+  "sugar",
+  "heart",
+  "rash",
+  "itching",
+  "cold",
+  "flu",
+  "throat",
+  "infection",
+  "weakness",
+  "fatigue",
+  "burning",
+  "acidity",
+  "gas",
+  "दर्द",
+  "सीना",
+  "बुखार",
+  "खांसी",
+  "सिरदर्द",
+  "पेट",
+  "सांस",
+  "तकलीफ",
+  "उल्टी",
+  "थकान",
 ];
 
 const TIME_DURATION_KEYWORDS = [
-  "day", "days", "hour", "hours", "week", "weeks", "month", "months", "today",
-  "yesterday", "ago", "since", "morning", "night", "started", "दिन", "घंटे", "हफ्ते"
+  "day",
+  "days",
+  "hour",
+  "hours",
+  "week",
+  "weeks",
+  "month",
+  "months",
+  "today",
+  "yesterday",
+  "ago",
+  "since",
+  "morning",
+  "night",
+  "started",
+  "दिन",
+  "घंटे",
+  "हफ्ते",
 ];
 
 const EXACERBATING_KEYWORDS = [
-  "stair", "stairs", "exertion", "walk", "walking", "running", "food", "eat",
-  "lying", "breath", "climbing", "work", "सीढ़ी", "चढ़ने", "चलने", "काम"
+  "stair",
+  "stairs",
+  "exertion",
+  "walk",
+  "walking",
+  "running",
+  "food",
+  "eat",
+  "lying",
+  "breath",
+  "climbing",
+  "work",
+  "सीढ़ी",
+  "चढ़ने",
+  "चलने",
+  "काम",
 ];
 
 /**
@@ -42,8 +108,23 @@ export function isOffTopicInput(input: string): boolean {
 
   // Single word checks for common non-medical nouns/random words
   const randomNouns = [
-    "gorilla", "monkey", "banana", "apple", "car", "football", "cricket", "movie",
-    "alien", "robot", "game", "song", "table", "chair", "pizza", "burger", "xyz"
+    "gorilla",
+    "monkey",
+    "banana",
+    "apple",
+    "car",
+    "football",
+    "cricket",
+    "movie",
+    "alien",
+    "robot",
+    "game",
+    "song",
+    "table",
+    "chair",
+    "pizza",
+    "burger",
+    "xyz",
   ];
   if (randomNouns.includes(clean)) return true;
 
@@ -68,7 +149,7 @@ export function isOffTopicInput(input: string): boolean {
 export function processClinicalInput(
   userInput: string,
   state: SOCRATESState,
-  lang: string = "en-IN"
+  lang: string = "en-IN",
 ): {
   aiText: string;
   isOffTopic: boolean;
@@ -109,7 +190,11 @@ export function processClinicalInput(
         isOffTopic: false,
         nextOptions: isHi
           ? ["3 दिन पहले शुरू हुआ, धीरे-धीरे", "आज सुबह अचानक", "1 सप्ताह से अधिक"]
-          : ["Started 3 days ago, gradual", "Started suddenly this morning", "More than a week ago"],
+          : [
+              "Started 3 days ago, gradual",
+              "Started suddenly this morning",
+              "More than a week ago",
+            ],
         frameworkTag: "SOCRATES — Onset & Duration",
         newState: updatedState,
       };
@@ -124,7 +209,11 @@ export function processClinicalInput(
         isOffTopic: false,
         nextOptions: isHi
           ? ["सीने में भारीपन, बाएं हाथ में जाता है", "जलन जैसा दर्द", "तेज चुभने वाला दर्द"]
-          : ["Squeezing pressure, radiates to left arm", "Burning chest pain", "Sharp stabbing pain"],
+          : [
+              "Squeezing pressure, radiates to left arm",
+              "Burning chest pain",
+              "Sharp stabbing pain",
+            ],
         frameworkTag: "SOCRATES — Character & Radiation",
         newState: updatedState,
       };
@@ -138,7 +227,11 @@ export function processClinicalInput(
           : `Got it. What makes the pain worse or better? For example, is it aggravated by exertion, climbing stairs, or deep breathing?`,
         isOffTopic: false,
         nextOptions: isHi
-          ? ["सीढ़ियाँ चढ़ने / परिश्रम से बढ़ता है", "भारी भोजन के बाद बढ़ता है", "विश्राम करने से कम होता है"]
+          ? [
+              "सीढ़ियाँ चढ़ने / परिश्रम से बढ़ता है",
+              "भारी भोजन के बाद बढ़ता है",
+              "विश्राम करने से कम होता है",
+            ]
           : ["Worse on exertion / stairs", "Worse after heavy meals", "Relieved by rest"],
         frameworkTag: "SOCRATES — Exacerbating & Relieving Factors",
         newState: updatedState,

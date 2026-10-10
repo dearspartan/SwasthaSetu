@@ -127,18 +127,27 @@ function FeasibilityPage() {
       />
 
       <Section title={strings.feasibilityPage.feasibleTitle}>
-        <DataTable headers={[strings.feasibilityPage.enablerHeader, strings.feasibilityPage.detailHeader]} rows={enablers} />
+        <DataTable
+          headers={[strings.feasibilityPage.enablerHeader, strings.feasibilityPage.detailHeader]}
+          rows={enablers}
+        />
       </Section>
 
       <Section title={strings.feasibilityPage.risksTitle} tone="surface">
-        <DataTable headers={[strings.feasibilityPage.riskHeader, strings.feasibilityPage.mitigationHeader]} rows={risks} />
+        <DataTable
+          headers={[strings.feasibilityPage.riskHeader, strings.feasibilityPage.mitigationHeader]}
+          rows={risks}
+        />
       </Section>
 
       <Section
         title={strings.feasibilityPage.complianceTitle}
         lead={strings.feasibilityPage.complianceLead}
       >
-        <DataTable headers={[strings.feasibilityPage.regHeader, strings.feasibilityPage.complianceHeader]} rows={compliance} />
+        <DataTable
+          headers={[strings.feasibilityPage.regHeader, strings.feasibilityPage.complianceHeader]}
+          rows={compliance}
+        />
       </Section>
 
       <Section title={strings.feasibilityPage.adoptionTitle} tone="surface">

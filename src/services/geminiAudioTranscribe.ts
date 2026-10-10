@@ -16,15 +16,15 @@ export class AudioRecorder {
 
     this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.audioChunks = [];
-    
+
     // Choose optimal mimeType supported by browser
     const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? "audio/webm;codecs=opus"
       : MediaRecorder.isTypeSupported("audio/webm")
-      ? "audio/webm"
-      : MediaRecorder.isTypeSupported("audio/mp4")
-      ? "audio/mp4"
-      : "audio/wav";
+        ? "audio/webm"
+        : MediaRecorder.isTypeSupported("audio/mp4")
+          ? "audio/mp4"
+          : "audio/wav";
 
     this.mediaRecorder = new MediaRecorder(this.stream, { mimeType });
     this.mediaRecorder.ondataavailable = (event) => {
@@ -82,7 +82,7 @@ export function blobToBase64(blob: Blob): Promise<string> {
  */
 export async function transcribeAudioWithGemini(
   audioBlob: Blob,
-  languageHint: string = "hi-IN"
+  languageHint: string = "hi-IN",
 ): Promise<string> {
   const base64Audio = await blobToBase64(audioBlob);
   const mimeType = audioBlob.type || "audio/webm";
@@ -107,10 +107,7 @@ Guidelines:
           contents: [
             {
               role: "user",
-              parts: [
-                { inlineData: { mimeType, data: base64Audio } },
-                { text: prompt },
-              ],
+              parts: [{ inlineData: { mimeType, data: base64Audio } }, { text: prompt }],
             },
           ],
         });

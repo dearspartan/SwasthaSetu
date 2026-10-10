@@ -17,9 +17,16 @@ export function setGeminiApiKey(key: string) {
 }
 
 export function getGeminiApiKey(): string {
-  const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
-  const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<string, string | undefined>;
-  const storedKey = typeof window !== "undefined" ? window.localStorage.getItem("swasthasetu_gemini_key") : "";
+  const env = (typeof process !== "undefined" ? process.env : {}) as Record<
+    string,
+    string | undefined
+  >;
+  const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<
+    string,
+    string | undefined
+  >;
+  const storedKey =
+    typeof window !== "undefined" ? window.localStorage.getItem("swasthasetu_gemini_key") : "";
 
   return (
     userApiKey ||
@@ -69,7 +76,7 @@ export async function queryGemini2FlashChat(
   userInput: string,
   chatHistory: { sender: "ai" | "patient"; text: string }[],
   language: string = "en-IN",
-  mode: "allopathy" | "ayush" = "allopathy"
+  mode: "allopathy" | "ayush" = "allopathy",
 ): Promise<GeminiClinicalResponse> {
   const apiKey = getGeminiApiKey();
   const systemPrompt = mode === "ayush" ? AYUSH_SYSTEM_PROMPT : ALLOPATHY_SYSTEM_PROMPT;
@@ -79,7 +86,12 @@ export async function queryGemini2FlashChat(
     if (apiKey.startsWith("sk-or-v1-")) {
       try {
         const messages = [
-          { role: "system", content: systemPrompt + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
+          {
+            role: "system",
+            content:
+              systemPrompt +
+              "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings).",
+          },
           ...chatHistory.map((m) => ({
             role: m.sender === "patient" ? "user" : "assistant",
             content: m.text,
@@ -118,11 +130,21 @@ export async function queryGemini2FlashChat(
 
     // 2. Vercel AI Gateway Execution (AQ., vck_, gsk_)
     if (apiKey.startsWith("AQ.") || apiKey.startsWith("vck_") || apiKey.startsWith("gsk_")) {
-      const modelCandidates = ["google/gemini-2.0-flash-001", "google/gemini-2.0-flash", "google/gemini-1.5-flash", "gemini-2.0-flash"];
+      const modelCandidates = [
+        "google/gemini-2.0-flash-001",
+        "google/gemini-2.0-flash",
+        "google/gemini-1.5-flash",
+        "gemini-2.0-flash",
+      ];
       for (const modelCandidate of modelCandidates) {
         try {
           const messages = [
-            { role: "system", content: systemPrompt + "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings)." },
+            {
+              role: "system",
+              content:
+                systemPrompt +
+                "\nRespond strictly in valid JSON with fields: replyText (string), isOffTopic (boolean), frameworkTag (string), suggestedOptions (array of strings).",
+            },
             ...chatHistory.map((m) => ({
               role: m.sender === "patient" ? "user" : "assistant",
               content: m.text,
@@ -154,7 +176,10 @@ export async function queryGemini2FlashChat(
             }
           }
         } catch (gatewayErr) {
-          console.warn("Vercel AI Gateway execution error for model " + modelCandidate + ":", gatewayErr);
+          console.warn(
+            "Vercel AI Gateway execution error for model " + modelCandidate + ":",
+            gatewayErr,
+          );
         }
       }
     }
@@ -189,9 +214,15 @@ export async function queryGemini2FlashChat(
             responseSchema: {
               type: Type.OBJECT,
               properties: {
-                replyText: { type: Type.STRING, description: "Direct conversational response to the patient" },
+                replyText: {
+                  type: Type.STRING,
+                  description: "Direct conversational response to the patient",
+                },
                 isOffTopic: { type: Type.BOOLEAN, description: "True if non-medical" },
-                frameworkTag: { type: Type.STRING, description: "Active conversation topic or framework phase" },
+                frameworkTag: {
+                  type: Type.STRING,
+                  description: "Active conversation topic or framework phase",
+                },
                 suggestedOptions: {
                   type: Type.ARRAY,
                   items: { type: Type.STRING },
@@ -224,7 +255,7 @@ function pureGeminiBaseEngine(
   userInput: string,
   chatHistory: { sender: "ai" | "patient"; text: string }[],
   language: string,
-  mode: "allopathy" | "ayush" = "allopathy"
+  mode: "allopathy" | "ayush" = "allopathy",
 ): GeminiClinicalResponse {
   const isHi = language.startsWith("hi");
   const clean = userInput.trim();
@@ -234,10 +265,15 @@ function pureGeminiBaseEngine(
 
   // AYUSH (Ayurvedic Dashavidha Pariksha Engine)
   if (mode === "ayush") {
-    const GIBBERISH_REGEX = /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
-    const HAS_AYUSH_KEYWORDS = /vata|pitta|kapha|dosha|agni|koshtha|digest|pain|gas|acid|stool|bowel|skin|fever|cough|sleep|stress|cold|hot|warm|sweat|appetite|joint|heavy|body|head|day|week|month|year|started|none|no|yes|hi|hello|namaste|ayurved/i;
+    const GIBBERISH_REGEX =
+      /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
+    const HAS_AYUSH_KEYWORDS =
+      /vata|pitta|kapha|dosha|agni|koshtha|digest|pain|gas|acid|stool|bowel|skin|fever|cough|sleep|stress|cold|hot|warm|sweat|appetite|joint|heavy|body|head|day|week|month|year|started|none|no|yes|hi|hello|namaste|ayurved/i;
 
-    if (GIBBERISH_REGEX.test(clean) || (!HAS_AYUSH_KEYWORDS.test(clean) && clean.split(" ").length <= 3 && patientTurns > 0)) {
+    if (
+      GIBBERISH_REGEX.test(clean) ||
+      (!HAS_AYUSH_KEYWORDS.test(clean) && clean.split(" ").length <= 3 && patientTurns > 0)
+    ) {
       return {
         replyText: isHi
           ? `मुझे क्षमा करें, आपका उत्तर ("${clean}") आपके आयुर्वेदिक दशविध परीक्षा मूल्यांकन से संबंधित नहीं लग रहा है। कृपया अपनी स्वास्थ्य समस्या या दोष लक्षण स्पष्ट करें, अथवा नीचे दिए गए विकल्पों में से चुनें।`
@@ -245,8 +281,18 @@ function pureGeminiBaseEngine(
         isOffTopic: true,
         frameworkTag: "Validation Alert — Off-Topic / Unclear AYUSH Input",
         suggestedOptions: isHi
-          ? ["वात असंतुलन (जोड़ों का दर्द, गैस, रूखापन)", "पित्त असंतुलन (एसिडिटी, जलन)", "कफ असंतुलन (बलगम, आलस्य)", "सामान्य स्वास्थ्य जांच"]
-          : ["Vata Imbalance (Joint pain, Gas)", "Pitta Imbalance (Acidity, Burning)", "Kapha Imbalance (Mucus, Lethargy)", "General Wellness Checkup"],
+          ? [
+              "वात असंतुलन (जोड़ों का दर्द, गैस, रूखापन)",
+              "पित्त असंतुलन (एसिडिटी, जलन)",
+              "कफ असंतुलन (बलगम, आलस्य)",
+              "सामान्य स्वास्थ्य जांच",
+            ]
+          : [
+              "Vata Imbalance (Joint pain, Gas)",
+              "Pitta Imbalance (Acidity, Burning)",
+              "Kapha Imbalance (Mucus, Lethargy)",
+              "General Wellness Checkup",
+            ],
       };
     }
 
@@ -260,8 +306,18 @@ function pureGeminiBaseEngine(
           isOffTopic: false,
           frameworkTag: "Dashavidha Pariksha — Vikriti & Agni Assessment",
           suggestedOptions: isHi
-            ? ["अनियमित भूख और गैस (विषमाग्नि)", "तेज भूख और छाती में जलन (तीक्ष्णाग्नि)", "कम भूख और भारीपन (मंदाग्नि)", "सामान्य पाचन (समाग्नि)"]
-            : ["Irregular appetite & gas (Vishama Agni)", "Intense hunger & burning (Tikshna Agni)", "Slow digestion & heaviness (Manda Agni)", "Normal digestion (Sama Agni)"],
+            ? [
+                "अनियमित भूख और गैस (विषमाग्नि)",
+                "तेज भूख और छाती में जलन (तीक्ष्णाग्नि)",
+                "कम भूख और भारीपन (मंदाग्नि)",
+                "सामान्य पाचन (समाग्नि)",
+              ]
+            : [
+                "Irregular appetite & gas (Vishama Agni)",
+                "Intense hunger & burning (Tikshna Agni)",
+                "Slow digestion & heaviness (Manda Agni)",
+                "Normal digestion (Sama Agni)",
+              ],
         };
 
       case 2:
@@ -272,8 +328,16 @@ function pureGeminiBaseEngine(
           isOffTopic: false,
           frameworkTag: "Dashavidha Pariksha — Koshtha & Ahara-Vihara Assessment",
           suggestedOptions: isHi
-            ? ["कड़ा मल और कब्ज (क्रूर कोष्ठ) · नींद कच्ची", "पतला मल और तीव्र वेग (मृदु कोष्ठ) · अच्छी नींद", "सामान्य मल त्याग (मध्यम कोष्ठ) · सामान्य नींद"]
-            : ["Hard stools & constipation (Krura Koshtha) · Disturbed sleep", "Loose stools (Mrudu Koshtha) · Sound sleep", "Regular normal stools (Madhyama Koshtha) · Normal sleep"],
+            ? [
+                "कड़ा मल और कब्ज (क्रूर कोष्ठ) · नींद कच्ची",
+                "पतला मल और तीव्र वेग (मृदु कोष्ठ) · अच्छी नींद",
+                "सामान्य मल त्याग (मध्यम कोष्ठ) · सामान्य नींद",
+              ]
+            : [
+                "Hard stools & constipation (Krura Koshtha) · Disturbed sleep",
+                "Loose stools (Mrudu Koshtha) · Sound sleep",
+                "Regular normal stools (Madhyama Koshtha) · Normal sleep",
+              ],
         };
 
       case 3:
@@ -284,8 +348,16 @@ function pureGeminiBaseEngine(
           isOffTopic: false,
           frameworkTag: "Dashavidha Pariksha — Prakriti & Satmya Assessment",
           suggestedOptions: isHi
-            ? ["ठंड संवेदनशील, सूखी त्वचा, पतला शरीर (वात)", "गर्मी संवेदनशील, तैलीय त्वचा, मध्यम शरीर (पित्त)", "गर्मी सहनशील, चिकनी त्वचा, मजबूत शरीर (कफ)"]
-            : ["Sensitive to cold, dry skin, lean frame (Vata)", "Sensitive to heat, oily skin, medium build (Pitta)", "Tolerates heat, smooth skin, sturdy build (Kapha)"],
+            ? [
+                "ठंड संवेदनशील, सूखी त्वचा, पतला शरीर (वात)",
+                "गर्मी संवेदनशील, तैलीय त्वचा, मध्यम शरीर (पित्त)",
+                "गर्मी सहनशील, चिकनी त्वचा, मजबूत शरीर (कफ)",
+              ]
+            : [
+                "Sensitive to cold, dry skin, lean frame (Vata)",
+                "Sensitive to heat, oily skin, medium build (Pitta)",
+                "Tolerates heat, smooth skin, sturdy build (Kapha)",
+              ],
         };
 
       case 4:
@@ -296,8 +368,16 @@ function pureGeminiBaseEngine(
           isOffTopic: false,
           frameworkTag: "Dashavidha Pariksha — Sattva & Vyayama Shakti Assessment",
           suggestedOptions: isHi
-            ? ["जल्दी चिंता / तनाव होना (अवर सत्त्व) · जल्दी थकान", "मध्यम तनाव सहनशीलता (मध्यम सत्त्व) · सामान्य ऊर्जा", "मजबूत मानसिक शक्ति (प्रवर सत्त्व) · उच्च सहनशक्ति"]
-            : ["Prone to anxiety/stress (Avara Sattva) · Early fatigue", "Moderate stress tolerance (Madhyama Sattva) · Normal energy", "High mental resilience (Pravara Sattva) · High endurance"],
+            ? [
+                "जल्दी चिंता / तनाव होना (अवर सत्त्व) · जल्दी थकान",
+                "मध्यम तनाव सहनशीलता (मध्यम सत्त्व) · सामान्य ऊर्जा",
+                "मजबूत मानसिक शक्ति (प्रवर सत्त्व) · उच्च सहनशक्ति",
+              ]
+            : [
+                "Prone to anxiety/stress (Avara Sattva) · Early fatigue",
+                "Moderate stress tolerance (Madhyama Sattva) · Normal energy",
+                "High mental resilience (Pravara Sattva) · High endurance",
+              ],
         };
 
       case 5:
@@ -309,18 +389,31 @@ function pureGeminiBaseEngine(
           isOffTopic: false,
           frameworkTag: "Dashavidha Pariksha Completed — Profile Generated",
           suggestedOptions: isHi
-            ? ["चरण 5 पर आगे बढ़ें (दस्तावेज़ ओसीआर)", "आयुर्वेदिक समरी देखें", "पुनः जांच शुरू करें"]
-            : ["Proceed to Step 5 (Document OCR)", "View Ayurvedic Profile Summary", "Restart Intake"],
+            ? [
+                "चरण 5 पर आगे बढ़ें (दस्तावेज़ ओसीआर)",
+                "आयुर्वेदिक समरी देखें",
+                "पुनः जांच शुरू करें",
+              ]
+            : [
+                "Proceed to Step 5 (Document OCR)",
+                "View Ayurvedic Profile Summary",
+                "Restart Intake",
+              ],
         };
     }
   }
 
   // ALLOPATHY (SOCRATES Engine)
   // 0. Off-topic & Nonsense Input Validation
-  const GIBBERISH_REGEX = /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
-  const HAS_MEDICAL_OR_TIME_KEYWORDS = /pain|fever|cough|headache|chest|stomach|abdomen|ankle|foot|leg|arm|day|week|month|today|year|since|started|worse|better|mild|moderate|severe|squeezing|sharp|dull|hypertension|diabetes|asthma|none|no|yes|hi|hello|namaste|cough|injury|swell|burn|cramp|nausea|vomit|dizzy|fatigue/i;
+  const GIBBERISH_REGEX =
+    /^(wallet|helmet|keyboard|butterfly|10 light year|moon in spacd|random|testing|asdf|qwerty)/i;
+  const HAS_MEDICAL_OR_TIME_KEYWORDS =
+    /pain|fever|cough|headache|chest|stomach|abdomen|ankle|foot|leg|arm|day|week|month|today|year|since|started|worse|better|mild|moderate|severe|squeezing|sharp|dull|hypertension|diabetes|asthma|none|no|yes|hi|hello|namaste|cough|injury|swell|burn|cramp|nausea|vomit|dizzy|fatigue/i;
 
-  if (GIBBERISH_REGEX.test(clean) || (!HAS_MEDICAL_OR_TIME_KEYWORDS.test(clean) && clean.split(" ").length <= 3 && patientTurns > 0)) {
+  if (
+    GIBBERISH_REGEX.test(clean) ||
+    (!HAS_MEDICAL_OR_TIME_KEYWORDS.test(clean) && clean.split(" ").length <= 3 && patientTurns > 0)
+  ) {
     return {
       replyText: isHi
         ? `मुझे क्षमा करें, आपका उत्तर ("${clean}") आपके स्वास्थ्य से संबंधित नहीं लग रहा है। कृपया अपनी स्वास्थ्य समस्या या लक्षण के बारे में स्पष्ट बताएं, अथवा नीचे दिए गए विकल्पों में से चुनें।`
@@ -336,7 +429,8 @@ function pureGeminiBaseEngine(
   // 1. Handle Greetings & Introductions
   if (
     patientTurns === 0 &&
-    (/^(hi|hello|hey|namaste|good morning|good evening)/i.test(clean) || /i am|my name/i.test(clean))
+    (/^(hi|hello|hey|namaste|good morning|good evening)/i.test(clean) ||
+      /i am|my name/i.test(clean))
   ) {
     const nameMatch = clean.match(/(?:i am|my name is|im)\s+([a-zA-Z]+)/i);
     const patientName = nameMatch ? nameMatch[1] : "";
@@ -386,7 +480,11 @@ function pureGeminiBaseEngine(
         isOffTopic: false,
         frameworkTag: "SOCRATES Phase 2 — Radiation & Aggravating Factors (Cardiac)",
         suggestedOptions: isHi
-          ? ["बाएं हाथ में दर्द जाता है", "सीढ़ियाँ चढ़ने से बढ़ता है", "विश्राम करने पर आराम मिलता है"]
+          ? [
+              "बाएं हाथ में दर्द जाता है",
+              "सीढ़ियाँ चढ़ने से बढ़ता है",
+              "विश्राम करने पर आराम मिलता है",
+            ]
           : ["Radiates to left arm", "Worse on climbing stairs", "Relieved by rest"],
       };
     }
@@ -414,8 +512,16 @@ function pureGeminiBaseEngine(
         isOffTopic: false,
         frameworkTag: "SOCRATES Phase 3 — Severity & Character",
         suggestedOptions: isHi
-          ? ["मध्यम (4-6 / 10) - भारीपन", "गंभीर (7-8 / 10) - चुभन वाला दर्द", "हल्का (1-3 / 10) - मीठा दर्द"]
-          : ["Moderate (4-6 / 10) - Squeezing", "Severe (7-8 / 10) - Sharp pain", "Mild (1-3 / 10) - Dull ache"],
+          ? [
+              "मध्यम (4-6 / 10) - भारीपन",
+              "गंभीर (7-8 / 10) - चुभन वाला दर्द",
+              "हल्का (1-3 / 10) - मीठा दर्द",
+            ]
+          : [
+              "Moderate (4-6 / 10) - Squeezing",
+              "Severe (7-8 / 10) - Sharp pain",
+              "Mild (1-3 / 10) - Dull ache",
+            ],
       };
 
     case 3:
@@ -426,8 +532,16 @@ function pureGeminiBaseEngine(
         isOffTopic: false,
         frameworkTag: "SOCRATES Phase 4 — Radiation & Relieving Factors",
         suggestedOptions: isHi
-          ? ["परिश्रम से बढ़ता है, आराम से घटता है", "कंधे / पीठ में फैलता है", "भोजन के बाद बढ़ता है"]
-          : ["Worse on exertion, better with rest", "Radiates to shoulder / back", "Worse after heavy meals"],
+          ? [
+              "परिश्रम से बढ़ता है, आराम से घटता है",
+              "कंधे / पीठ में फैलता है",
+              "भोजन के बाद बढ़ता है",
+            ]
+          : [
+              "Worse on exertion, better with rest",
+              "Radiates to shoulder / back",
+              "Worse after heavy meals",
+            ],
       };
 
     case 4:
@@ -438,8 +552,18 @@ function pureGeminiBaseEngine(
         isOffTopic: false,
         frameworkTag: "SOCRATES Phase 5 — Associated Symptoms",
         suggestedOptions: isHi
-          ? ["सांस फूलना और पसीना आना", "बुखार और ठंड लगना", "चक्कर आना और कमजोरी", "कोई अन्य लक्षण नहीं"]
-          : ["Shortness of breath & sweating", "Fever & chills", "Dizziness & fatigue", "No associated symptoms"],
+          ? [
+              "सांस फूलना और पसीना आना",
+              "बुखार और ठंड लगना",
+              "चक्कर आना और कमजोरी",
+              "कोई अन्य लक्षण नहीं",
+            ]
+          : [
+              "Shortness of breath & sweating",
+              "Fever & chills",
+              "Dizziness & fatigue",
+              "No associated symptoms",
+            ],
       };
 
     case 5:
@@ -450,8 +574,18 @@ function pureGeminiBaseEngine(
         isOffTopic: false,
         frameworkTag: "SOCRATES Phase 6 — Past Medical History",
         suggestedOptions: isHi
-          ? ["कोई पुरानी बीमारी नहीं", "उच्च रक्तचाप (High BP)", "टाइप 2 मधुमेह (Diabetes)", "अस्थमा / सांस की बीमारी"]
-          : ["None / No past conditions", "Hypertension (High BP)", "Type 2 Diabetes", "Asthma / Respiratory"],
+          ? [
+              "कोई पुरानी बीमारी नहीं",
+              "उच्च रक्तचाप (High BP)",
+              "टाइप 2 मधुमेह (Diabetes)",
+              "अस्थमा / सांस की बीमारी",
+            ]
+          : [
+              "None / No past conditions",
+              "Hypertension (High BP)",
+              "Type 2 Diabetes",
+              "Asthma / Respiratory",
+            ],
       };
 
     case 6:
@@ -468,4 +602,3 @@ function pureGeminiBaseEngine(
       };
   }
 }
-

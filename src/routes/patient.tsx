@@ -29,7 +29,8 @@ export const Route = createFileRoute("/patient")({
       { title: "Patient Dashboard — SwasthaSetu" },
       {
         name: "description",
-        content: "A single unified view of your healthcare records, active intake tokens, medicines and insurance.",
+        content:
+          "A single unified view of your healthcare records, active intake tokens, medicines and insurance.",
       },
     ],
   }),
@@ -143,7 +144,9 @@ const DOCUMENTS = [
 
 function PatientPage() {
   const { strings } = useLocale();
-  const [activeTab, setActiveTab] = useState<"overview" | "consultations" | "medicines" | "documents" | "insurance">("overview");
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "consultations" | "medicines" | "documents" | "insurance"
+  >("overview");
   const [uploadModal, setUploadModal] = useState(false);
   const [docFilter, setDocFilter] = useState<"all" | "Prescription" | "Lab Report">("all");
 
@@ -215,7 +218,9 @@ function PatientPage() {
             <div className="flex items-start gap-3 rounded-lg border-l-4 border-amber-500 bg-amber-50 p-4 text-amber-900 shadow-sm">
               <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="flex-1">
-                <h3 className="font-bold text-sm text-amber-900">{strings.patientPortal.healthAlertTitle}</h3>
+                <h3 className="font-bold text-sm text-amber-900">
+                  {strings.patientPortal.healthAlertTitle}
+                </h3>
                 <p className="text-xs sm:text-sm mt-0.5 text-amber-800">
                   {strings.patientPortal.healthAlertBody}
                 </p>
@@ -237,8 +242,12 @@ function PatientPage() {
                     <Activity className="h-5 w-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent">Active Queue</span>
-                    <h3 className="font-display text-lg font-bold text-primary">{strings.patientPortal.activeConsultationTitle}</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent">
+                      Active Queue
+                    </span>
+                    <h3 className="font-display text-lg font-bold text-primary">
+                      {strings.patientPortal.activeConsultationTitle}
+                    </h3>
                   </div>
                 </div>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/20 px-3 py-1 text-xs font-bold text-accent border border-accent/30">
@@ -248,7 +257,9 @@ function PatientPage() {
 
               <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 text-sm">
                 <div>
-                  <span className="text-xs text-muted-foreground font-medium">Hospital / Clinic</span>
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Hospital / Clinic
+                  </span>
                   <p className="font-bold text-foreground">{strings.patientPortal.hospitalName}</p>
                 </div>
                 <div>
@@ -280,10 +291,16 @@ function PatientPage() {
               >
                 <div className="flex items-center justify-between">
                   <Pill className="h-7 w-7 text-accent" />
-                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">View All →</span>
+                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">
+                    View All →
+                  </span>
                 </div>
-                <h3 className="mt-4 font-display text-xl font-bold text-primary">{strings.patientPortal.medicinesStat}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">{strings.patientPortal.medicinesSub}</p>
+                <h3 className="mt-4 font-display text-xl font-bold text-primary">
+                  {strings.patientPortal.medicinesStat}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {strings.patientPortal.medicinesSub}
+                </p>
               </div>
 
               <div
@@ -292,10 +309,16 @@ function PatientPage() {
               >
                 <div className="flex items-center justify-between">
                   <FileText className="h-7 w-7 text-accent" />
-                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">View All →</span>
+                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">
+                    View All →
+                  </span>
                 </div>
-                <h3 className="mt-4 font-display text-xl font-bold text-primary">{strings.patientPortal.documentsStat}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">{strings.patientPortal.documentsSub}</p>
+                <h3 className="mt-4 font-display text-xl font-bold text-primary">
+                  {strings.patientPortal.documentsStat}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {strings.patientPortal.documentsSub}
+                </p>
               </div>
 
               <div
@@ -304,10 +327,16 @@ function PatientPage() {
               >
                 <div className="flex items-center justify-between">
                   <ShieldAlert className="h-7 w-7 text-accent" />
-                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">View All →</span>
+                  <span className="text-xs font-bold text-muted-foreground group-hover:text-accent">
+                    View All →
+                  </span>
                 </div>
-                <h3 className="mt-4 font-display text-xl font-bold text-primary">{strings.patientPortal.insuranceStat}</h3>
-                <p className="mt-1 text-xs text-muted-foreground">{strings.patientPortal.insuranceSub}</p>
+                <h3 className="mt-4 font-display text-xl font-bold text-primary">
+                  {strings.patientPortal.insuranceStat}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {strings.patientPortal.insuranceSub}
+                </p>
               </div>
             </div>
 
@@ -329,7 +358,10 @@ function PatientPage() {
 
               <div className="divide-y divide-border">
                 {consultations.map((c: any) => (
-                  <div key={c.id} className="py-3.5 flex flex-wrap items-center justify-between gap-4 text-sm">
+                  <div
+                    key={c.id}
+                    className="py-3.5 flex flex-wrap items-center justify-between gap-4 text-sm"
+                  >
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-primary">{c.dept}</span>
@@ -355,8 +387,12 @@ function PatientPage() {
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
               <div>
-                <h2 className="font-display text-xl font-bold text-primary">Consultation History & Summaries</h2>
-                <p className="text-xs text-muted-foreground">All completed outpatient and inpatient visits linked to your ABHA.</p>
+                <h2 className="font-display text-xl font-bold text-primary">
+                  Consultation History & Summaries
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  All completed outpatient and inpatient visits linked to your ABHA.
+                </p>
               </div>
               <Link
                 to="/intake"
@@ -383,7 +419,9 @@ function PatientPage() {
 
                   <div className="mt-4 grid gap-4 md:grid-cols-2 text-xs sm:text-sm">
                     <div>
-                      <span className="text-muted-foreground font-medium">Attending Physician:</span>
+                      <span className="text-muted-foreground font-medium">
+                        Attending Physician:
+                      </span>
                       <p className="font-bold text-foreground">{c.doctor}</p>
                     </div>
                     <div>
@@ -391,18 +429,25 @@ function PatientPage() {
                       <p className="font-bold text-foreground">{c.hospital}</p>
                     </div>
                     <div className="md:col-span-2">
-                      <span className="text-muted-foreground font-medium">Chief Reason for Visit:</span>
+                      <span className="text-muted-foreground font-medium">
+                        Chief Reason for Visit:
+                      </span>
                       <p className="font-semibold text-foreground">{c.reason}</p>
                     </div>
                     <div className="md:col-span-2 rounded-lg bg-surface p-3 border border-border">
-                      <span className="text-muted-foreground font-bold uppercase tracking-wider text-[11px]">Clinical Diagnosis:</span>
+                      <span className="text-muted-foreground font-bold uppercase tracking-wider text-[11px]">
+                        Clinical Diagnosis:
+                      </span>
                       <p className="font-bold text-primary mt-0.5">{c.diagnosis}</p>
                     </div>
                     <div className="md:col-span-2">
                       <span className="text-muted-foreground font-medium">Prescribed Therapy:</span>
                       <ul className="mt-1 space-y-1">
                         {c.prescription.map((p: string) => (
-                          <li key={p} className="flex items-center gap-2 font-mono text-xs font-semibold text-foreground">
+                          <li
+                            key={p}
+                            className="flex items-center gap-2 font-mono text-xs font-semibold text-foreground"
+                          >
                             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                             {p}
                           </li>
@@ -420,16 +465,25 @@ function PatientPage() {
         {activeTab === "medicines" && (
           <div className="space-y-6">
             <div className="border-b border-border pb-4">
-              <h2 className="font-display text-xl font-bold text-primary">Active Prescription & Regular Medications</h2>
-              <p className="text-xs text-muted-foreground">Track ongoing daily medicines for chronic care & upcoming refills.</p>
+              <h2 className="font-display text-xl font-bold text-primary">
+                Active Prescription & Regular Medications
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Track ongoing daily medicines for chronic care & upcoming refills.
+              </p>
             </div>
 
             {/* Daily Schedule Cards */}
             <div className="grid gap-4 md:grid-cols-3">
               {medicines.map((m: any) => (
-                <div key={m.name} className="rounded-xl border border-border bg-card p-5 shadow-sm relative border-l-4 border-accent">
+                <div
+                  key={m.name}
+                  className="rounded-xl border border-border bg-card p-5 shadow-sm relative border-l-4 border-accent"
+                >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-accent uppercase tracking-wider">{m.status}</span>
+                    <span className="text-xs font-bold text-accent uppercase tracking-wider">
+                      {m.status}
+                    </span>
                     <Pill className="h-5 w-5 text-accent" />
                   </div>
                   <h3 className="mt-2 font-display text-lg font-bold text-primary">{m.name}</h3>
@@ -456,7 +510,8 @@ function PatientPage() {
             <div className="rounded-lg bg-surface border border-border p-4 flex items-center gap-3">
               <AlertTriangle className="h-5 w-5 text-accent shrink-0" />
               <p className="text-xs text-muted-foreground">
-                <strong>Drug Safety Alert:</strong> Always take Thyroxine on an empty stomach at least 30 minutes before breakfast. Do not double doses if missed.
+                <strong>Drug Safety Alert:</strong> Always take Thyroxine on an empty stomach at
+                least 30 minutes before breakfast. Do not double doses if missed.
               </p>
             </div>
           </div>
@@ -467,8 +522,12 @@ function PatientPage() {
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
               <div>
-                <h2 className="font-display text-xl font-bold text-primary">Scanned Medical Records & Reports</h2>
-                <p className="text-xs text-muted-foreground">Digitised prescriptions, lab investigation reports and discharge summaries.</p>
+                <h2 className="font-display text-xl font-bold text-primary">
+                  Scanned Medical Records & Reports
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Digitised prescriptions, lab investigation reports and discharge summaries.
+                </p>
               </div>
               <button
                 type="button"
@@ -482,18 +541,27 @@ function PatientPage() {
 
             <div className="grid gap-4 md:grid-cols-2">
               {documents.map((d: any) => (
-                <div key={d.id} className="rounded-xl border border-border bg-card p-5 shadow-sm flex flex-col justify-between">
+                <div
+                  key={d.id}
+                  className="rounded-xl border border-border bg-card p-5 shadow-sm flex flex-col justify-between"
+                >
                   <div>
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-mono font-bold text-accent">{d.id}</span>
                       <span className="text-xs font-mono text-muted-foreground">{d.date}</span>
                     </div>
-                    <h3 className="mt-2 font-display text-base font-bold text-primary">{d.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">{d.facility} · {d.type}</p>
+                    <h3 className="mt-2 font-display text-base font-bold text-primary">
+                      {d.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {d.facility} · {d.type}
+                    </p>
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
-                    <span className={`text-xs font-bold px-2.5 py-1 rounded border ${d.statusColor}`}>
+                    <span
+                      className={`text-xs font-bold px-2.5 py-1 rounded border ${d.statusColor}`}
+                    >
                       {d.flag}
                     </span>
                     <button type="button" className="text-xs font-bold text-accent hover:underline">
@@ -512,13 +580,23 @@ function PatientPage() {
                     <h3 className="font-display text-base font-bold text-primary flex items-center gap-2">
                       <FileUp className="h-5 w-5 text-accent" /> Upload Document for OCR Scan
                     </h3>
-                    <button type="button" onClick={() => setUploadModal(false)} className="text-xs font-bold text-muted-foreground">✕</button>
+                    <button
+                      type="button"
+                      onClick={() => setUploadModal(false)}
+                      className="text-xs font-bold text-muted-foreground"
+                    >
+                      ✕
+                    </button>
                   </div>
 
                   <div className="mt-4 border-2 border-dashed border-accent/40 bg-accent/5 rounded-xl p-6 text-center">
                     <Upload className="h-8 w-8 text-accent mx-auto mb-2" />
-                    <p className="text-xs font-bold text-foreground">Drag and drop prescription or lab PDF / Image here</p>
-                    <p className="text-[11px] text-muted-foreground mt-1">Supports PNG, JPG, PDF up to 10MB</p>
+                    <p className="text-xs font-bold text-foreground">
+                      Drag and drop prescription or lab PDF / Image here
+                    </p>
+                    <p className="text-[11px] text-muted-foreground mt-1">
+                      Supports PNG, JPG, PDF up to 10MB
+                    </p>
                     <button
                       type="button"
                       onClick={() => {
@@ -540,19 +618,29 @@ function PatientPage() {
         {activeTab === "insurance" && (
           <div className="space-y-6">
             <div className="border-b border-border pb-4">
-              <h2 className="font-display text-xl font-bold text-primary">Insurance Policies & PMJAY Coverage</h2>
-              <p className="text-xs text-muted-foreground">Active government health coverage and private mediclaim details.</p>
+              <h2 className="font-display text-xl font-bold text-primary">
+                Insurance Policies & PMJAY Coverage
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Active government health coverage and private mediclaim details.
+              </p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
               {/* PMJAY Card */}
               <div className="rounded-xl border border-border bg-card p-6 shadow-sm relative border-l-4 border-emerald-500">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">Active Government Coverage</span>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">
+                    Active Government Coverage
+                  </span>
                   <ShieldCheck className="h-6 w-6 text-emerald-600" />
                 </div>
-                <h3 className="mt-3 font-display text-lg font-bold text-primary">Pradhan Mantri Jan Arogya Yojana (PMJAY)</h3>
-                <p className="text-xs font-mono text-muted-foreground">ABHA Card Linked · Ayushman Bharat</p>
+                <h3 className="mt-3 font-display text-lg font-bold text-primary">
+                  Pradhan Mantri Jan Arogya Yojana (PMJAY)
+                </h3>
+                <p className="text-xs font-mono text-muted-foreground">
+                  ABHA Card Linked · Ayushman Bharat
+                </p>
 
                 <div className="mt-4 space-y-2 text-xs border-t border-border pt-3">
                   <div className="flex justify-between">
@@ -573,10 +661,14 @@ function PatientPage() {
               {/* Private Mediclaim */}
               <div className="rounded-xl border border-border bg-card p-6 shadow-sm relative border-l-4 border-accent">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-accent bg-accent/15 px-2.5 py-0.5 rounded">Private Mediclaim</span>
+                  <span className="text-xs font-bold text-accent bg-accent/15 px-2.5 py-0.5 rounded">
+                    Private Mediclaim
+                  </span>
                   <ShieldAlert className="h-6 w-6 text-accent" />
                 </div>
-                <h3 className="mt-3 font-display text-lg font-bold text-primary">Star Health Optima Insurance</h3>
+                <h3 className="mt-3 font-display text-lg font-bold text-primary">
+                  Star Health Optima Insurance
+                </h3>
                 <p className="text-xs font-mono text-muted-foreground">Policy # SH-9481-2025</p>
 
                 <div className="mt-4 space-y-2 text-xs border-t border-border pt-3">
@@ -585,11 +677,15 @@ function PatientPage() {
                     <span className="font-bold text-primary">₹ 7,50,000</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Cardiac Waiting Period:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Cardiac Waiting Period:
+                    </span>
                     <span className="font-bold text-emerald-600">Passed (36 Months Completed)</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Cashless Verification:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Cashless Verification:
+                    </span>
                     <span className="font-bold text-foreground">Instant via Hospital Desk</span>
                   </div>
                 </div>

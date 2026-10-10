@@ -4,8 +4,14 @@
 import { createClient } from "@supabase/supabase-js";
 
 const getEnvVar = (key: string): string => {
-  const env = (typeof process !== "undefined" ? process.env : {}) as Record<string, string | undefined>;
-  const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<string, string | undefined>;
+  const env = (typeof process !== "undefined" ? process.env : {}) as Record<
+    string,
+    string | undefined
+  >;
+  const metaEnv = (typeof import.meta !== "undefined" ? (import.meta as any).env : {}) as Record<
+    string,
+    string | undefined
+  >;
 
   return env[key] || metaEnv[key] || "";
 };

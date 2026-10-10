@@ -5,7 +5,6 @@ import { GoogleGenAI } from "@google/genai";
 import { getGeminiApiKey } from "./geminiClinicalEngine";
 
 let activeAudioElement: HTMLAudioElement | null = null;
-let activeAudioContext: AudioContext | null = null;
 
 /**
  * Converts raw PCM base64 data from Gemini 2.0 Flash into a playable WAV Data URL
@@ -66,10 +65,7 @@ function pcmToWavDataUrl(base64Pcm: string, sampleRate: number = 24000): string 
 /**
  * Gemini 2.0 Flash Multimodal Speech Synthesizer (TTS)
  */
-export async function speakGeminiTTS(
-  text: string,
-  lang: string = "hi-IN"
-): Promise<boolean> {
+export async function speakGeminiTTS(text: string, lang: string = "hi-IN"): Promise<boolean> {
   stopTTS();
 
   const apiKey = getGeminiApiKey();
@@ -81,6 +77,7 @@ export async function speakGeminiTTS(
       const targetLangName = isHindi ? "Hindi (Devanagari / Hindustani)" : lang;
       const prompt = `Perform clear, empathetic, spoken text-to-speech audio synthesis in ${targetLangName} for the following clinical response: "${text}"`;
 
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-2.0-flash",
         contents: [
@@ -102,19 +99,22 @@ export async function speakGeminiTTS(
       });
 
       const audioPart = response.candidates?.[0]?.content?.parts?.find(
-        (part: any) => part.inlineData && part.inlineData.mimeType?.startsWith("audio/")
+        (part: any) => part.inlineData && part.inlineData.mimeType?.startsWith("audio/"),
       );
 
-      if (audioPart && audioPart.inlineData) {
-        const { mimeType, data } = audioPart.inlineData;
-        
+      if (audioPart && audioPart.inlineData && audioPart.inlineData.data) {
+        const mimeType = audioPart.inlineData.mimeType || "audio/pcm";
+        const data = audioPart.inlineData.data;
+
         // Convert PCM or raw data into a playable WAV Data URL
         let sampleRate = 24000;
         if (mimeType.includes("16000") || mimeType.includes("rate=16000")) {
           sampleRate = 16000;
         }
 
-        const audioSrc = mimeType.includes("pcm") ? pcmToWavDataUrl(data, sampleRate) : `data:${mimeType};base64,${data}`;
+        const audioSrc = mimeType.includes("pcm")
+          ? pcmToWavDataUrl(data, sampleRate)
+          : `data:${mimeType};base64,${data}`;
 
         activeAudioElement = new Audio(audioSrc);
         await activeAudioElement.play();
@@ -154,7 +154,7 @@ function speakBrowserFallbackTTS(text: string, lang: string = "hi-IN"): boolean 
       v.lang.replace("_", "-") === safeLang ||
       (langPrefix && v.lang.startsWith(langPrefix)) ||
       (langPrefix && v.name.toLowerCase().includes(langPrefix)) ||
-      v.name.toLowerCase().includes("hindi")
+      v.name.toLowerCase().includes("hindi"),
   );
 
   const utterance = new SpeechSynthesisUtterance(text);

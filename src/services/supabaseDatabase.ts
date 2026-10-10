@@ -80,6 +80,7 @@ export async function savePatientConsentToSupabase(abhaId: string, consentTypes:
     return data;
   } catch (err) {
     console.warn("Supabase consent error:", err);
+    return null;
   }
 }
 
@@ -113,7 +114,10 @@ export async function fetchQueueSessionsFromSupabase(): Promise<SupabaseIntakeSe
 
     return data.map((item: any) => ({
       ...item,
-      differentials: typeof item.differentials === "string" ? JSON.parse(item.differentials) : item.differentials,
+      differentials:
+        typeof item.differentials === "string"
+          ? JSON.parse(item.differentials)
+          : item.differentials,
     }));
   } catch (e) {
     const local = JSON.parse(localStorage.getItem("swasthasetu_local_sessions") || "[]");

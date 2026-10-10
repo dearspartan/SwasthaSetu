@@ -43,17 +43,23 @@ export const en = {
     title: "Your Healthcare, Connected",
     lead: "A persistent health workspace for the patient and a prepared clinical workspace for the doctor — connected by one structured record.",
     intakeTitle: "Pre-Consultation Intake",
-    intakeBody: "A guided voice and touch interview in eight Indian languages, completed while the patient waits.",
+    intakeBody:
+      "A guided voice and touch interview in eight Indian languages, completed while the patient waits.",
     recordsTitle: "Health Records",
-    recordsBody: "Old prescriptions, lab reports and discharge summaries digitised into a dated clinical timeline.",
+    recordsBody:
+      "Old prescriptions, lab reports and discharge summaries digitised into a dated clinical timeline.",
     medicinesTitle: "Regular Medicines",
-    medicinesBody: "Chronic medication for thyroid, diabetes and hypertension tracked persistently across visits.",
+    medicinesBody:
+      "Chronic medication for thyroid, diabetes and hypertension tracked persistently across visits.",
     ayushTitle: "AYUSH Assessment",
-    ayushBody: "A dedicated Dashavidha Pariksha interview producing a structured Ayurvedic patient profile.",
+    ayushBody:
+      "A dedicated Dashavidha Pariksha interview producing a structured Ayurvedic patient profile.",
     insuranceTitle: "Insurance & Mediclaim",
-    insuranceBody: "Policies, waiting periods and PMJAY eligibility visible before admission decisions are made.",
+    insuranceBody:
+      "Policies, waiting periods and PMJAY eligibility visible before admission decisions are made.",
     providersTitle: "Verified Providers",
-    providersBody: "Only NMC, State Council and AYUSH-registered providers can write to a patient's record.",
+    providersBody:
+      "Only NMC, State Council and AYUSH-registered providers can write to a patient's record.",
   },
 
   steps: {
@@ -113,14 +119,22 @@ export const en = {
   problemsPage: {
     eyebrow: "Problem Statement",
     title: "India's OPD consultation has no room left for the patient's story",
-    intro: "The single most diagnostically valuable act in medicine — taking a history — is systematically compressed out of the Indian public OPD encounter.",
+    intro:
+      "The single most diagnostically valuable act in medicine — taking a history — is systematically compressed out of the Indian public OPD encounter.",
     realityTitle: "Current Reality",
-    realityLead: "The problem is not clinician competence. It is arithmetic: thousands of patients, minutes per consultation, and no structured record to start from.",
+    realityLead:
+      "The problem is not clinician competence. It is arithmetic: thousands of patients, minutes per consultation, and no structured record to start from.",
     dimHeader: "Dimension",
     realityHeader: "Current Reality",
     realityRows: [
-      ["Consultation time", "2–5 minutes per OPD patient (BMJ Open, 2017) — among the shortest globally"],
-      ["Patient volume", "Tertiary government hospitals register 4,000–10,000 OPD patients per day"],
+      [
+        "Consultation time",
+        "2–5 minutes per OPD patient (BMJ Open, 2017) — among the shortest globally",
+      ],
+      [
+        "Patient volume",
+        "Tertiary government hospitals register 4,000–10,000 OPD patients per day",
+      ],
       [
         "History-taking yield",
         "A thorough history yields the correct diagnosis in 70–80% of cases — but there is no time to take one",
@@ -139,19 +153,24 @@ export const en = {
       ],
     ],
     resultPrefix: "Result:",
-    resultText: "systematic under-elicitation of history, missed comorbidities, diagnostic error, and repeated questioning of the same patient across every visit.",
+    resultText:
+      "systematic under-elicitation of history, missed comorbidities, diagnostic error, and repeated questioning of the same patient across every visit.",
     consequencesTitle: "Consequences on the Ground",
     card1Index: "01",
     card1Title: "Diagnostic risk",
-    card1Body: "With 70–80% of diagnoses resting on history, a rushed two-minute interview shifts the burden onto investigations that are slower, costlier and often unnecessary.",
+    card1Body:
+      "With 70–80% of diagnoses resting on history, a rushed two-minute interview shifts the burden onto investigations that are slower, costlier and often unnecessary.",
     card2Index: "02",
     card2Title: "Lost longitudinal record",
-    card2Body: "Each visit restarts from zero. Chronic trends — a rising HbA1c, a changing drug regimen — remain buried in a plastic bag of paper.",
+    card2Body:
+      "Each visit restarts from zero. Chronic trends — a rising HbA1c, a changing drug regimen — remain buried in a plastic bag of paper.",
     card3Index: "03",
     card3Title: "Exclusion by design",
-    card3Body: "Elderly, non-literate and rural patients cannot use app-based intake, so digital solutions widen rather than close the access gap.",
+    card3Body:
+      "Elderly, non-literate and rural patients cannot use app-based intake, so digital solutions widen rather than close the access gap.",
     failuresTitle: "Why Existing Solutions Fall Short",
-    failuresLead: "Every layer of the current stack solves an adjacent problem — none addresses the minutes between a patient arriving and entering the consultation room.",
+    failuresLead:
+      "Every layer of the current stack solves an adjacent problem — none addresses the minutes between a patient arriving and entering the consultation room.",
     approachHeader: "Existing Approach",
     shortfallHeader: "Why It Falls Short",
     failureRows: [
@@ -181,9 +200,11 @@ export const en = {
   solutionPage: {
     eyebrow: "Solution",
     title: "A complete clinical intake, finished before the consultation starts",
-    intro: "SwasthaSetu enables any patient — regardless of literacy, language or digital comfort — to independently complete a comprehensive clinical history and document intake before seeing the doctor.",
+    intro:
+      "SwasthaSetu enables any patient — regardless of literacy, language or digital comfort — to independently complete a comprehensive clinical history and document intake before seeing the doctor.",
     modulesTitle: "Four Platform Modules",
-    modulesLead: "AI is an enabling layer, not the identity of the product. The product is the patient's healthcare journey and the clinician's prepared workflow.",
+    modulesLead:
+      "AI is an enabling layer, not the identity of the product. The product is the patient's healthcare journey and the clinician's prepared workflow.",
     modules: [
       {
         index: "Module A",
@@ -232,14 +253,35 @@ export const en = {
     ],
     journeyTitle: "End-to-End Patient Journey",
     journey: [
-      { step: "Step 1", title: "Identify", body: "ABHA login, language selection, audio-guided consent" },
-      { step: "Step 2", title: "Converse", body: "AI interview, voice + touch, adaptive questions, AYUSH mode" },
-      { step: "Step 3", title: "Scan", body: "Upload documents, OCR and extraction, timeline, abnormal flags" },
-      { step: "Step 4", title: "Summarise & Route", body: "Structured summary pushed to HIS and linked to ABHA" },
-      { step: "Step 5", title: "Consult", body: "Doctor reviews the draft before the patient enters the room" },
+      {
+        step: "Step 1",
+        title: "Identify",
+        body: "ABHA login, language selection, audio-guided consent",
+      },
+      {
+        step: "Step 2",
+        title: "Converse",
+        body: "AI interview, voice + touch, adaptive questions, AYUSH mode",
+      },
+      {
+        step: "Step 3",
+        title: "Scan",
+        body: "Upload documents, OCR and extraction, timeline, abnormal flags",
+      },
+      {
+        step: "Step 4",
+        title: "Summarise & Route",
+        body: "Structured summary pushed to HIS and linked to ABHA",
+      },
+      {
+        step: "Step 5",
+        title: "Consult",
+        body: "Doctor reviews the draft before the patient enters the room",
+      },
     ],
     diffTitle: "Platform Differentiators",
-    diffLead: "Practical additions beyond the core problem statement that make real-world deployment work.",
+    diffLead:
+      "Practical additions beyond the core problem statement that make real-world deployment work.",
     featureHeader: "Feature",
     purposeHeader: "Purpose",
     differentiators: [
@@ -270,7 +312,8 @@ export const en = {
     ],
     summaryTitle: "Sample Physician Summary",
     physicianNote: "Physician: edit / confirm / reject.",
-    physicianDisclaimer: "This is an AI-generated draft — never a diagnosis and never an autonomous medical record.",
+    physicianDisclaimer:
+      "This is an AI-generated draft — never a diagnosis and never an autonomous medical record.",
     summary: {
       patientName: "Ramesh Kumar (M / 54 yrs)",
       deptToken: "Dept: General Medicine · Token #47 · Kiosk Intake #1024",
@@ -314,7 +357,8 @@ export const en = {
       restingEcg: "Resting ECG",
       ecgResult: "Normal sinus rhythm",
       triageAlertTitle: "TRIAGE ALERT / RED FLAG DETECTED",
-      triageAlertText: "Exertional chest pain + family history of MI → Recommend urgent cardiac evaluation & stat ECG.",
+      triageAlertText:
+        "Exertional chest pain + family history of MI → Recommend urgent cardiac evaluation & stat ECG.",
       acceptBtn: "Accept & Confirm Summary",
       amendBtn: "Amend / Edit Notes",
       rejectBtn: "Reject Draft",
@@ -325,52 +369,87 @@ export const en = {
   technicalPage: {
     eyebrow: "Technical Approach",
     title: "Built on India's public digital health rails",
-    intro: "Bhashini language models, national clinical ontologies and HL7 FHIR R4 over ABDM — assembled into an offline-capable progressive web application designed for a non-literate first-time user.",
+    intro:
+      "Bhashini language models, national clinical ontologies and HL7 FHIR R4 over ABDM — assembled into an offline-capable progressive web application designed for a non-literate first-time user.",
     stackTitle: "Technology Stack",
     layerHeader: "Layer",
     techHeader: "Technology",
     purposeHeader: "Purpose",
     stackRows: [
-      ["Speech-to-Text (ASR)", "Bhashini / AI4Bharat IndicASR", "Indian-language, multi-accent recognition"],
-      ["Text-to-Speech (TTS)", "Bhashini TTS / AI4Bharat IndicTTS", "Audio prompts and consent explanation"],
+      [
+        "Speech-to-Text (ASR)",
+        "Bhashini / AI4Bharat IndicASR",
+        "Indian-language, multi-accent recognition",
+      ],
+      [
+        "Text-to-Speech (TTS)",
+        "Bhashini TTS / AI4Bharat IndicTTS",
+        "Audio prompts and consent explanation",
+      ],
       [
         "Conversational AI",
         "Medically fine-tuned LLM constrained by clinical ontology",
         "Adaptive clinical interview and history structuring",
       ],
-      ["Clinical Ontology", "ICD-10, SNOMED-CT, RxNorm / ATC", "Standardised coding for interoperability"],
-      ["OCR Engine", "Cloud Vision AI + custom handwriting models / Tesseract", "Printed and handwritten extraction"],
-      ["Document AI", "NER models trained on Indian medical documents", "Clinical entity extraction"],
+      [
+        "Clinical Ontology",
+        "ICD-10, SNOMED-CT, RxNorm / ATC",
+        "Standardised coding for interoperability",
+      ],
+      [
+        "OCR Engine",
+        "Cloud Vision AI + custom handwriting models / Tesseract",
+        "Printed and handwritten extraction",
+      ],
+      [
+        "Document AI",
+        "NER models trained on Indian medical documents",
+        "Clinical entity extraction",
+      ],
       ["Interoperability", "HL7 FHIR R4 APIs", "ABDM integration, HIS/EMR push, ABHA linking"],
       ["ABDM APIs", "M1 authentication, HIP push, HIU pull", "National digital health ecosystem"],
       ["Frontend", "Progressive Web App", "Cross-platform, installable, offline-capable"],
       ["Backend", "Cloud-native microservices", "Scalable, secure, module-independent deployment"],
       ["Database", "FHIR-native store, AES-256 at rest", "Secure health data persistence"],
-      ["Offline Sync", "Service workers + local storage with conflict resolution", "Low-connectivity environments"],
+      [
+        "Offline Sync",
+        "Service workers + local storage with conflict resolution",
+        "Low-connectivity environments",
+      ],
     ],
     archTitle: "Data Flow Architecture",
     card1Index: "Input",
     card1Title: "At the platform",
-    card1Body: "Voice input via ASR, touch input by tap or type, and document upload by scan or photo — all three available at every step of the encounter.",
+    card1Body:
+      "Voice input via ASR, touch input by tap or type, and document upload by scan or photo — all three available at every step of the encounter.",
     card2Index: "Processing",
     card2Title: "AI processing layer",
-    card2Body: "LLM interview, OCR and named-entity recognition, summarisation, and a red-flag check run over the combined conversational and document evidence.",
+    card2Body:
+      "LLM interview, OCR and named-entity recognition, summarisation, and a red-flag check run over the combined conversational and document evidence.",
     card3Index: "Output",
     card3Title: "Delivery",
-    card3Body: "Hospital HIS/EMR on the doctor's screen, ABDM HIE as a FHIR bundle, and the patient's own ABHA personal health record.",
+    card3Body:
+      "Hospital HIS/EMR on the doctor's screen, ABDM HIE as a FHIR bundle, and the patient's own ABHA personal health record.",
     ocrTitle: "Handling the Handwriting Problem",
-    ocrLead: "Handwritten prescriptions in India are notoriously illegible. Perfect OCR is not achievable today, and the platform is engineered around that honest constraint.",
+    ocrLead:
+      "Handwritten prescriptions in India are notoriously illegible. Perfect OCR is not achievable today, and the platform is engineered around that honest constraint.",
     tierHeader: "Tier",
     inputHeader: "Input",
     handlingHeader: "Handling",
     ocrRows: [
       ["Tier 1", "Printed text", "Standard OCR — high accuracy"],
       ["Tier 2", "Handwritten text", "Specialised handwriting recognition models"],
-      ["Tier 3", "Unreadable", "Confidence-scored and flagged for manual review — never hallucinated"],
+      [
+        "Tier 3",
+        "Unreadable",
+        "Confidence-scored and flagged for manual review — never hallucinated",
+      ],
     ],
-    ocrCallout: "Where confidence falls below threshold the system flags for human review rather than inventing text. Verified providers are prompted to upload digital reports directly, bypassing OCR entirely.",
+    ocrCallout:
+      "Where confidence falls below threshold the system flags for human review rather than inventing text. Verified providers are prompted to upload digital reports directly, bypassing OCR entirely.",
     a11yTitle: "Accessibility Engineering",
-    a11yIntro: "The primary persona is a 60-year-old, first-time, non-literate user. Every interface decision is tested against that persona first.",
+    a11yIntro:
+      "The primary persona is a 60-year-old, first-time, non-literate user. Every interface decision is tested against that persona first.",
     principleHeader: "Principle",
     implHeader: "Implementation",
     a11yRows: [
@@ -380,15 +459,22 @@ export const en = {
       ["Tap alternatives", "Every voice question also shows 3–4 large illustrated tap options"],
       ["Large touch targets", "Minimum 48×48dp buttons, high contrast, no fine-motor requirement"],
       ["No scrolling", "One question per screen with clear forward and back navigation"],
-      ["Language auto-detect", "If the patient starts speaking, the system detects and switches language"],
-      ["Zero training required", "A volunteer points the patient to the kiosk; the system takes over"],
+      [
+        "Language auto-detect",
+        "If the patient starts speaking, the system detects and switches language",
+      ],
+      [
+        "Zero training required",
+        "A volunteer points the patient to the kiosk; the system takes over",
+      ],
     ],
   },
 
   feasibilityPage: {
     eyebrow: "Feasibility & Viability",
     title: "Deployable on rails that already exist",
-    intro: "SwasthaSetu does not require new national infrastructure, new hardware procurement or a change in clinician behaviour. It requires the assembly of components India has already built.",
+    intro:
+      "SwasthaSetu does not require new national infrastructure, new hardware procurement or a change in clinician behaviour. It requires the assembly of components India has already built.",
     feasibleTitle: "Why It Is Feasible Today",
     enablerHeader: "Enabler",
     detailHeader: "Detail",
@@ -443,9 +529,11 @@ export const en = {
         "Intake runs in the waiting period patients already spend; emergency red flags bypass the queue entirely",
       ],
     ],
-    riskCallout: "The platform makes no accuracy claims it cannot evidence. Where a model is unreliable — handwriting above all — the design routes to a human rather than to a guess.",
+    riskCallout:
+      "The platform makes no accuracy claims it cannot evidence. Where a model is unreliable — handwriting above all — the design routes to a human rather than to a guess.",
     complianceTitle: "Compliance & Legal Framework",
-    complianceLead: "Health data carries the strictest obligations in Indian law. Compliance is an architectural constraint, not a later addition.",
+    complianceLead:
+      "Health data carries the strictest obligations in Indian law. Compliance is an architectural constraint, not a later addition.",
     regHeader: "Regulation",
     complianceHeader: "How SwasthaSetu Complies",
     complianceRows: [
@@ -489,7 +577,8 @@ export const en = {
   impactsPage: {
     eyebrow: "Impacts & Benefits",
     title: "From a rushed two-minute interaction to a clinical encounter",
-    intro: "The measurable outcome is time returned to the examination and the conversation — and a national health record that finally reflects what happened in the room.",
+    intro:
+      "The measurable outcome is time returned to the examination and the conversation — and a national health record that finally reflects what happened in the room.",
     timeTitle: "Consultation Time Impact",
     timeLead: "The same clock, redistributed away from paperwork and towards clinical work.",
     phaseHeader: "Phase",
@@ -563,7 +652,8 @@ export const en = {
   researchPage: {
     eyebrow: "Research & References",
     title: "The evidence and standards the platform stands on",
-    intro: "Every design claim in SwasthaSetu traces to published clinical evidence, a national digital health standard, or an openly stated limitation.",
+    intro:
+      "Every design claim in SwasthaSetu traces to published clinical evidence, a national digital health standard, or an openly stated limitation.",
     evidenceTitle: "Clinical Evidence Base",
     areaHeader: "Area",
     findingHeader: "Finding",
@@ -589,12 +679,21 @@ export const en = {
     standardHeader: "Standard",
     roleHeader: "Role in the Platform",
     standardRows: [
-      ["ABDM", "Ayushman Bharat Digital Mission — ABHA identity, consent manager, HIP and HIU APIs"],
-      ["HL7 FHIR R4", "Composition, Condition, MedicationStatement, AllergyIntolerance and Observation resources"],
+      [
+        "ABDM",
+        "Ayushman Bharat Digital Mission — ABHA identity, consent manager, HIP and HIU APIs",
+      ],
+      [
+        "HL7 FHIR R4",
+        "Composition, Condition, MedicationStatement, AllergyIntolerance and Observation resources",
+      ],
       ["ICD-10", "Diagnosis coding for interoperable clinical records"],
       ["SNOMED CT", "Clinical terminology for structured findings"],
       ["RxNorm / ATC", "Medication normalisation and drug interaction checking"],
-      ["DPDP Act, 2023", "Digital Personal Data Protection obligations for health data fiduciaries"],
+      [
+        "DPDP Act, 2023",
+        "Digital Personal Data Protection obligations for health data fiduciaries",
+      ],
     ],
     nationalTitle: "National Digital Public Goods Used",
     nationalCards: [
@@ -621,7 +720,8 @@ export const en = {
       "Longitudinal study of whether pre-consultation intake measurably improves diagnostic concordance.",
       "Standardised digital encoding of Dashavidha Pariksha parameters for AYUSH interoperability.",
     ],
-    researchCallout: "SwasthaSetu publishes no accuracy figure it has not measured. Targets stated on this portal are design goals for pilot evaluation, not validated performance claims.",
+    researchCallout:
+      "SwasthaSetu publishes no accuracy figure it has not measured. Targets stated on this portal are design goals for pilot evaluation, not validated performance claims.",
   },
 
   loginPage: {
@@ -816,7 +916,8 @@ export const en = {
     statusHeader: "Status",
     aboveRange: "ABOVE RANGE",
     aiInsightsTitle: "DOCTOR-ONLY AI CLINICAL INSIGHTS & DIFFERENTIAL DIAGNOSES",
-    triageAlert: "Triage Red Flag Identified: Retrosternal pressure on exertion with left arm radiation in a diabetic patient.",
+    triageAlert:
+      "Triage Red Flag Identified: Retrosternal pressure on exertion with left arm radiation in a diabetic patient.",
     differentialTitle: "Suggested Differential Diagnoses (Ranked by AI Confidence):",
     workupTitle: "Suggested Diagnostic Workup:",
     workupDetail: "• Stat 12-lead ECG · Serum Troponin I · Fasting Lipid Profile & HbA1c recheck",
@@ -825,7 +926,8 @@ export const en = {
     editBtn: "Amend / Edit Clinical Notes",
     rejectBtn: "Reject Draft",
     actualConsultTitle: "Actual Physician Consultation & Prescription",
-    rxPlaceholder: "Type final clinical diagnosis, prescription medicines, dosage schedule and advice...",
+    rxPlaceholder:
+      "Type final clinical diagnosis, prescription medicines, dosage schedule and advice...",
     savePrescriptionBtn: "Save & Print Verified Prescription (FHIR Linked)",
     clinicianMode: "Clinician Decision Mode",
     assessmentLabel: "Clinical Assessment / Diagnosis",
@@ -839,7 +941,8 @@ export const en = {
     alertsTitle: "High-Priority Clinical Triage Alerts",
     alertsSub: "Automated AI detection of STEMI, acute abdomen, stroke, and critical lab values.",
     alert1Title: "Severe Dyspnea & Acute Tachycardia Alert",
-    alert1Sub: "Intake speech analysis detected acute respiratory distress. Fast-track cardiac & oxygen saturation check recommended.",
+    alert1Sub:
+      "Intake speech analysis detected acute respiratory distress. Fast-track cardiac & oxygen saturation check recommended.",
     alert2Title: "Exertional Chest Pain + Family History of MI",
     alert2Sub: "Combine history of retrosternal pain with paternal MI at age 55. Stat ECG ordered.",
     inspectRecordBtn: "Inspect Patient Record →",
@@ -848,11 +951,51 @@ export const en = {
     recentSignedTitle: "Recent Signed Consultation Records",
     nmcSigned: "NMC SIGNED",
     queueList: [
-      { token: "45", name: "Sunita Devi", age: "48 / F", status: "Completed", time: "09:15 AM", complaint: "Mild fever", abha: "91-1234-5678-01" },
-      { token: "46", name: "Vikram Singh", age: "62 / M", status: "Completed", time: "09:30 AM", complaint: "Hypertension checkup", abha: "91-2345-6789-02" },
-      { token: "47", name: "Ramesh Kumar", age: "54 / M", status: "Active Intake Draft", time: "09:45 AM", complaint: "Chest pain on exertion", abha: "91-8273-9481-22" },
-      { token: "48", name: "Priya Sharma", age: "31 / F", status: "Red Flag Alert", time: "10:00 AM", complaint: "Severe dyspnea & tachycardia", abha: "91-3456-7890-03" },
-      { token: "49", name: "Abdul Rahim", age: "70 / M", status: "Waiting in Queue", time: "10:15 AM", complaint: "Diabetes follow-up", abha: "91-4567-8901-04" },
+      {
+        token: "45",
+        name: "Sunita Devi",
+        age: "48 / F",
+        status: "Completed",
+        time: "09:15 AM",
+        complaint: "Mild fever",
+        abha: "91-1234-5678-01",
+      },
+      {
+        token: "46",
+        name: "Vikram Singh",
+        age: "62 / M",
+        status: "Completed",
+        time: "09:30 AM",
+        complaint: "Hypertension checkup",
+        abha: "91-2345-6789-02",
+      },
+      {
+        token: "47",
+        name: "Ramesh Kumar",
+        age: "54 / M",
+        status: "Active Intake Draft",
+        time: "09:45 AM",
+        complaint: "Chest pain on exertion",
+        abha: "91-8273-9481-22",
+      },
+      {
+        token: "48",
+        name: "Priya Sharma",
+        age: "31 / F",
+        status: "Red Flag Alert",
+        time: "10:00 AM",
+        complaint: "Severe dyspnea & tachycardia",
+        abha: "91-3456-7890-03",
+      },
+      {
+        token: "49",
+        name: "Abdul Rahim",
+        age: "70 / M",
+        status: "Waiting in Queue",
+        time: "10:15 AM",
+        complaint: "Diabetes follow-up",
+        abha: "91-4567-8901-04",
+      },
     ],
   },
 
@@ -896,23 +1039,32 @@ export const en = {
     audioConsentNotice: "Audio-Guided Consent Notice (ऑडियो सहमति सूचना):",
     listenConsent: "Listen / सहमति सुनें",
     purposeHeading: "Purpose of Information Collection (Digital Clinical History & Records)",
-    purposeDesc: "In compliance with the Digital Personal Data Protection (DPDP) Act 2023 and the Ayushman Bharat Digital Mission (ABDM) Consent Architecture, SwasthaSetu requests your explicit authorization to capture and process your health details for today's OPD consultation:",
+    purposeDesc:
+      "In compliance with the Digital Personal Data Protection (DPDP) Act 2023 and the Ayushman Bharat Digital Mission (ABDM) Consent Architecture, SwasthaSetu requests your explicit authorization to capture and process your health details for today's OPD consultation:",
     symptomHistoryTitle: "1. Symptom History",
-    symptomHistorySub: "Interactive voice & text intake of chief health complaints and SOCRATES history for your attending doctor.",
+    symptomHistorySub:
+      "Interactive voice & text intake of chief health complaints and SOCRATES history for your attending doctor.",
     docOcrTitle: "2. Document OCR",
-    docOcrSub: "Digitisation and entity extraction of legacy paper prescriptions and diagnostic lab reports.",
+    docOcrSub:
+      "Digitisation and entity extraction of legacy paper prescriptions and diagnostic lab reports.",
     abdmLinkingTitle: "3. ABDM FHIR Linking",
-    abdmLinkingSub: "Formatting clinical summary into an ABDM FHIR bundle linked to your ABHA health account.",
+    abdmLinkingSub:
+      "Formatting clinical summary into an ABDM FHIR bundle linked to your ABHA health account.",
     dataRightsTitle: "Patient Data Rights & Privacy Guarantee:",
-    dataRights1: "Your health information is used strictly for your medical care during this consultation.",
+    dataRights1:
+      "Your health information is used strictly for your medical care during this consultation.",
     dataRights2: "Data is encrypted end-to-end and stored adhering to ABDM health data standards.",
-    dataRights3: "Consent is revocable at any time without compromising your right to standard medical care.",
+    dataRights3:
+      "Consent is revocable at any time without compromising your right to standard medical care.",
     consentBox1Title: "Consent for Clinical Intake & Symptom Interview",
-    consentBox1Sub: "I consent to capturing and structuring my health symptoms via SwasthaSetu AI assistant for my doctor.",
+    consentBox1Sub:
+      "I consent to capturing and structuring my health symptoms via SwasthaSetu AI assistant for my doctor.",
     consentBox2Title: "Consent for Medical Document Digitization & OCR",
-    consentBox2Sub: "I consent to scanning, extracting parameters, and summarizing my previous medical prescriptions & lab tests.",
+    consentBox2Sub:
+      "I consent to scanning, extracting parameters, and summarizing my previous medical prescriptions & lab tests.",
     consentBox3Title: "Consent for ABDM FHIR Profile Linking",
-    consentBox3Sub: "I consent to linking this structured clinical intake summary to my ABHA account for my treating physician.",
+    consentBox3Sub:
+      "I consent to linking this structured clinical intake summary to my ABHA account for my treating physician.",
     selectAllAgree: "Select All & Agree",
     iAgreeBtn: "I Agree & Give Consent",
   },

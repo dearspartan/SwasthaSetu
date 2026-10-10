@@ -110,11 +110,31 @@ const DIFFERENTIATORS = [
 ] as const;
 
 const JOURNEY = [
-  { step: "Step 1", title: "Identify", body: "ABHA login, language selection, audio-guided consent" },
-  { step: "Step 2", title: "Converse", body: "AI interview, voice + touch, adaptive questions, AYUSH mode" },
-  { step: "Step 3", title: "Scan", body: "Upload documents, OCR and extraction, timeline, abnormal flags" },
-  { step: "Step 4", title: "Summarise & Route", body: "Structured summary pushed to HIS and linked to ABHA" },
-  { step: "Step 5", title: "Consult", body: "Doctor reviews the draft before the patient enters the room" },
+  {
+    step: "Step 1",
+    title: "Identify",
+    body: "ABHA login, language selection, audio-guided consent",
+  },
+  {
+    step: "Step 2",
+    title: "Converse",
+    body: "AI interview, voice + touch, adaptive questions, AYUSH mode",
+  },
+  {
+    step: "Step 3",
+    title: "Scan",
+    body: "Upload documents, OCR and extraction, timeline, abnormal flags",
+  },
+  {
+    step: "Step 4",
+    title: "Summarise & Route",
+    body: "Structured summary pushed to HIS and linked to ABHA",
+  },
+  {
+    step: "Step 5",
+    title: "Consult",
+    body: "Doctor reviews the draft before the patient enters the room",
+  },
 ] as const;
 
 function SolutionPage() {
@@ -133,10 +153,7 @@ function SolutionPage() {
         intro={strings.solutionPage.intro}
       />
 
-      <Section
-        title={strings.solutionPage.modulesTitle}
-        lead={strings.solutionPage.modulesLead}
-      >
+      <Section title={strings.solutionPage.modulesTitle} lead={strings.solutionPage.modulesLead}>
         <div className="grid gap-6 md:grid-cols-2">
           {modules.map((m: any) => (
             <InfoCard key={m.index} index={m.index} title={m.title}>
@@ -167,11 +184,11 @@ function SolutionPage() {
         </ol>
       </Section>
 
-      <Section
-        title={strings.solutionPage.diffTitle}
-        lead={strings.solutionPage.diffLead}
-      >
-        <DataTable headers={[strings.solutionPage.featureHeader, strings.solutionPage.purposeHeader]} rows={differentiators} />
+      <Section title={strings.solutionPage.diffTitle} lead={strings.solutionPage.diffLead}>
+        <DataTable
+          headers={[strings.solutionPage.featureHeader, strings.solutionPage.purposeHeader]}
+          rows={differentiators}
+        />
       </Section>
 
       <Section title={strings.solutionPage.summaryTitle} tone="surface">
@@ -190,9 +207,7 @@ function SolutionPage() {
                     ABHA: 91-8273-9481-22
                   </span>
                 </div>
-                <p className="text-xs opacity-85 mt-0.5">
-                  {summary.deptToken}
-                </p>
+                <p className="text-xs opacity-85 mt-0.5">{summary.deptToken}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -235,7 +250,9 @@ function SolutionPage() {
                     <dd className="font-semibold text-foreground">{summary.radiationValue}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted-foreground font-medium">{summary.aggravatingLabel}</dt>
+                    <dt className="text-muted-foreground font-medium">
+                      {summary.aggravatingLabel}
+                    </dt>
                     <dd className="font-semibold text-foreground">{summary.aggravatingValue}</dd>
                   </div>
                   <div>
@@ -257,13 +274,23 @@ function SolutionPage() {
                   </h4>
                   <div className="mt-3 space-y-2 text-xs sm:text-sm">
                     <div className="flex flex-wrap gap-1.5 items-center">
-                      <span className="text-muted-foreground font-medium">{summary.conditionsLabel}</span>
-                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">{summary.cond1}</span>
-                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">{summary.cond2}</span>
+                      <span className="text-muted-foreground font-medium">
+                        {summary.conditionsLabel}
+                      </span>
+                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">
+                        {summary.cond1}
+                      </span>
+                      <span className="rounded bg-primary/10 px-2.5 py-1 font-semibold text-primary">
+                        {summary.cond2}
+                      </span>
                     </div>
                     <div className="pt-1">
-                      <span className="text-muted-foreground font-medium">{summary.familyHistoryLabel}</span>
-                      <p className="font-medium text-foreground mt-0.5">{summary.familyHistoryValue}</p>
+                      <span className="text-muted-foreground font-medium">
+                        {summary.familyHistoryLabel}
+                      </span>
+                      <p className="font-medium text-foreground mt-0.5">
+                        {summary.familyHistoryValue}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -275,11 +302,17 @@ function SolutionPage() {
                   </h4>
                   <div className="mt-3 space-y-2 text-xs sm:text-sm">
                     <div className="flex flex-wrap gap-1.5 items-center">
-                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">{summary.med1}</span>
-                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">{summary.med2}</span>
+                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">
+                        {summary.med1}
+                      </span>
+                      <span className="rounded bg-accent/15 px-2.5 py-1 font-semibold text-foreground border border-accent/20">
+                        {summary.med2}
+                      </span>
                     </div>
                     <div className="pt-1 flex items-center gap-2">
-                      <span className="text-muted-foreground font-medium">{summary.allergiesLabel}</span>
+                      <span className="text-muted-foreground font-medium">
+                        {summary.allergiesLabel}
+                      </span>
                       <span className="rounded bg-red-100 text-red-700 px-2 py-0.5 text-xs font-bold border border-red-200">
                         {summary.allergyValue}
                       </span>
@@ -310,7 +343,9 @@ function SolutionPage() {
                       <td className="py-2.5 font-bold text-destructive">7.8 %</td>
                       <td className="py-2.5 text-muted-foreground">{summary.threeMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{summary.aboveRange}</span>
+                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">
+                          {summary.aboveRange}
+                        </span>
                       </td>
                     </tr>
                     <tr>
@@ -318,7 +353,9 @@ function SolutionPage() {
                       <td className="py-2.5 font-bold text-destructive">165 mg/dL</td>
                       <td className="py-2.5 text-muted-foreground">{summary.threeMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">{summary.aboveRange}</span>
+                        <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-bold text-red-700">
+                          {summary.aboveRange}
+                        </span>
                       </td>
                     </tr>
                     <tr>
@@ -326,7 +363,9 @@ function SolutionPage() {
                       <td className="py-2.5 text-foreground">{summary.ecgResult}</td>
                       <td className="py-2.5 text-muted-foreground">{summary.sixMonthsAgo}</td>
                       <td className="py-2.5 text-right">
-                        <span className="inline-block rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">{summary.normal}</span>
+                        <span className="inline-block rounded bg-emerald-100 px-2 py-0.5 text-xs font-bold text-emerald-700">
+                          {summary.normal}
+                        </span>
                       </td>
                     </tr>
                   </tbody>
@@ -339,22 +378,29 @@ function SolutionPage() {
               <AlertTriangle className="h-6 w-6 text-red-600 shrink-0 mt-0.5" />
               <div>
                 <h5 className="font-bold text-sm text-red-800">{summary.triageAlertTitle}</h5>
-                <p className="text-xs sm:text-sm mt-0.5">
-                  {summary.triageAlertText}
-                </p>
+                <p className="text-xs sm:text-sm mt-0.5">{summary.triageAlertText}</p>
               </div>
             </div>
 
             {/* Physician Decision Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
               <div className="flex flex-wrap items-center gap-3">
-                <button type="button" className="inline-flex items-center gap-2 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 shadow-sm">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700 shadow-sm"
+                >
                   <CheckCircle2 className="h-4 w-4" /> {summary.acceptBtn}
                 </button>
-                <button type="button" className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/10"
+                >
                   <Edit3 className="h-4 w-4" /> {summary.amendBtn}
                 </button>
-                <button type="button" className="inline-flex items-center gap-2 rounded border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50">
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                >
                   <XCircle className="h-4 w-4" /> {summary.rejectBtn}
                 </button>
               </div>

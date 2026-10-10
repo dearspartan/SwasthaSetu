@@ -26,7 +26,7 @@ export const BHASHINI_LANGUAGES = [
 export async function translateWithBhashini(
   text: string,
   sourceLang: string,
-  targetLang: string = "en-IN"
+  targetLang: string = "en-IN",
 ): Promise<BhashiniTranslationResult> {
   // Simulated Bhashini API Latency
   await new Promise((res) => setTimeout(res, 200));

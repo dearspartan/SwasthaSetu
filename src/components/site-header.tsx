@@ -18,9 +18,7 @@ export function SiteHeader() {
       {/* Utility strip */}
       <div className="bg-primary-dark text-primary-foreground">
         <div className="mx-auto flex w-full max-w-full flex-wrap items-center justify-between gap-2 px-4 sm:px-6 md:px-10 lg:px-16 py-1.5 text-[11px] sm:text-xs">
-          <p className="font-medium tracking-wide uppercase opacity-90">
-            {strings.initiative}
-          </p>
+          <p className="font-medium tracking-wide uppercase opacity-90">{strings.initiative}</p>
           <div className="flex items-center gap-4">
             <a href="#services" className="hidden sm:inline opacity-80 hover:opacity-100">
               {strings.skipToMain}
@@ -84,8 +82,7 @@ export function SiteHeader() {
             />
             <span className="hidden border-l border-border pl-3 text-xs leading-tight font-medium text-muted-foreground sm:block">
               {strings.mastheadSubtitle.split("&")[0]}
-              <br />
-              & {strings.mastheadSubtitle.split("&")[1]}
+              <br />& {strings.mastheadSubtitle.split("&")[1]}
             </span>
           </Link>
 
@@ -111,7 +108,10 @@ export function SiteHeader() {
       </div>
 
       {/* Primary navigation */}
-      <nav className="relative bg-primary text-primary-foreground border-b-2 border-accent shadow-sm" aria-label="Primary">
+      <nav
+        className="relative bg-primary text-primary-foreground border-b-2 border-accent shadow-sm"
+        aria-label="Primary"
+      >
         <div className="mx-auto w-full max-w-full px-4 sm:px-6 md:px-10 lg:px-16">
           <ul className="hidden lg:flex items-center justify-between flex-nowrap">
             {NAV.map((item) => (
@@ -120,7 +120,9 @@ export function SiteHeader() {
                   to={item.to}
                   activeOptions={{ exact: item.to === "/" }}
                   className="inline-block border-b-4 border-transparent px-3.5 xl:px-4.5 py-3 text-sm xl:text-base font-semibold tracking-wide whitespace-nowrap transition-all hover:bg-primary-dark hover:border-accent/40 -mb-[2px]"
-                  activeProps={{ className: "!border-accent bg-primary-dark font-bold text-white shadow-inner" }}
+                  activeProps={{
+                    className: "!border-accent bg-primary-dark font-bold text-white shadow-inner",
+                  }}
                 >
                   {item.label}
                 </Link>

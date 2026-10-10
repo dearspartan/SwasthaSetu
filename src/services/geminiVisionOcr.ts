@@ -28,16 +28,17 @@ export interface ExtractedMedication {
 
 export interface ExtractedDocumentResult {
   isMedicalDocument: boolean;
-  nonMedicalReason?: string;
-  docType: "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan" | "Non-Medical Document";
+  nonMedicalReason?: string | undefined;
+  docType:
+    "Lab Report" | "Prescription" | "Clinical Note" | "Diagnostic Scan" | "Non-Medical Document";
   ocrTier: OcrTierType;
-  patientName?: string;
-  date?: string;
+  patientName?: string | undefined;
+  date?: string | undefined;
   labParams: ExtractedLabParam[];
   medications: ExtractedMedication[];
   clinicalObservations: string[];
   unreadableFields: string[];
-  unreadableWarning?: string;
+  unreadableWarning?: string | undefined;
   confidenceScore: number; // e.g. 98%
   rawExtractedText: string;
 }
@@ -51,10 +52,13 @@ export function fileToBase64DataUrl(file: File): Promise<{ base64Data: string; m
     reader.onload = () => {
       const result = reader.result as string;
       const match = result.match(/^data:(.*);base64,(.*)$/);
-      if (match) {
+      if (match && match[1] && match[2]) {
         resolve({ mimeType: match[1], base64Data: match[2] });
       } else {
-        resolve({ mimeType: file.type || "image/jpeg", base64Data: result.split(",")[1] || result });
+        resolve({
+          mimeType: file.type || "image/jpeg",
+          base64Data: result.split(",")[1] || result,
+        });
       }
     };
     reader.onerror = (err) => reject(err);
@@ -66,7 +70,7 @@ export function fileToBase64DataUrl(file: File): Promise<{ base64Data: string; m
  * Sends image data to Gemini 2.0 Vision for 3-Tier clinical parameter extraction & Medical Document Guardrail Validation
  */
 export async function processMedicalDocumentWithGeminiVision(
-  fileData: File | { base64Data: string; mimeType: string }
+  fileData: File | { base64Data: string; mimeType: string },
 ): Promise<ExtractedDocumentResult> {
   let base64Data = "";
   let mimeType = "image/jpeg";
@@ -126,10 +130,7 @@ Respond in JSON matching this schema:
           contents: [
             {
               role: "user",
-              parts: [
-                { inlineData: { mimeType, data: base64Data } },
-                { text: prompt },
-              ],
+              parts: [{ inlineData: { mimeType, data: base64Data } }, { text: prompt }],
             },
           ],
           config: {
@@ -196,7 +197,10 @@ Respond in JSON matching this schema:
 /**
  * Fallback 3-Tier clinical digitizer demonstrating Tier 1, Tier 2, Tier 3 unreadable flagging, and non-medical document rejection
  */
-function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): ExtractedDocumentResult {
+function fallback3TierMedicalOcrDigitizer(
+  mimeType: string,
+  fileName: string,
+): ExtractedDocumentResult {
   const lowerName = fileName.toLowerCase();
   const isNonMedical =
     lowerName.includes("bill") ||
@@ -221,7 +225,8 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
         "No health parameters or medical regimens extracted to protect EHR data integrity.",
       ],
       unreadableFields: ["Entire Document (Non-Medical Content)"],
-      unreadableWarning: "⚠️ Non-Medical Document Upload Blocked from Electronic Health Records (EHR)",
+      unreadableWarning:
+        "⚠️ Non-Medical Document Upload Blocked from Electronic Health Records (EHR)",
       confidenceScore: 12.0,
       rawExtractedText: `REJECTED DOCUMENT: ${fileName} does not contain clinical data.`,
     };
@@ -236,14 +241,37 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
       docType: "Lab Report",
       ocrTier: "Tier 1 · Digital File (High Precision PDF / E-Report)",
       patientName: "Rahul Sharma",
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toISOString().slice(0, 10),
       labParams: [
-        { paramName: "HbA1c (Glycated Hemoglobin)", value: "8.4", unit: "%", referenceRange: "4.0 - 5.6 %", status: "HIGH" },
-        { paramName: "LDL Cholesterol", value: "165", unit: "mg/dL", referenceRange: "< 100 mg/dL", status: "HIGH" },
-        { paramName: "Serum Creatinine", value: "0.9", unit: "mg/dL", referenceRange: "0.7 - 1.3 mg/dL", status: "NORMAL" },
+        {
+          paramName: "HbA1c (Glycated Hemoglobin)",
+          value: "8.4",
+          unit: "%",
+          referenceRange: "4.0 - 5.6 %",
+          status: "HIGH",
+        },
+        {
+          paramName: "LDL Cholesterol",
+          value: "165",
+          unit: "mg/dL",
+          referenceRange: "< 100 mg/dL",
+          status: "HIGH",
+        },
+        {
+          paramName: "Serum Creatinine",
+          value: "0.9",
+          unit: "mg/dL",
+          referenceRange: "0.7 - 1.3 mg/dL",
+          status: "NORMAL",
+        },
       ],
       medications: [
-        { drugName: "Tab Metformin HCl", dosage: "500 mg", frequency: "1-0-1 (BD)", duration: "30 days" },
+        {
+          drugName: "Tab Metformin HCl",
+          dosage: "500 mg",
+          frequency: "1-0-1 (BD)",
+          duration: "30 days",
+        },
       ],
       clinicalObservations: [
         "Digital PDF verified with high cryptographic confidence",
@@ -261,14 +289,30 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
       docType: "Prescription",
       ocrTier: "Tier 3 · Low Clarity / Unreadable Details Flagged",
       patientName: "Rahul Sharma",
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toISOString().slice(0, 10),
       labParams: [
-        { paramName: "Random Blood Sugar", value: "198", unit: "mg/dL", referenceRange: "< 140 mg/dL", status: "HIGH" },
-        { paramName: "Serum Electrolytes (Sodium/Potassium)", value: "Unreadable Blur", status: "UNREADABLE", isUnreadable: true },
+        {
+          paramName: "Random Blood Sugar",
+          value: "198",
+          unit: "mg/dL",
+          referenceRange: "< 140 mg/dL",
+          status: "HIGH",
+        },
+        {
+          paramName: "Serum Electrolytes (Sodium/Potassium)",
+          value: "Unreadable Blur",
+          status: "UNREADABLE",
+          isUnreadable: true,
+        },
       ],
       medications: [
         { drugName: "Tab Metformin HCl", dosage: "500 mg", frequency: "BD" },
-        { drugName: "[Unreadable Doctor Handwriting Line 2]", dosage: "???", frequency: "HS", isUnreadable: true },
+        {
+          drugName: "[Unreadable Doctor Handwriting Line 2]",
+          dosage: "???",
+          frequency: "HS",
+          isUnreadable: true,
+        },
       ],
       clinicalObservations: [
         "Low image resolution / handwriting degradation detected",
@@ -279,7 +323,8 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
         "Serum Potassium quantitative value (smudged digit)",
         "Physician NMC License Stamp",
       ],
-      unreadableWarning: "⚠️ Low Image Clarity / Unreadable Details Flagged for Human Physician Verification — Never Guessed by AI Engine",
+      unreadableWarning:
+        "⚠️ Low Image Clarity / Unreadable Details Flagged for Human Physician Verification — Never Guessed by AI Engine",
       confidenceScore: 68.4,
       rawExtractedText: `SCANNED PRESCRIPTION [POOR CLARITY]\nRx: Tab Metformin 500mg BD\n[Line 2 illegible smudged text]\nNote: Flagged for manual doctor review.`,
     };
@@ -291,14 +336,36 @@ function fallback3TierMedicalOcrDigitizer(mimeType: string, fileName: string): E
     docType: "Prescription",
     ocrTier: "Tier 2 · Scanned Copy (Camera Photo / Printed Scan)",
     patientName: "Rahul Sharma",
-    date: new Date().toISOString().split("T")[0],
+    date: new Date().toISOString().slice(0, 10),
     labParams: [
-      { paramName: "HbA1c (Glycated Hemoglobin)", value: "8.4", unit: "%", referenceRange: "4.0 - 5.6 %", status: "HIGH" },
-      { paramName: "LDL Cholesterol", value: "165", unit: "mg/dL", referenceRange: "< 100 mg/dL", status: "HIGH" },
+      {
+        paramName: "HbA1c (Glycated Hemoglobin)",
+        value: "8.4",
+        unit: "%",
+        referenceRange: "4.0 - 5.6 %",
+        status: "HIGH",
+      },
+      {
+        paramName: "LDL Cholesterol",
+        value: "165",
+        unit: "mg/dL",
+        referenceRange: "< 100 mg/dL",
+        status: "HIGH",
+      },
     ],
     medications: [
-      { drugName: "Tab Metformin HCl", dosage: "500 mg", frequency: "1-0-1 (BD)", duration: "30 days" },
-      { drugName: "Tab Atorvastatin", dosage: "10 mg", frequency: "0-0-1 (HS)", duration: "30 days" },
+      {
+        drugName: "Tab Metformin HCl",
+        dosage: "500 mg",
+        frequency: "1-0-1 (BD)",
+        duration: "30 days",
+      },
+      {
+        drugName: "Tab Atorvastatin",
+        dosage: "10 mg",
+        frequency: "0-0-1 (HS)",
+        duration: "30 days",
+      },
     ],
     clinicalObservations: [
       "Camera scan processed via Gemini 2.0 Flash Vision Multimodal",

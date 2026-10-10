@@ -33,7 +33,9 @@ export interface AbdmDataTransferPayload {
 /**
  * Simulates ABHA Authentication Request (/v0.5/users/auth/init)
  */
-export async function triggerAbdmAuthInit(abhaId: string = "91-8273-9481-22"): Promise<AbdmAuthResponse> {
+export async function triggerAbdmAuthInit(
+  abhaId: string = "91-8273-9481-22",
+): Promise<AbdmAuthResponse> {
   // Simulate network roundtrip latency to ABDM Sandbox Gateway
   await new Promise((r) => setTimeout(r, 600));
 
@@ -49,7 +51,9 @@ export async function triggerAbdmAuthInit(abhaId: string = "91-8273-9481-22"): P
 /**
  * Simulates DPDP Act 2023 Consent Artifact Generation (/v0.5/consent-requests/init)
  */
-export async function triggerAbdmConsentArtifact(abhaId: string = "91-8273-9481-22"): Promise<AbdmConsentArtifact> {
+export async function triggerAbdmConsentArtifact(
+  abhaId: string = "91-8273-9481-22",
+): Promise<AbdmConsentArtifact> {
   await new Promise((r) => setTimeout(r, 500));
 
   const consentId = "consent-dpdp-" + Math.random().toString(36).substring(2, 9);
@@ -79,7 +83,7 @@ export async function triggerAbdmConsentArtifact(abhaId: string = "91-8273-9481-
  */
 export async function triggerAbdmFhirDataTransfer(
   abhaId: string = "91-8273-9481-22",
-  consentId?: string
+  consentId?: string,
 ): Promise<AbdmDataTransferPayload> {
   await new Promise((r) => setTimeout(r, 700));
 

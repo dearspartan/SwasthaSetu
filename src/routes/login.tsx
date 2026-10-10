@@ -1,7 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLocale } from "@/context/LocaleContext";
-import { User, Stethoscope, ShieldCheck, KeyRound, ArrowRight, Sparkles, Lock, ExternalLink } from "lucide-react";
+import {
+  User,
+  Stethoscope,
+  ShieldCheck,
+  KeyRound,
+  ArrowRight,
+  Sparkles,
+  Lock,
+  ExternalLink,
+} from "lucide-react";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -62,9 +71,7 @@ function LoginPage() {
           <h1 className="font-display text-2xl font-bold text-primary sm:text-3xl">
             {strings.loginPage.title}
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {strings.loginPage.subtitle}
-          </p>
+          <p className="mt-2 text-sm text-muted-foreground">{strings.loginPage.subtitle}</p>
         </div>
 
         {/* Role Toggle Tabs */}
@@ -149,8 +156,12 @@ function LoginPage() {
                 </div>
                 {otpSent && (
                   <p className="mt-1.5 text-xs text-emerald-700 font-medium flex items-center gap-1">
-                    <span>✓ Aadhaar OTP dispatched to linked mobile (+91-XXXXXX9481). Demo OTP:</span>
-                    <strong className="font-mono bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">123456</strong>
+                    <span>
+                      ✓ Aadhaar OTP dispatched to linked mobile (+91-XXXXXX9481). Demo OTP:
+                    </span>
+                    <strong className="font-mono bg-emerald-100 text-emerald-900 px-1.5 py-0.5 rounded border border-emerald-300">
+                      123456
+                    </strong>
                   </p>
                 )}
               </div>
@@ -172,7 +183,8 @@ function LoginPage() {
                     rel="noopener noreferrer"
                     className="font-bold text-accent hover:underline inline-flex items-center gap-1"
                   >
-                    {(strings.loginPage as any).registerAbhaLink || "Create / Register Official ABHA ID"}
+                    {(strings.loginPage as any).registerAbhaLink ||
+                      "Create / Register Official ABHA ID"}
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 </p>

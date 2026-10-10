@@ -23,9 +23,7 @@ export function SiteFooter() {
           <p className="mt-1 text-xs font-semibold tracking-[0.2em] uppercase opacity-80">
             {strings.footer.tagline}
           </p>
-          <p className="mt-4 max-w-lg text-sm leading-relaxed opacity-90">
-            {strings.footer.desc}
-          </p>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed opacity-90">{strings.footer.desc}</p>
         </div>
 
         {COLUMNS.map((col) => (

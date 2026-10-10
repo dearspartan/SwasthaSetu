@@ -33,20 +33,48 @@ export const Route = createFileRoute("/technical")({
 });
 
 const STACK = [
-  ["Speech-to-Text (ASR)", "Gemini 2.0 Flash Multimodal Audio API (@google/genai)", "85+ languages, Hinglish code-switching, filler word removal"],
-  ["Text-to-Speech (TTS)", "Web Speech API + Bhashini IndicTTS Fallback", "Audio prompts and consent explanation in patient language"],
+  [
+    "Speech-to-Text (ASR)",
+    "Gemini 2.0 Flash Multimodal Audio API (@google/genai)",
+    "85+ languages, Hinglish code-switching, filler word removal",
+  ],
+  [
+    "Text-to-Speech (TTS)",
+    "Web Speech API + Bhashini IndicTTS Fallback",
+    "Audio prompts and consent explanation in patient language",
+  ],
   [
     "Conversational AI",
     "Gemini 2.0 Flash (SOCRATES & Dashavidha Pariksha Engine)",
     "Adaptive clinical interview, off-topic rejection, HPI structuring",
   ],
-  ["Clinical Ontology", "ICD-10, SNOMED-CT, RxNorm / ATC", "Standardised coding for interoperability"],
-  ["OCR Engine", "Gemini 2.0 Flash Vision Multimodal", "Printed prescriptions, lab report entity extraction"],
-  ["Document AI", "Gemini Vision Multimodal Clinical Extractor", "Lab parameter extraction, reference range flagging"],
-  ["Summary Generation", "Gemini 2.0 Flash Clinical Summarizer", "Dynamic HPI narrative & doctor-only differential synthesis"],
+  [
+    "Clinical Ontology",
+    "ICD-10, SNOMED-CT, RxNorm / ATC",
+    "Standardised coding for interoperability",
+  ],
+  [
+    "OCR Engine",
+    "Gemini 2.0 Flash Vision Multimodal",
+    "Printed prescriptions, lab report entity extraction",
+  ],
+  [
+    "Document AI",
+    "Gemini Vision Multimodal Clinical Extractor",
+    "Lab parameter extraction, reference range flagging",
+  ],
+  [
+    "Summary Generation",
+    "Gemini 2.0 Flash Clinical Summarizer",
+    "Dynamic HPI narrative & doctor-only differential synthesis",
+  ],
   ["Interoperability", "HL7 FHIR R4 APIs", "ABDM integration, HIS/EMR push, ABHA linking"],
   ["ABDM APIs", "M1 authentication, HIP push, HIU pull", "National digital health ecosystem"],
-  ["Frontend", "Progressive Web App (TanStack Start + Tailwind)", "Cross-platform, installable, offline-capable"],
+  [
+    "Frontend",
+    "Progressive Web App (TanStack Start + Tailwind)",
+    "Cross-platform, installable, offline-capable",
+  ],
   ["Backend", "Cloud-native microservices", "Scalable, secure, module-independent deployment"],
   ["Database", "FHIR-native store, AES-256 at rest", "Secure health data persistence"],
 ] as const;
@@ -64,7 +92,10 @@ const ACCESSIBILITY = [
   ["Tap alternatives", "Every voice question also shows 3–4 large illustrated tap options"],
   ["Large touch targets", "Minimum 48×48dp buttons, high contrast, no fine-motor requirement"],
   ["No scrolling", "One question per screen with clear forward and back navigation"],
-  ["Language auto-detect", "If the patient starts speaking, the system detects and switches language"],
+  [
+    "Language auto-detect",
+    "If the patient starts speaking, the system detects and switches language",
+  ],
   ["Zero training required", "A volunteer points the patient to the kiosk; the system takes over"],
 ] as const;
 
@@ -84,18 +115,34 @@ function TechnicalPage() {
       />
 
       <Section title={strings.technicalPage.stackTitle}>
-        <DataTable headers={[strings.technicalPage.layerHeader, strings.technicalPage.techHeader, strings.technicalPage.purposeHeader]} rows={stack} />
+        <DataTable
+          headers={[
+            strings.technicalPage.layerHeader,
+            strings.technicalPage.techHeader,
+            strings.technicalPage.purposeHeader,
+          ]}
+          rows={stack}
+        />
       </Section>
 
       <Section title={strings.technicalPage.archTitle} tone="surface">
         <div className="grid gap-6 md:grid-cols-3">
-          <InfoCard index={strings.technicalPage.card1Index} title={strings.technicalPage.card1Title}>
+          <InfoCard
+            index={strings.technicalPage.card1Index}
+            title={strings.technicalPage.card1Title}
+          >
             {strings.technicalPage.card1Body}
           </InfoCard>
-          <InfoCard index={strings.technicalPage.card2Index} title={strings.technicalPage.card2Title}>
+          <InfoCard
+            index={strings.technicalPage.card2Index}
+            title={strings.technicalPage.card2Title}
+          >
             {strings.technicalPage.card2Body}
           </InfoCard>
-          <InfoCard index={strings.technicalPage.card3Index} title={strings.technicalPage.card3Title}>
+          <InfoCard
+            index={strings.technicalPage.card3Index}
+            title={strings.technicalPage.card3Title}
+          >
             {strings.technicalPage.card3Body}
           </InfoCard>
         </div>
@@ -107,8 +154,12 @@ function TechnicalPage() {
                 <Layers className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-display text-lg font-bold text-primary">Integration & Data Flow Pipeline</h3>
-                <p className="text-xs text-muted-foreground">National Health Stack (ABDM) & Hospital Infrastructure Connections</p>
+                <h3 className="font-display text-lg font-bold text-primary">
+                  Integration & Data Flow Pipeline
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  National Health Stack (ABDM) & Hospital Infrastructure Connections
+                </p>
               </div>
             </div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800 border border-emerald-200">
@@ -122,8 +173,12 @@ function TechnicalPage() {
               <div className="flex items-center gap-3">
                 <Cpu className="h-6 w-6 text-accent" />
                 <div>
-                  <h4 className="font-display text-base font-bold">SwasthaSetu Intake Core Engine</h4>
-                  <p className="text-xs opacity-85">Processes Voice, OCR, Clinical NLP & FHIR Serialization</p>
+                  <h4 className="font-display text-base font-bold">
+                    SwasthaSetu Intake Core Engine
+                  </h4>
+                  <p className="text-xs opacity-85">
+                    Processes Voice, OCR, Clinical NLP & FHIR Serialization
+                  </p>
                 </div>
               </div>
               <span className="text-xs font-mono bg-primary-dark px-3 py-1 rounded text-accent font-semibold">
@@ -165,7 +220,8 @@ function TechnicalPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Structured intake summary converted to FHIR Bundles & pushed to ABDM Health Information Exchange.
+                  Structured intake summary converted to FHIR Bundles & pushed to ABDM Health
+                  Information Exchange.
                 </p>
                 <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px] font-mono text-primary">
                   <span>Format: FHIR R4 Bundle</span>
@@ -185,7 +241,8 @@ function TechnicalPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Fetches prior longitudinal records linked to patient's ABHA subject to patient consent.
+                  Fetches prior longitudinal records linked to patient's ABHA subject to patient
+                  consent.
                 </p>
                 <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px] font-mono text-primary">
                   <span>Scope: Prior Records</span>
@@ -205,7 +262,8 @@ function TechnicalPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Pushes formatted clinical summary draft directly to clinician's consultation terminal.
+                  Pushes formatted clinical summary draft directly to clinician's consultation
+                  terminal.
                 </p>
                 <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px] font-mono text-primary">
                   <span>Target: Doctor Terminal</span>
@@ -225,7 +283,8 @@ function TechnicalPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Patient views, manages, and securely shares their own structured clinical history across future healthcare visits.
+                  Patient views, manages, and securely shares their own structured clinical history
+                  across future healthcare visits.
                 </p>
                 <div className="mt-3 pt-2 border-t border-border flex items-center justify-between text-[11px] font-mono text-primary">
                   <span>Access: Patient Controlled</span>
@@ -237,23 +296,26 @@ function TechnicalPage() {
         </div>
       </Section>
 
-      <Section
-        title={strings.technicalPage.ocrTitle}
-        lead={strings.technicalPage.ocrLead}
-      >
-        <DataTable headers={[strings.technicalPage.tierHeader, strings.technicalPage.inputHeader, strings.technicalPage.handlingHeader]} rows={ocrTiers} />
+      <Section title={strings.technicalPage.ocrTitle} lead={strings.technicalPage.ocrLead}>
+        <DataTable
+          headers={[
+            strings.technicalPage.tierHeader,
+            strings.technicalPage.inputHeader,
+            strings.technicalPage.handlingHeader,
+          ]}
+          rows={ocrTiers}
+        />
         <div className="mt-8">
-          <CalloutBar>
-            {strings.technicalPage.ocrCallout}
-          </CalloutBar>
+          <CalloutBar>{strings.technicalPage.ocrCallout}</CalloutBar>
         </div>
       </Section>
 
       <Section title={strings.technicalPage.a11yTitle} tone="surface">
-        <p className="mb-8 max-w-3xl text-muted-foreground">
-          {strings.technicalPage.a11yIntro}
-        </p>
-        <DataTable headers={[strings.technicalPage.principleHeader, strings.technicalPage.implHeader]} rows={accessibility} />
+        <p className="mb-8 max-w-3xl text-muted-foreground">{strings.technicalPage.a11yIntro}</p>
+        <DataTable
+          headers={[strings.technicalPage.principleHeader, strings.technicalPage.implHeader]}
+          rows={accessibility}
+        />
       </Section>
     </>
   );

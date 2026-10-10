@@ -41,7 +41,10 @@ const EVIDENCE = [
 
 const STANDARDS = [
   ["ABDM", "Ayushman Bharat Digital Mission — ABHA identity, consent manager, HIP and HIU APIs"],
-  ["HL7 FHIR R4", "Composition, Condition, MedicationStatement, AllergyIntolerance and Observation resources"],
+  [
+    "HL7 FHIR R4",
+    "Composition, Condition, MedicationStatement, AllergyIntolerance and Observation resources",
+  ],
   ["ICD-10", "Diagnosis coding for interoperable clinical records"],
   ["SNOMED CT", "Clinical terminology for structured findings"],
   ["RxNorm / ATC", "Medication normalisation and drug interaction checking"],
@@ -92,11 +95,17 @@ function ResearchPage() {
       />
 
       <Section title={strings.researchPage.evidenceTitle}>
-        <DataTable headers={[strings.researchPage.areaHeader, strings.researchPage.findingHeader]} rows={evidence} />
+        <DataTable
+          headers={[strings.researchPage.areaHeader, strings.researchPage.findingHeader]}
+          rows={evidence}
+        />
       </Section>
 
       <Section title={strings.researchPage.standardsTitle} tone="surface">
-        <DataTable headers={[strings.researchPage.standardHeader, strings.researchPage.roleHeader]} rows={standards} />
+        <DataTable
+          headers={[strings.researchPage.standardHeader, strings.researchPage.roleHeader]}
+          rows={standards}
+        />
       </Section>
 
       <Section title={strings.researchPage.nationalTitle}>
@@ -118,9 +127,7 @@ function ResearchPage() {
           ))}
         </ul>
         <div className="mt-8">
-          <CalloutBar>
-            {strings.researchPage.researchCallout}
-          </CalloutBar>
+          <CalloutBar>{strings.researchPage.researchCallout}</CalloutBar>
         </div>
       </Section>
     </>

@@ -101,12 +101,13 @@ function ImpactsPage() {
         intro={strings.impactsPage.intro}
       />
 
-      <Section
-        title={strings.impactsPage.timeTitle}
-        lead={strings.impactsPage.timeLead}
-      >
+      <Section title={strings.impactsPage.timeTitle} lead={strings.impactsPage.timeLead}>
         <DataTable
-          headers={[strings.impactsPage.phaseHeader, strings.impactsPage.withoutHeader, strings.impactsPage.withHeader]}
+          headers={[
+            strings.impactsPage.phaseHeader,
+            strings.impactsPage.withoutHeader,
+            strings.impactsPage.withHeader,
+          ]}
           rows={time}
         />
       </Section>
@@ -132,7 +133,10 @@ function ImpactsPage() {
       </Section>
 
       <Section title={strings.impactsPage.metricsTitle} tone="surface">
-        <DataTable headers={[strings.impactsPage.metricHeader, strings.impactsPage.targetHeader]} rows={metrics} />
+        <DataTable
+          headers={[strings.impactsPage.metricHeader, strings.impactsPage.targetHeader]}
+          rows={metrics}
+        />
       </Section>
     </>
   );

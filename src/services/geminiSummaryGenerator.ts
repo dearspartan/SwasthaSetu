@@ -17,13 +17,15 @@ export interface DynamicClinicalSummary {
   pastMedicalHistory: string;
   differentials: DifferentialDiagnosis[];
   suggestedWorkup: string[];
-  ayurvedicProfile?: {
-    prakriti: string;
-    vikriti: string;
-    agni: string;
-    koshtha: string;
-    sattva: string;
-  };
+  ayurvedicProfile?:
+    | {
+        prakriti: string;
+        vikriti: string;
+        agni: string;
+        koshtha: string;
+        sattva: string;
+      }
+    | undefined;
 }
 
 /**
@@ -32,7 +34,7 @@ export interface DynamicClinicalSummary {
 export async function generateClinicalSummaryFromTranscript(
   messages: { sender: "ai" | "patient"; text: string }[],
   intakeMode: "allopathy" | "ayush" = "allopathy",
-  ocrResult?: ExtractedDocumentResult | null
+  ocrResult?: ExtractedDocumentResult | null,
 ): Promise<DynamicClinicalSummary> {
   const patientText = messages
     .filter((m) => m.sender === "patient")
@@ -57,7 +59,7 @@ Provide response in JSON:
   "pastMedicalHistory": "Past medical conditions noted",
   "differentials": [ { "conditionName": "Stable Angina Pectoris", "icdCode": "I20.9", "rationale": "Chest pain on exertion" } ],
   "suggestedWorkup": [ "Stat 12-lead ECG", "Serum Troponin I" ],
-  "ayurvedicProfile": ${intakeMode === "ayush" ? '{ "prakriti": "Vata-Pitta", "vikriti": "Vata Aggravated", "agni": "Vishama Agni", "koshtha": "Krura Koshtha", "sattva": "Madhyama Sattva" }' : 'null'}
+  "ayurvedicProfile": ${intakeMode === "ayush" ? '{ "prakriti": "Vata-Pitta", "vikriti": "Vata Aggravated", "agni": "Vishama Agni", "koshtha": "Krura Koshtha", "sattva": "Madhyama Sattva" }' : "null"}
 }`;
 
         const response = await ai.models.generateContent({
@@ -84,7 +86,7 @@ Provide response in JSON:
 function buildFallbackDynamicSummary(
   patientText: string,
   intakeMode: "allopathy" | "ayush",
-  ocrResult?: ExtractedDocumentResult | null
+  ocrResult?: ExtractedDocumentResult | null,
 ): DynamicClinicalSummary {
   const hasChest = /chest|heart|breath|सीना/i.test(patientText);
   const hasAbdomen = /stomach|abdomen|gas|acid|पेट/i.test(patientText);
@@ -103,25 +105,61 @@ function buildFallbackDynamicSummary(
 
   const differentials: DifferentialDiagnosis[] = hasChest
     ? [
-        { conditionName: "Stable Angina Pectoris / Ischemic Heart Disease", icdCode: "I20.9", rationale: "Exertional retrosternal pain with radiation" },
-        { conditionName: "Gastroesophageal Reflux Disease (GERD)", icdCode: "K21.9", rationale: "Postprandial substernal burning discomfort" },
-        { conditionName: "Musculoskeletal Chest Wall Strain", icdCode: "M79.1", rationale: "Localized tenderness on deep inspiration" },
+        {
+          conditionName: "Stable Angina Pectoris / Ischemic Heart Disease",
+          icdCode: "I20.9",
+          rationale: "Exertional retrosternal pain with radiation",
+        },
+        {
+          conditionName: "Gastroesophageal Reflux Disease (GERD)",
+          icdCode: "K21.9",
+          rationale: "Postprandial substernal burning discomfort",
+        },
+        {
+          conditionName: "Musculoskeletal Chest Wall Strain",
+          icdCode: "M79.1",
+          rationale: "Localized tenderness on deep inspiration",
+        },
       ]
     : hasAbdomen
-    ? [
-        { conditionName: "Acute Gastritis / Peptic Ulcer Disease", icdCode: "K29.7", rationale: "Epigastric tenderness aggravated by spicy meals" },
-        { conditionName: "Irritable Bowel Syndrome (IBS)", icdCode: "K58.9", rationale: "Alternating bowel habits and abdominal bloating" },
-      ]
-    : [
-        { conditionName: "Sprain & Strain of Ankle Joint", icdCode: "S93.4", rationale: "Local edema and pain on weight bearing" },
-        { conditionName: "Inflammatory Arthropathy / Gouty Arthritis", icdCode: "M10.9", rationale: "Acute tarsal inflammation" },
-      ];
+      ? [
+          {
+            conditionName: "Acute Gastritis / Peptic Ulcer Disease",
+            icdCode: "K29.7",
+            rationale: "Epigastric tenderness aggravated by spicy meals",
+          },
+          {
+            conditionName: "Irritable Bowel Syndrome (IBS)",
+            icdCode: "K58.9",
+            rationale: "Alternating bowel habits and abdominal bloating",
+          },
+        ]
+      : [
+          {
+            conditionName: "Sprain & Strain of Ankle Joint",
+            icdCode: "S93.4",
+            rationale: "Local edema and pain on weight bearing",
+          },
+          {
+            conditionName: "Inflammatory Arthropathy / Gouty Arthritis",
+            icdCode: "M10.9",
+            rationale: "Acute tarsal inflammation",
+          },
+        ];
 
   const suggestedWorkup = hasChest
-    ? ["Stat 12-lead Electrocardiogram (ECG)", "Serum Troponin I & CK-MB Quantitative", "Fasting Lipid Profile & HbA1c Recheck"]
+    ? [
+        "Stat 12-lead Electrocardiogram (ECG)",
+        "Serum Troponin I & CK-MB Quantitative",
+        "Fasting Lipid Profile & HbA1c Recheck",
+      ]
     : hasAbdomen
-    ? ["Abdominal Ultrasound Scan", "Serum Amylase & Lipase", "Stool Routine & Occult Blood"]
-    : ["Ankle X-Ray (AP & Lateral views)", "Serum Uric Acid level", "ESR & C-Reactive Protein (CRP)"];
+      ? ["Abdominal Ultrasound Scan", "Serum Amylase & Lipase", "Stool Routine & Occult Blood"]
+      : [
+          "Ankle X-Ray (AP & Lateral views)",
+          "Serum Uric Acid level",
+          "ESR & C-Reactive Protein (CRP)",
+        ];
 
   return {
     chiefComplaint,
@@ -129,12 +167,15 @@ function buildFallbackDynamicSummary(
     pastMedicalHistory: pastMedical,
     differentials,
     suggestedWorkup,
-    ayurvedicProfile: intakeMode === "ayush" ? {
-      prakriti: "Vata-Pitta Dominant",
-      vikriti: "Vata Aggravated (Katu/Tikta)",
-      agni: "Vishama Agni (विषमाग्नि)",
-      koshtha: "Krura Koshtha (क्रूर कोष्ठ)",
-      sattva: "Madhyama Sattva",
-    } : undefined,
+    ayurvedicProfile:
+      intakeMode === "ayush"
+        ? {
+            prakriti: "Vata-Pitta Dominant",
+            vikriti: "Vata Aggravated (Katu/Tikta)",
+            agni: "Vishama Agni (विषमाग्नि)",
+            koshtha: "Krura Koshtha (क्रूर कोष्ठ)",
+            sattva: "Madhyama Sattva",
+          }
+        : undefined,
   };
 }

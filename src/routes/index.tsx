@@ -66,8 +66,16 @@ const SERVICES = [
 ] as const;
 
 const STEPS = [
-  { n: "01", t: "Identify", d: "ABHA login or assisted creation, language choice, audio-guided consent." },
-  { n: "02", t: "Converse", d: "Adaptive clinical interview by voice or tap, one question per screen." },
+  {
+    n: "01",
+    t: "Identify",
+    d: "ABHA login or assisted creation, language choice, audio-guided consent.",
+  },
+  {
+    n: "02",
+    t: "Converse",
+    d: "Adaptive clinical interview by voice or tap, one question per screen.",
+  },
   { n: "03", t: "Scan", d: "Documents digitised, entities extracted, abnormal values flagged." },
   { n: "04", t: "Summarise", d: "Physician-ready draft pushed to the consultation terminal." },
 ] as const;
@@ -187,11 +195,7 @@ function Index() {
         </dl>
       </div>
 
-      <Section
-        id="services"
-        title={strings.services.title}
-        lead={strings.services.lead}
-      >
+      <Section id="services" title={strings.services.title} lead={strings.services.lead}>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s) => (
             <article key={s.title} className="gov-panel h-full p-6">
@@ -203,11 +207,7 @@ function Index() {
         </div>
       </Section>
 
-      <Section
-        title={strings.steps.title}
-        lead={strings.steps.lead}
-        tone="surface"
-      >
+      <Section title={strings.steps.title} lead={strings.steps.lead} tone="surface">
         <ol className="grid gap-4 md:grid-cols-4">
           {STEPS.map((s) => (
             <li key={s.n} className="border border-border bg-card p-6">
@@ -234,9 +234,7 @@ function Index() {
 
         <div className="mt-8 flex items-start gap-3 border-l-4 border-accent bg-surface p-5 text-sm md:text-base">
           <AlertTriangle className="mt-0.5 h-6 w-6 shrink-0 text-accent" aria-hidden />
-          <p className="text-foreground font-medium">
-            {strings.aiSection.redFlagAlert}
-          </p>
+          <p className="text-foreground font-medium">{strings.aiSection.redFlagAlert}</p>
         </div>
       </Section>
 
@@ -247,9 +245,7 @@ function Index() {
             <h2 className="font-display text-2xl font-bold md:text-3xl">
               {strings.proposal.title}
             </h2>
-            <p className="mt-2 max-w-2xl text-base opacity-90">
-              {strings.proposal.desc}
-            </p>
+            <p className="mt-2 max-w-2xl text-base opacity-90">{strings.proposal.desc}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link

@@ -22,7 +22,10 @@ export const Route = createFileRoute("/problems")({
 });
 
 const REALITY = [
-  ["Consultation time", "2–5 minutes per OPD patient (BMJ Open, 2017) — among the shortest globally"],
+  [
+    "Consultation time",
+    "2–5 minutes per OPD patient (BMJ Open, 2017) — among the shortest globally",
+  ],
   ["Patient volume", "Tertiary government hospitals register 4,000–10,000 OPD patients per day"],
   [
     "History-taking yield",
@@ -81,11 +84,11 @@ function ProblemsPage() {
         intro={strings.problemsPage.intro}
       />
 
-      <Section
-        title={strings.problemsPage.realityTitle}
-        lead={strings.problemsPage.realityLead}
-      >
-        <DataTable headers={[strings.problemsPage.dimHeader, strings.problemsPage.realityHeader]} rows={reality} />
+      <Section title={strings.problemsPage.realityTitle} lead={strings.problemsPage.realityLead}>
+        <DataTable
+          headers={[strings.problemsPage.dimHeader, strings.problemsPage.realityHeader]}
+          rows={reality}
+        />
         <div className="mt-8">
           <CalloutBar>
             <strong className="text-primary">{strings.problemsPage.resultPrefix}</strong>{" "}
@@ -108,11 +111,11 @@ function ProblemsPage() {
         </div>
       </Section>
 
-      <Section
-        title={strings.problemsPage.failuresTitle}
-        lead={strings.problemsPage.failuresLead}
-      >
-        <DataTable headers={[strings.problemsPage.approachHeader, strings.problemsPage.shortfallHeader]} rows={failures} />
+      <Section title={strings.problemsPage.failuresTitle} lead={strings.problemsPage.failuresLead}>
+        <DataTable
+          headers={[strings.problemsPage.approachHeader, strings.problemsPage.shortfallHeader]}
+          rows={failures}
+        />
       </Section>
     </>
   );
