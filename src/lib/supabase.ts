@@ -19,11 +19,12 @@ const getEnvVar = (key: string): string => {
 export const SUPABASE_URL =
   getEnvVar("VITE_SUPABASE_URL") ||
   getEnvVar("SUPABASE_URL") ||
-  "https://drrrrmrasdmzpksxmxvu.supabase.co";
+  "https://placeholder-project.supabase.co";
 
 export const SUPABASE_ANON_KEY =
   getEnvVar("VITE_SUPABASE_ANON_KEY") ||
+  getEnvVar("VITE_SUPABASE_PUBLISHABLE_KEY") ||
   getEnvVar("SUPABASE_ANON_KEY") ||
-  "sb_publishable_sxEmFuoz7i1lZVWEe8krRg_bbcNTcHX";
+  "placeholder-anon-key";
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
